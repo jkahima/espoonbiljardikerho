@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Uutinen — Espoon Biljardikerho ry.</title>
+<meta name="description" content="Espoon Biljardikerho uutinen.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --gold: #C8A84B;
+  --gold-light: #E2C97A;
+  --gold-dim: #7a6528;
+  --green-dark: #0D1F0F;
+  --green-mid: #152B17;
+  --green-felt: #1A3A1C;
+  --surface: #111E12;
+  --surface-card: #192A1B;
+  --text-primary: #F0EDE4;
+  --text-secondary: #A8A090;
+  --text-muted: #6B6358;
+  --border: rgba(200,168,75,0.14);
+  --border-strong: rgba(200,168,75,0.28);
+  --px: clamp(1rem, 4vw, 3rem);
+  --spy: clamp(36px, 5vw, 64px);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--green-dark);
+  color: var(--text-primary);
+  font-size: clamp(14px, 1.5vw, 16px);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* ── NAV ── */
+nav {
+  position: fixed; top:0; left:0; right:0; z-index:100;
+  display:flex; align-items:center; justify-content:space-between;
+  padding: 0 var(--px);
+  height: clamp(52px, 7vw, 64px);
+  background: rgba(13,31,15,0.95);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-logo { display:flex; align-items:center; gap:10px; text-decoration:none; flex-shrink:0; }
+.nav-logo-icon {
+  width:32px; height:32px; background:var(--gold); border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Playfair Display',serif; font-weight:700; font-size:12px;
+  color:var(--green-dark); flex-shrink:0;
+}
+.nav-logo-text { font-family:'Playfair Display',serif; font-size:13.5px; font-weight:600; color:var(--text-primary); line-height:1.2; }
+.nav-logo-sub  { font-size:9.5px; font-weight:300; color:var(--gold); letter-spacing:0.1em; text-transform:uppercase; }
+.nav-links { display:flex; align-items:center; gap:1px; list-style:none; }
+.nav-links a {
+  display:block; padding:5px 10px;
+  font-size:12px; font-weight:400; color:var(--text-secondary);
+  text-decoration:none; border-radius:5px;
+  transition:color 0.2s, background 0.2s;
+}
+.nav-links a:hover { color:var(--text-primary); background:rgba(200,168,75,0.08); }
+.nav-links a.active { color:var(--gold); }
+.nav-cta { padding:6px 16px !important; background:var(--gold) !important; color:var(--green-dark) !important; font-weight:500 !important; border-radius:5px !important; }
+.nav-cta:hover { background:var(--gold-light) !important; }
+.lang-switcher {
+  display:flex; align-items:center; gap:2px;
+  margin-left:10px; padding-left:10px;
+  border-left:1px solid var(--border);
+}
+.lang-btn {
+  display:flex; align-items:center; gap:4px;
+  padding:4px 7px; border-radius:4px; border:none; cursor:pointer;
+  background:transparent; color:var(--text-muted);
+  font-family:'DM Sans',sans-serif; font-size:11px;
+  transition:color 0.2s, background 0.2s;
+  text-decoration:none;
+}
+.lang-btn:hover  { color:var(--text-primary); background:rgba(200,168,75,0.08); }
+.lang-btn.active { color:var(--gold); }
+.hamburger { display:none; flex-direction:column; gap:5px; cursor:pointer; padding:6px; background:none; border:none; }
+.hamburger span { display:block; width:22px; height:2px; background:var(--text-secondary); border-radius:2px; }
+.mobile-menu {
+  display:none; position:fixed;
+  top:clamp(52px,7vw,64px); left:0; right:0;
+  background:rgba(13,31,15,0.98); border-bottom:1px solid var(--border);
+  z-index:99; padding:14px var(--px) 20px; flex-direction:column; gap:3px;
+}
+.mobile-menu.open { display:flex; }
+.mobile-menu a { display:block; padding:10px 12px; font-size:15px; color:var(--text-secondary); text-decoration:none; border-radius:7px; }
+.mobile-menu a:hover, .mobile-menu a.active { color:var(--gold); background:rgba(200,168,75,0.06); }
+.mobile-menu .m-cta { background:var(--gold); color:var(--green-dark) !important; font-weight:500; margin-top:6px; text-align:center; }
+
+/* ── SHARED ── */
+section { padding: var(--spy) var(--px); }
+.sec-label { display:inline-block; font-size:10px; font-weight:500; color:var(--gold); letter-spacing:0.13em; text-transform:uppercase; margin-bottom:7px; }
+.divider   { width:28px; height:2px; background:var(--gold); margin:7px 0 12px; }
+.sec-title { font-family:'Playfair Display',serif; font-size:clamp(20px,2.8vw,32px); font-weight:600; color:var(--text-primary); line-height:1.2; }
+.sec-header { display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:clamp(18px,2.5vw,30px); gap:14px; flex-wrap:wrap; }
+.btn-secondary {
+  display:inline-flex; align-items:center; gap:7px;
+  padding:clamp(8px,1.2vw,11px) clamp(12px,1.8vw,20px);
+  background:transparent; color:var(--text-primary);
+  font-family:'DM Sans',sans-serif; font-size:clamp(11.5px,1.1vw,13.5px); font-weight:400;
+  border:1px solid var(--border-strong); border-radius:6px; text-decoration:none;
+  transition:border-color 0.2s, color 0.2s;
+}
+.btn-secondary:hover { border-color:var(--gold); color:var(--gold); }
+.ebadge { padding:3px 8px; border-radius:20px; font-size:9.5px; font-weight:500; letter-spacing:0.04em; text-transform:uppercase; white-space:nowrap; }
+.b-kaisa   { background:rgba(200,168,75,0.12); color:var(--gold);  border:1px solid rgba(200,168,75,0.25); }
+.b-pool    { background:rgba(29,158,117,0.12); color:#4ECBA0; border:1px solid rgba(29,158,117,0.25); }
+.b-snooker { background:rgba(106,90,205,0.12); color:#9D8FE8; border:1px solid rgba(106,90,205,0.25); }
+.b-kara    { background:rgba(210,90,50,0.12);  color:#E8956A; border:1px solid rgba(210,90,50,0.25); }
+.b-kilpailu{ background:rgba(200,168,75,0.08); color:var(--gold-light); border:1px solid rgba(200,168,75,0.2); }
+
+/* ── ARTICLE HERO ── */
+.article-hero {
+  position:relative;
+  min-height: clamp(320px, 45vw, 520px);
+  display:flex; align-items:flex-end;
+  overflow:hidden;
+}
+.article-hero-img {
+  position:absolute; inset:0;
+}
+.article-hero-img img {
+  width:100%; height:100%; object-fit:cover; display:block;
+  filter:brightness(0.55) saturate(0.6);
+}
+.article-hero-img::after {
+  content:''; position:absolute; inset:0;
+  background:
+    linear-gradient(to bottom, rgba(13,31,15,0.2) 0%, transparent 30%, rgba(13,31,15,0.55) 60%, rgba(13,31,15,0.92) 100%),
+    linear-gradient(160deg, rgba(26,58,28,0.3) 0%, transparent 60%);
+}
+/* Felt texture overlay */
+.article-hero-img::before {
+  content:''; position:absolute; inset:0; z-index:1; opacity:0.12;
+  background-image:
+    repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(26,58,28,0.2) 3px, rgba(26,58,28,0.2) 4px),
+    repeating-linear-gradient(90deg, transparent, transparent 3px, rgba(26,58,28,0.2) 3px, rgba(26,58,28,0.2) 4px);
+}
+.article-hero-content {
+  position:relative; z-index:2;
+  width:100%; padding: var(--px);
+  padding-top: clamp(72px,10vw,90px);
+  padding-bottom: clamp(28px,3.5vw,44px);
+  max-width: 760px;
+}
+.breadcrumb {
+  display:flex; align-items:center; gap:6px;
+  font-size:11px; color:rgba(240,237,228,0.55); margin-bottom:16px;
+  letter-spacing:0.04em; text-transform:uppercase;
+}
+.breadcrumb a { color:rgba(240,237,228,0.55); text-decoration:none; transition:color 0.2s; }
+.breadcrumb a:hover { color:var(--gold); }
+.breadcrumb-sep { opacity:0.4; }
+.article-tag { display:inline-flex; align-items:center; margin-bottom:12px; }
+.article-hero h1 {
+  font-family:'Playfair Display',serif;
+  font-size:clamp(22px,3.5vw,46px);
+  font-weight:700; line-height:1.12; color:#fff;
+  margin-bottom:14px;
+  text-shadow: 0 1px 20px rgba(0,0,0,0.4);
+}
+.article-meta {
+  display:flex; align-items:center; gap:16px; flex-wrap:wrap;
+}
+.article-date {
+  display:flex; align-items:center; gap:6px;
+  font-size:11.5px; color:rgba(240,237,228,0.6); font-weight:300; letter-spacing:0.04em;
+}
+.article-date::before { content:'📅'; font-size:11px; }
+.article-source {
+  font-size:11px; color:rgba(200,168,75,0.7); letter-spacing:0.04em;
+}
+
+/* ── LOADING STATES ── */
+.hero-skeleton {
+  position:absolute; inset:0; z-index:2;
+  background: linear-gradient(90deg, var(--green-dark) 25%, rgba(200,168,75,0.04) 50%, var(--green-dark) 75%);
+  background-size:1200px 100%;
+  animation:shimmer 1.6s infinite linear;
+  display:flex; align-items:flex-end; padding: var(--px);
+}
+@keyframes shimmer {
+  0%   { background-position: -1200px 0; }
+  100% { background-position:  1200px 0; }
+}
+.hero-skeleton-inner { width:100%; max-width:680px; padding-bottom:clamp(28px,3.5vw,44px); }
+.skel-line {
+  height:12px; border-radius:4px; margin-bottom:10px;
+  background: linear-gradient(90deg, var(--green-mid) 25%, rgba(200,168,75,0.08) 50%, var(--green-mid) 75%);
+  background-size:600px 100%; animation:shimmer 1.4s infinite linear;
+}
+.skel-date  { width:20%; height:9px; }
+.skel-h1-1  { width:75%; height:32px; margin-bottom:12px; }
+.skel-h1-2  { width:55%; height:32px; margin-bottom:16px; }
+.skel-meta  { width:30%; height:10px; }
+
+/* ── ARTICLE BODY ── */
+.article-layout {
+  display:grid;
+  grid-template-columns: 1fr clamp(180px, 22vw, 260px);
+  gap:clamp(28px, 4vw, 56px);
+  max-width:1100px; margin:0 auto;
+  padding: var(--spy) var(--px);
+}
+
+.article-body {
+  min-width:0;
+}
+
+/* Style the scraped content from Yhdistysavain */
+.article-content {
+  font-size:clamp(14px,1.3vw,16px);
+  line-height:1.8;
+  color:var(--text-secondary);
+  font-weight:300;
+}
+.article-content p { margin-bottom:1.2em; }
+.article-content h2, .article-content h3 {
+  font-family:'Playfair Display',serif;
+  color:var(--text-primary);
+  margin:1.6em 0 0.6em;
+  line-height:1.25;
+}
+.article-content h2 { font-size:clamp(18px,2vw,24px); }
+.article-content h3 { font-size:clamp(15px,1.6vw,19px); }
+.article-content img {
+  width:100%; border-radius:7px; margin:1.4em 0;
+  filter:brightness(0.88) saturate(0.75);
+  border:1px solid var(--border);
+}
+.article-content a { color:var(--gold); text-decoration:underline; text-underline-offset:2px; }
+.article-content a:hover { color:var(--gold-light); }
+.article-content ul, .article-content ol {
+  padding-left:1.4em; margin-bottom:1.2em;
+}
+.article-content li { margin-bottom:0.4em; }
+.article-content blockquote {
+  border-left:3px solid var(--gold-dim);
+  margin:1.4em 0; padding:0.8em 1.2em;
+  background:rgba(200,168,75,0.04); border-radius:0 6px 6px 0;
+  font-style:italic; color:var(--text-secondary);
+}
+.article-content table { width:100%; border-collapse:collapse; margin:1.2em 0; font-size:13px; }
+.article-content th { background:var(--surface-card); border:1px solid var(--border); padding:8px 12px; font-weight:500; color:var(--text-primary); text-align:left; }
+.article-content td { border:1px solid var(--border); padding:7px 12px; color:var(--text-secondary); }
+.article-content tr:hover td { background:rgba(200,168,75,0.03); }
+
+/* Body skeleton */
+.body-skeleton { padding-top:8px; }
+.body-skeleton .skel-line { margin-bottom:12px; height:13px; }
+.body-skeleton .skel-para { width:100%; }
+.body-skeleton .skel-para-short { width:65%; }
+.body-skeleton .skel-para-med { width:82%; }
+.body-skeleton .skel-gap { height:24px; background:none; animation:none; }
+
+/* Article source link */
+.article-source-link {
+  display:inline-flex; align-items:center; gap:6px;
+  margin-top:clamp(20px,2.5vw,32px); padding:8px 14px;
+  border:1px solid var(--border); border-radius:6px;
+  font-size:11.5px; color:var(--text-muted); text-decoration:none;
+  transition:border-color 0.2s, color 0.2s;
+}
+.article-source-link:hover { border-color:var(--border-strong); color:var(--gold); }
+
+/* ── SIDEBAR ── */
+.article-sidebar { display:flex; flex-direction:column; gap:16px; }
+
+.sidebar-card {
+  background:var(--surface-card); border:1px solid var(--border); border-radius:9px;
+  padding:16px;
+}
+.sidebar-card h4 {
+  font-family:'Playfair Display',serif; font-size:13px; font-weight:600;
+  color:var(--text-primary); margin-bottom:14px; padding-bottom:9px;
+  border-bottom:1px solid var(--border);
+}
+.sidebar-nav-link {
+  display:flex; align-items:center; gap:9px;
+  padding:7px 0; border-bottom:1px solid var(--border);
+  text-decoration:none; transition:color 0.18s;
+}
+.sidebar-nav-link:last-child { border-bottom:none; padding-bottom:0; }
+.sidebar-nav-link:hover .sidebar-nav-title { color:var(--gold); }
+.sidebar-nav-date { font-size:9.5px; color:var(--text-muted); letter-spacing:0.04em; white-space:nowrap; flex-shrink:0; }
+.sidebar-nav-title { font-size:12px; font-weight:400; color:var(--text-secondary); line-height:1.4; }
+
+.sidebar-share { display:flex; flex-direction:column; gap:8px; }
+.share-btn {
+  display:flex; align-items:center; gap:8px;
+  padding:8px 12px; border-radius:6px; border:1px solid var(--border);
+  background:transparent; cursor:pointer;
+  font-family:'DM Sans',sans-serif; font-size:12px;
+  color:var(--text-muted); transition:all 0.18s; text-decoration:none;
+}
+.share-btn:hover { border-color:var(--border-strong); color:var(--text-primary); background:rgba(200,168,75,0.04); }
+.share-icon { font-size:14px; }
+
+/* ── "LUE MYÖS" (Read more) ── */
+.read-more-section {
+  background:var(--surface);
+  border-top:1px solid var(--border);
+}
+.news-grid {
+  display:grid; grid-template-columns:repeat(3,1fr);
+  gap:clamp(10px,1.8vw,18px);
+}
+.news-card {
+  background:var(--surface-card); border:1px solid var(--border);
+  border-radius:9px; overflow:hidden; text-decoration:none;
+  display:flex; flex-direction:column;
+  transition:border-color 0.2s, transform 0.2s;
+}
+.news-card:hover { border-color:var(--border-strong); transform:translateY(-2px); }
+.news-img-wrap {
+  position:relative; width:100%; aspect-ratio:16/9; overflow:hidden; flex-shrink:0;
+}
+.news-img-wrap img {
+  width:100%; height:100%; object-fit:cover; display:block;
+  filter:brightness(0.78) saturate(0.7);
+  transition:transform 0.4s ease, filter 0.3s;
+}
+.news-card:hover .news-img-wrap img { transform:scale(1.04); filter:brightness(0.85) saturate(0.8); }
+.news-img-wrap::after {
+  content:''; position:absolute; inset:0; pointer-events:none;
+  background:linear-gradient(to bottom, rgba(13,31,15,0.35) 0%, transparent 28%, transparent 60%, rgba(13,31,15,0.75) 100%);
+}
+.news-body { padding:14px; flex:1; display:flex; flex-direction:column; }
+.news-date  { font-size:10px; color:var(--gold-dim); letter-spacing:0.05em; text-transform:uppercase; margin-bottom:5px; }
+.news-title { font-family:'Playfair Display',serif; font-size:clamp(13px,1.4vw,16px); font-weight:600; color:var(--text-primary); line-height:1.3; margin-bottom:7px; }
+.news-tag {
+  display:inline-block; margin-top:auto; padding-top:10px;
+  padding-bottom:0;
+}
+.news-tag span {
+  padding:2px 8px; background:rgba(200,168,75,0.09); border:1px solid var(--border);
+  border-radius:3px; font-size:9.5px; color:var(--gold); letter-spacing:0.05em; text-transform:uppercase;
+}
+
+/* ── ERROR ── */
+.load-error {
+  text-align:center; padding:clamp(48px,7vw,96px) var(--px);
+}
+.load-error-icon { font-size:48px; margin-bottom:16px; opacity:0.4; }
+.load-error h2 { font-family:'Playfair Display',serif; font-size:22px; color:var(--text-secondary); margin-bottom:10px; }
+.load-error p { font-size:13.5px; color:var(--text-muted); margin-bottom:22px; max-width:400px; margin-left:auto; margin-right:auto; }
+
+/* ── FOOTER ── */
+footer { background:var(--green-dark); border-top:1px solid var(--border); padding:clamp(32px,4.5vw,52px) var(--px) 24px; }
+.footer-grid { display:grid; grid-template-columns:1.3fr 1fr 1fr 1fr; gap:clamp(20px,3.5vw,44px); margin-bottom:30px; }
+.footer-brand p { font-size:12.5px; font-weight:300; color:var(--text-muted); line-height:1.7; margin-top:12px; max-width:240px; }
+.footer-col h4 { font-family:'Playfair Display',serif; font-size:12.5px; font-weight:600; color:var(--text-primary); margin-bottom:14px; padding-bottom:9px; border-bottom:1px solid var(--border); }
+.footer-col ul { list-style:none; display:flex; flex-direction:column; gap:8px; }
+.footer-col a  { font-size:12px; font-weight:300; color:var(--text-muted); text-decoration:none; transition:color 0.2s; }
+.footer-col a:hover { color:var(--gold); }
+.f-ci { display:flex; align-items:flex-start; gap:8px; font-size:12px; color:var(--text-muted); font-weight:300; line-height:1.5; }
+.f-ci-icon { color:var(--gold-dim); flex-shrink:0; margin-top:1px; }
+.footer-bottom { padding-top:18px; border-top:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; }
+.footer-bottom p { font-size:11px; color:var(--text-muted); }
+.social-btn { width:30px; height:30px; border-radius:6px; border:1px solid var(--border); display:flex; align-items:center; justify-content:center; color:var(--text-muted); text-decoration:none; font-size:12px; transition:border-color 0.2s, color 0.2s; }
+.social-btn:hover { border-color:var(--border-strong); color:var(--gold); }
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:translateY(0); } }
+.article-hero-content { animation:fadeUp 0.45s ease both; }
+
+/* ── MOBILE ── */
+@media (max-width:900px) {
+  .nav-links { display:none; }
+  .lang-switcher { display:none; }
+  .hamburger { display:flex; }
+  .article-layout { grid-template-columns:1fr; }
+  .article-sidebar { display:none; } /* sidebar becomes less useful on mobile */
+  .news-grid { grid-template-columns:1fr 1fr; }
+  .footer-grid { grid-template-columns:1fr 1fr; }
+}
+@media (max-width:560px) {
+  .news-grid { grid-template-columns:1fr; }
+  .footer-grid { grid-template-columns:1fr; }
+  .article-meta { gap:10px; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">
+    <div class="nav-logo-icon">EBK</div>
+    <div>
+      <div class="nav-logo-text">Espoon Biljardikerho</div>
+      <div class="nav-logo-sub">Perustettu 1980</div>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Etusivu</a></li>
+    <li><a href="esittely.html">Esittely</a></li>
+    <li><a href="uutiset.html" class="active">Uutiset</a></li>
+    <li><a href="tulospalvelu.html">Tulospalvelu</a></li>
+    <li><a href="tapahtumat.html">Tapahtumat</a></li>
+    <li><a href="jasenet.html">Jäsenet</a></li>
+    <li><a href="yhteystiedot.html">Yhteystiedot</a></li>
+    <li><a href="https://www.espoonbiljardikerho.com/esittely/jaseneksi/" class="nav-cta" target="_blank">Liity jäseneksi</a></li>
+  </ul>
+  <div class="lang-switcher">
+    <a href="#" class="lang-btn active" title="Suomi">🇫🇮 FI</a>
+    <a href="#" class="lang-btn" title="Svenska">🇸🇪 SV</a>
+    <a href="#" class="lang-btn" title="Українська">🇺🇦 UA</a>
+  </div>
+  <button class="hamburger" onclick="document.querySelector('.mobile-menu').classList.toggle('open')" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="mobile-menu">
+  <a href="index.html">Etusivu</a>
+  <a href="esittely.html">Esittely</a>
+  <a href="uutiset.html" class="active">Uutiset</a>
+  <a href="tulospalvelu.html">Tulospalvelu</a>
+  <a href="tapahtumat.html">Tapahtumat</a>
+  <a href="jasenet.html">Jäsenet</a>
+  <a href="yhteystiedot.html">Yhteystiedot</a>
+  <a href="https://www.espoonbiljardikerho.com/esittely/jaseneksi/" class="m-cta" target="_blank">Liity jäseneksi</a>
+  <div style="display:flex;gap:6px;margin-top:10px;padding-top:10px;border-top:1px solid var(--border);">
+    <a href="#" style="flex:1;text-align:center;padding:8px;border-radius:6px;background:rgba(200,168,75,0.1);border:1px solid var(--border-strong);font-size:12px;color:var(--gold);text-decoration:none;">🇫🇮 Suomi</a>
+    <a href="#" style="flex:1;text-align:center;padding:8px;border-radius:6px;border:1px solid var(--border);font-size:12px;color:var(--text-muted);text-decoration:none;">🇸🇪 Svenska</a>
+    <a href="#" style="flex:1;text-align:center;padding:8px;border-radius:6px;border:1px solid var(--border);font-size:12px;color:var(--text-muted);text-decoration:none;">🇺🇦 UA</a>
+  </div>
+</div>
+
+<!-- ARTICLE HERO — populated by JS -->
+<div class="article-hero" id="article-hero">
+  <!-- Skeleton while loading -->
+  <div class="article-hero-img" id="hero-img-wrap">
+    <div class="hero-skeleton" id="hero-skeleton">
+      <div class="hero-skeleton-inner">
+        <div class="skel-line skel-date"></div>
+        <div class="skel-line skel-h1-1"></div>
+        <div class="skel-line skel-h1-2"></div>
+        <div class="skel-line skel-meta"></div>
+      </div>
+    </div>
+  </div>
+  <div class="article-hero-content" id="hero-content" style="opacity:0;">
+    <div class="breadcrumb">
+      <a href="index.html">Etusivu</a>
+      <span class="breadcrumb-sep">›</span>
+      <a href="uutiset.html">Uutiset</a>
+      <span class="breadcrumb-sep">›</span>
+      <span id="breadcrumb-title">Ladataan…</span>
+    </div>
+    <div class="article-tag" id="article-tag-wrap"></div>
+    <h1 id="article-title">Ladataan artikkelia…</h1>
+    <div class="article-meta">
+      <span class="article-date" id="article-date"></span>
+      <span class="article-source">espoonbiljardikerho.com</span>
+    </div>
+  </div>
+</div>
+
+<!-- ARTICLE BODY + SIDEBAR -->
+<div class="article-layout" id="article-layout">
+
+  <main class="article-body">
+    <!-- Skeleton while loading -->
+    <div class="body-skeleton" id="body-skeleton">
+      <div class="skel-line skel-para"></div>
+      <div class="skel-line skel-para-med"></div>
+      <div class="skel-line skel-para"></div>
+      <div class="skel-line skel-para-short"></div>
+      <div class="skel-line skel-gap"></div>
+      <div class="skel-line skel-para"></div>
+      <div class="skel-line skel-para-med"></div>
+      <div class="skel-line skel-para"></div>
+      <div class="skel-line skel-para"></div>
+      <div class="skel-line skel-para-short"></div>
+      <div class="skel-line skel-gap"></div>
+      <div class="skel-line skel-para"></div>
+      <div class="skel-line skel-para-med"></div>
+    </div>
+
+    <div class="article-content" id="article-content" style="display:none;"></div>
+    <div id="article-error" style="display:none;"></div>
+
+    <a href="#" id="source-link" class="article-source-link" target="_blank" rel="noopener" style="display:none;">
+      🔗 Lue alkuperäinen artikkeli espoonbiljardikerho.com:ssa
+    </a>
+  </main>
+
+  <aside class="article-sidebar" id="sidebar">
+    <!-- Populated by JS with recent articles -->
+    <div class="sidebar-card">
+      <h4>Viimeisimmät uutiset</h4>
+      <div id="sidebar-news">
+        <div class="skel-line" style="width:80%;margin-bottom:10px;"></div>
+        <div class="skel-line" style="width:65%;margin-bottom:10px;"></div>
+        <div class="skel-line" style="width:75%;margin-bottom:10px;"></div>
+        <div class="skel-line" style="width:55%;"></div>
+      </div>
+    </div>
+
+    <div class="sidebar-card">
+      <h4>Jaa artikkeli</h4>
+      <div class="sidebar-share">
+        <a class="share-btn" id="share-fb" href="#" target="_blank" rel="noopener">
+          <span class="share-icon">👥</span> Facebook
+        </a>
+        <button class="share-btn" id="share-copy" onclick="copyLink()">
+          <span class="share-icon">🔗</span> Kopioi linkki
+        </button>
+      </div>
+    </div>
+
+    <div class="sidebar-card" style="text-align:center;">
+      <div style="font-size:28px;margin-bottom:8px;">🏆</div>
+      <h4 style="border:none;padding:0;margin-bottom:6px;">Osallistu kilpailuihin</h4>
+      <p style="font-size:12px;color:var(--text-muted);margin-bottom:12px;font-weight:300;">Katso tulevat tapahtumat ja kilpailut</p>
+      <a href="tapahtumat.html" class="btn-secondary" style="width:100%;justify-content:center;font-size:11.5px;">Tapahtumat →</a>
+    </div>
+  </aside>
+
+</div>
+
+<!-- LUE MYÖS -->
+<section class="read-more-section" id="read-more-section" style="display:none;">
+  <div class="sec-header">
+    <div>
+      <span class="sec-label">Lue myös</span>
+      <div class="divider"></div>
+      <h2 class="sec-title">Muita uutisia</h2>
+    </div>
+    <a href="uutiset.html" class="btn-secondary" style="font-size:11.5px;padding:6px 14px;">Kaikki uutiset →</a>
+  </div>
+  <div class="news-grid" id="read-more-grid"></div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div style="display:flex;gap:10px;align-items:center;">
+        <div class="nav-logo-icon">EBK</div>
+        <div><div class="nav-logo-text">Espoon Biljardikerho</div><div class="nav-logo-sub">Perustettu 1980</div></div>
+      </div>
+      <p>Yksityisklubi biljardista intohimoisille. Kotimme on Espoon Tillinmäessä — tule mukaan.</p>
+    </div>
+    <div class="footer-col"><h4>Sivut</h4><ul>
+      <li><a href="index.html">Etusivu</a></li>
+      <li><a href="esittely.html">Esittely</a></li>
+      <li><a href="uutiset.html">Uutiset</a></li>
+      <li><a href="tulospalvelu.html">Tulospalvelu</a></li>
+      <li><a href="tapahtumat.html">Tapahtumat</a></li>
+      <li><a href="jasenet.html">Jäsenet</a></li>
+    </ul></div>
+    <div class="footer-col"><h4>Lajit</h4><ul>
+      <li><a href="#">Kaisa</a></li><li><a href="#">Kara</a></li>
+      <li><a href="#">Pool</a></li><li><a href="#">Pyramidi</a></li>
+      <li><a href="#">Snooker</a></li>
+    </ul></div>
+    <div class="footer-col"><h4>Yhteystiedot</h4>
+      <div style="display:flex;flex-direction:column;gap:9px;margin-top:4px;">
+        <div class="f-ci"><span class="f-ci-icon">📍</span><span>Tillinmäentie, Espoo</span></div>
+        <div class="f-ci"><span class="f-ci-icon">✉️</span><span>info@espoonbiljardikerho.com</span></div>
+        <div class="f-ci"><span class="f-ci-icon">🔗</span><span>facebook.com/espoonbiljardikerho</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 Espoon Biljardikerho ry.</p>
+    <a href="https://www.facebook.com/espoonbiljardikerho" class="social-btn" title="Facebook">f</a>
+  </div>
+</footer>
+
+<script>
+(async function() {
+  const BASE     = 'https://www.espoonbiljardikerho.com';
+  const PROXY    = 'https://corsproxy.io/?url=';
+  const FALLBACK = 'https://images.unsplash.com/photo-1615213612138-4d1195b1c0e8?w=1400&auto=format&fit=crop&q=60';
+
+  // ── Helpers ──────────────────────────────────────────────────────────────────
+
+  function guessTag(title) {
+    const t = title.toLowerCase();
+    if (t.includes('pool') || t.includes('8-pallo') || t.includes('9-pallo') || t.includes('viikkis')) return 'Pool';
+    if (t.includes('kaisa'))    return 'Kaisa';
+    if (t.includes('snooker'))  return 'Snooker';
+    if (t.includes('kara'))     return 'Kara';
+    if (t.includes('pyramidi')) return 'Pyramidi';
+    if (t.includes('sm') || t.includes('mm') || t.includes('kisa') || t.includes('mestar') || t.includes('kilpa')) return 'Kilpailu';
+    return 'Uutinen';
+  }
+
+  function tagClass(tag) {
+    const map = { Kaisa:'b-kaisa', Pool:'b-pool', Snooker:'b-snooker', Kara:'b-kara', Kilpailu:'b-kilpailu' };
+    return map[tag] || 'b-kaisa';
+  }
+
+  async function fetchHTML(url) {
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(res.status);
+    return res.text();
+  }
+
+  async function fetchWithFallback(url) {
+    try { return await fetchHTML(url); }
+    catch { return fetchHTML(PROXY + encodeURIComponent(url)); }
+  }
+
+  function cleanContent(el) {
+    // Remove Yhdistysavain UI chrome we don't want
+    ['script','style','.d4-xcontainer-header-tools','.d4-breadcrumbs',
+     '.d4-share','.d4-widget-comments','nav','header','footer',
+     '.d4-xcontainer-header','#d4-navigation'].forEach(sel => {
+      el.querySelectorAll(sel).forEach(n => n.remove());
+    });
+    // Fix relative URLs in images
+    el.querySelectorAll('img').forEach(img => {
+      const src = img.getAttribute('src');
+      if (src && src.startsWith('/')) img.setAttribute('src', BASE + src);
+    });
+    // Fix relative links
+    el.querySelectorAll('a[href]').forEach(a => {
+      const href = a.getAttribute('href');
+      if (href && href.startsWith('/uutiset/')) {
+        a.setAttribute('href', 'uutinen.html?url=' + encodeURIComponent(BASE + href));
+      } else if (href && href.startsWith('/') && !href.startsWith('//')) {
+        a.setAttribute('href', BASE + href);
+        a.setAttribute('target', '_blank');
+        a.setAttribute('rel', 'noopener');
+      }
+    });
+    return el.innerHTML;
+  }
+
+  // ── Get URL param ─────────────────────────────────────────────────────────────
+
+  const params    = new URLSearchParams(location.search);
+  const articleUrl = params.get('url'); // e.g. /uutiset/some-slug/
+
+  if (!articleUrl) {
+    showError('Artikkelin osoitetta ei löydy.', true);
+    return;
+  }
+
+  const fullUrl = articleUrl.startsWith('http') ? articleUrl : BASE + articleUrl;
+
+  // ── Load article ──────────────────────────────────────────────────────────────
+
+  try {
+    const html = await fetchWithFallback(fullUrl);
+    const doc  = new DOMParser().parseFromString(html, 'text/html');
+
+    // Title
+    const title = doc.querySelector('.d4-xcontainer-header-tools__title')?.textContent?.trim()
+                || doc.querySelector('h1')?.textContent?.trim()
+                || 'Artikkeli';
+
+    // Date
+    const date = doc.querySelector('.d4-widget-news-article-date, time, .date')?.textContent?.trim() || '';
+
+    // Lead image — try article's own image first
+    const leadImg = doc.querySelector('.d4-widget-news-article img, article img, .content img')?.getAttribute('src')
+                  || doc.querySelector('img[src*="bin.yhdistysavain"]')?.getAttribute('src')
+                  || FALLBACK;
+    const leadImgFull = leadImg.startsWith('/') ? BASE + leadImg : leadImg;
+
+    // Body content
+    const contentEl = doc.querySelector('.content main, .content article, main article, .d4-content, main');
+    const tag = guessTag(title);
+
+    // ── Populate hero ────────────────────────────────────────────────────────────
+    const heroImg = document.createElement('img');
+    heroImg.src    = leadImgFull;
+    heroImg.alt    = title;
+    heroImg.onerror = () => { heroImg.src = FALLBACK; };
+    heroImg.onload  = () => {
+      document.getElementById('hero-skeleton').style.display = 'none';
+      document.getElementById('hero-content').style.opacity = '1';
+      document.getElementById('hero-content').style.transition = 'opacity 0.3s';
+    };
+    document.getElementById('hero-img-wrap').prepend(heroImg);
+
+    document.getElementById('article-title').textContent = title;
+    document.getElementById('breadcrumb-title').textContent = title.length > 40 ? title.slice(0,40) + '…' : title;
+    document.title = title + ' — Espoon Biljardikerho ry.';
+
+    if (date) document.getElementById('article-date').textContent = date;
+
+    const tagWrap = document.getElementById('article-tag-wrap');
+    tagWrap.innerHTML = `<span class="ebadge ${tagClass(tag)}">${tag}</span>`;
+
+    // Update meta description
+    document.querySelector('meta[name="description"]')?.setAttribute('content',
+      title + ' — Espoon Biljardikerho ry.');
+
+    // ── Populate body ────────────────────────────────────────────────────────────
+    if (contentEl) {
+      const cleaned = cleanContent(contentEl.cloneNode(true));
+      document.getElementById('body-skeleton').style.display = 'none';
+      const contentDiv = document.getElementById('article-content');
+      contentDiv.innerHTML = cleaned;
+      contentDiv.style.display = 'block';
+    } else {
+      // No parseable content — link to original
+      document.getElementById('body-skeleton').style.display = 'none';
+      document.getElementById('article-content').innerHTML =
+        '<p style="color:var(--text-muted);font-size:13px;">Artikkelin sisältöä ei voitu ladata automaattisesti.</p>';
+      document.getElementById('article-content').style.display = 'block';
+    }
+
+    // Show source link
+    const srcLink = document.getElementById('source-link');
+    srcLink.href = fullUrl;
+    srcLink.style.display = 'inline-flex';
+
+    // Share buttons
+    const pageUrl = window.location.href;
+    document.getElementById('share-fb').href =
+      'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(pageUrl);
+
+    // ── Load "Lue myös" and sidebar ──────────────────────────────────────────────
+    loadRelated(tag);
+
+  } catch (err) {
+    console.error('Article load failed:', err);
+    showError('Artikkelia ei voitu ladata. Tarkista yhteytesi tai avaa artikkeli suoraan kerhon sivulta.', false, fullUrl);
+  }
+
+  // ── Related articles ─────────────────────────────────────────────────────────
+
+  async function loadRelated(currentTag) {
+    try {
+      const html = await fetchWithFallback(BASE + '/uutiset/');
+      const doc  = new DOMParser().parseFromString(html, 'text/html');
+      const all  = Array.from(doc.querySelectorAll('a.d4-widget-news-article')).map(a => {
+        const href    = a.getAttribute('href') || '';
+        const title   = a.querySelector('.d4-widget-news-article-heading')?.textContent?.replace(/›/g,'').trim() || '';
+        const date    = a.querySelector('.d4-widget-news-article-date')?.textContent?.trim() || '';
+        const img     = a.querySelector('img')?.getAttribute('src') || FALLBACK;
+        return { href, title, date, img, tag: guessTag(title) };
+      });
+
+      // Filter out current article; prefer same tag, fill with others
+      const currentHref = articleUrl;
+      const candidates  = all.filter(a => a.href !== currentHref);
+      const sameTag     = candidates.filter(a => a.tag === currentTag);
+      const others      = candidates.filter(a => a.tag !== currentTag);
+      const related     = [...sameTag, ...others].slice(0, 3);
+
+      if (!related.length) return;
+
+      // "Lue myös" grid
+      const grid = document.getElementById('read-more-grid');
+      grid.innerHTML = related.map(a => {
+        const url = 'uutinen.html?url=' + encodeURIComponent(a.href.startsWith('http') ? a.href : BASE + a.href);
+        const imgSrc = a.img.startsWith('/') ? BASE + a.img : a.img;
+        const safeTitle = a.title.replace(/</g,'&lt;').replace(/>/g,'&gt;');
+        return `
+          <a href="${url}" class="news-card">
+            <div class="news-img-wrap">
+              <img src="${imgSrc}" alt="${safeTitle}" onerror="this.src='${FALLBACK}'" loading="lazy">
+            </div>
+            <div class="news-body">
+              ${a.date ? `<div class="news-date">${a.date}</div>` : ''}
+              <h3 class="news-title">${safeTitle}</h3>
+              <div class="news-tag"><span>${a.tag}</span></div>
+            </div>
+          </a>`;
+      }).join('');
+      document.getElementById('read-more-section').style.display = 'block';
+
+      // Sidebar recent news
+      const sidebarNews = document.getElementById('sidebar-news');
+      sidebarNews.innerHTML = candidates.slice(0, 5).map(a => {
+        const url = 'uutinen.html?url=' + encodeURIComponent(a.href.startsWith('http') ? a.href : BASE + a.href);
+        const safeTitle = a.title.replace(/</g,'&lt;').replace(/>/g,'&gt;');
+        return `
+          <a href="${url}" class="sidebar-nav-link">
+            <div class="sidebar-nav-title">${safeTitle}</div>
+            ${a.date ? `<div class="sidebar-nav-date">${a.date}</div>` : ''}
+          </a>`;
+      }).join('');
+
+    } catch (e) {
+      // Related articles are non-critical — fail silently
+      console.warn('Related articles failed:', e);
+    }
+  }
+
+  // ── Error state ───────────────────────────────────────────────────────────────
+
+  function showError(msg, noUrl, url) {
+    document.getElementById('hero-skeleton').style.display = 'none';
+    document.getElementById('hero-content').style.opacity = '1';
+    document.getElementById('article-title').textContent = 'Artikkelia ei löydy';
+    document.getElementById('body-skeleton').style.display = 'none';
+    const errDiv = document.getElementById('article-error');
+    errDiv.style.display = 'block';
+    errDiv.innerHTML = `
+      <div class="load-error">
+        <div class="load-error-icon">📄</div>
+        <h2>Artikkelia ei voitu ladata</h2>
+        <p>${msg}</p>
+        ${url ? `<a href="${url}" class="btn-secondary" target="_blank" rel="noopener">Avaa alkuperäinen →</a>` : ''}
+        <br><br>
+        <a href="uutiset.html" class="btn-secondary" style="margin-top:8px;">← Takaisin uutisiin</a>
+      </div>`;
+  }
+
+  // ── Copy link ─────────────────────────────────────────────────────────────────
+
+  window.copyLink = function() {
+    navigator.clipboard.writeText(window.location.href).then(() => {
+      const btn = document.getElementById('share-copy');
+      btn.innerHTML = '<span class="share-icon">✅</span> Kopioitu!';
+      setTimeout(() => { btn.innerHTML = '<span class="share-icon">🔗</span> Kopioi linkki'; }, 2000);
+    });
+  };
+
+})();
+</script>
+
+</body>
+</html>
