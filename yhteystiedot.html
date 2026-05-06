@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yhteystiedot — Espoon Biljardikerho ry.</title>
+<meta name="description" content="Espoon Biljardikerho yhteystiedot, sijainti ja hallitus. Tillinmäentie 1 F, 02330 Espoo.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --gold: #C8A84B; --gold-light: #E2C97A; --gold-dim: #7a6528;
+  --green-dark: #0D1F0F; --green-mid: #152B17; --green-felt: #1A3A1C;
+  --surface: #111E12; --surface-card: #192A1B;
+  --text-primary: #F0EDE4; --text-secondary: #A8A090; --text-muted: #6B6358;
+  --border: rgba(200,168,75,0.14); --border-strong: rgba(200,168,75,0.28);
+  --px: clamp(1rem, 4vw, 3rem); --spy: clamp(36px, 5vw, 64px);
+}
+html { scroll-behavior: smooth; }
+body { font-family: 'DM Sans', sans-serif; background: var(--green-dark); color: var(--text-primary); font-size: clamp(14px,1.5vw,16px); line-height: 1.6; overflow-x: hidden; }
+
+/* NAV */
+nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:0 var(--px); height:clamp(52px,7vw,64px); background:rgba(13,31,15,0.95); backdrop-filter:blur(14px); border-bottom:1px solid var(--border); }
+.nav-logo { display:flex; align-items:center; gap:10px; text-decoration:none; flex-shrink:0; }
+.nav-logo-icon { width:32px; height:32px; background:var(--gold); border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:'Playfair Display',serif; font-weight:700; font-size:12px; color:var(--green-dark); flex-shrink:0; }
+.nav-logo-text { font-family:'Playfair Display',serif; font-size:13.5px; font-weight:600; color:var(--text-primary); line-height:1.2; }
+.nav-logo-sub { font-size:9.5px; font-weight:300; color:var(--gold); letter-spacing:0.1em; text-transform:uppercase; }
+.nav-links { display:flex; align-items:center; gap:1px; list-style:none; }
+.nav-links a { display:block; padding:5px 10px; font-size:12px; color:var(--text-secondary); text-decoration:none; border-radius:5px; transition:color 0.2s, background 0.2s; }
+.nav-links a:hover { color:var(--text-primary); background:rgba(200,168,75,0.08); }
+.nav-links a.active { color:var(--gold); }
+.nav-cta { padding:6px 16px !important; background:var(--gold) !important; color:var(--green-dark) !important; font-weight:500 !important; border-radius:5px !important; }
+.nav-cta:hover { background:var(--gold-light) !important; }
+.lang-switcher { display:flex; align-items:center; gap:2px; margin-left:10px; padding-left:10px; border-left:1px solid var(--border); }
+.lang-btn { display:flex; align-items:center; gap:4px; padding:4px 7px; border-radius:4px; border:none; cursor:pointer; background:transparent; color:var(--text-muted); font-family:'DM Sans',sans-serif; font-size:11px; transition:color 0.2s, background 0.2s; text-decoration:none; }
+.lang-btn:hover { color:var(--text-primary); background:rgba(200,168,75,0.08); }
+.lang-btn.active { color:var(--gold); }
+.hamburger { display:none; flex-direction:column; gap:5px; cursor:pointer; padding:6px; background:none; border:none; }
+.hamburger span { display:block; width:22px; height:2px; background:var(--text-secondary); border-radius:2px; }
+.mobile-menu { display:none; position:fixed; top:clamp(52px,7vw,64px); left:0; right:0; background:rgba(13,31,15,0.98); border-bottom:1px solid var(--border); z-index:99; padding:14px var(--px) 20px; flex-direction:column; gap:3px; }
+.mobile-menu.open { display:flex; }
+.mobile-menu a { display:block; padding:10px 12px; font-size:15px; color:var(--text-secondary); text-decoration:none; border-radius:7px; }
+.mobile-menu a:hover, .mobile-menu a.active { color:var(--gold); background:rgba(200,168,75,0.06); }
+.mobile-menu .m-cta { background:var(--gold); color:var(--green-dark) !important; font-weight:500; margin-top:6px; text-align:center; }
+
+/* SHARED */
+section { padding: var(--spy) var(--px); }
+.sec-label { display:inline-block; font-size:10px; font-weight:500; color:var(--gold); letter-spacing:0.13em; text-transform:uppercase; margin-bottom:7px; }
+.divider { width:28px; height:2px; background:var(--gold); margin:7px 0 12px; }
+.sec-title { font-family:'Playfair Display',serif; font-size:clamp(20px,2.8vw,32px); font-weight:600; color:var(--text-primary); line-height:1.2; }
+.btn-primary { display:inline-flex; align-items:center; gap:7px; padding:clamp(9px,1.3vw,12px) clamp(16px,2.2vw,24px); background:var(--gold); color:var(--green-dark); font-family:'DM Sans',sans-serif; font-size:clamp(11.5px,1.1vw,13.5px); font-weight:500; border-radius:6px; text-decoration:none; transition:background 0.2s, transform 0.15s; }
+.btn-primary:hover { background:var(--gold-light); transform:translateY(-1px); }
+.btn-secondary { display:inline-flex; align-items:center; gap:7px; padding:clamp(8px,1.2vw,11px) clamp(12px,1.8vw,20px); background:transparent; color:var(--text-primary); font-family:'DM Sans',sans-serif; font-size:clamp(11.5px,1.1vw,13.5px); font-weight:400; border:1px solid var(--border-strong); border-radius:6px; text-decoration:none; transition:border-color 0.2s, color 0.2s; }
+.btn-secondary:hover { border-color:var(--gold); color:var(--gold); }
+
+/* PAGE HERO */
+.page-hero { padding-top:clamp(72px,10vw,90px); padding-bottom:clamp(24px,3vw,40px); padding-left:var(--px); padding-right:var(--px); background:var(--green-dark); border-bottom:1px solid var(--border); position:relative; overflow:hidden; }
+.page-hero-bg { position:absolute; inset:0; pointer-events:none; background: radial-gradient(ellipse 60% 80% at 90% 50%, rgba(26,58,28,0.4) 0%, transparent 70%); }
+.page-hero-felt { position:absolute; inset:0; opacity:0.18; pointer-events:none; background-image: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(26,58,28,0.18) 3px, rgba(26,58,28,0.18) 4px), repeating-linear-gradient(90deg, transparent, transparent 3px, rgba(26,58,28,0.18) 3px, rgba(26,58,28,0.18) 4px); }
+.page-hero-inner { position:relative; z-index:1; animation:fadeUp 0.45s ease both; }
+.breadcrumb { display:flex; align-items:center; gap:6px; font-size:11px; color:var(--text-muted); margin-bottom:14px; letter-spacing:0.04em; text-transform:uppercase; }
+.breadcrumb a { color:var(--text-muted); text-decoration:none; transition:color 0.2s; }
+.breadcrumb a:hover { color:var(--gold); }
+.breadcrumb-sep { color:var(--border-strong); }
+.page-hero h1 { font-family:'Playfair Display',serif; font-size:clamp(28px,3.8vw,48px); font-weight:700; line-height:1.1; color:var(--text-primary); margin-bottom:10px; }
+.page-hero h1 em { font-style:italic; color:var(--gold); }
+.page-hero-desc { font-size:clamp(13px,1.2vw,15px); font-weight:300; color:var(--text-secondary); line-height:1.7; max-width:520px; }
+
+/* CONTACT GRID SECTION */
+.contact-section { background:var(--green-dark); }
+.contact-grid { display:grid; grid-template-columns:1fr 1fr; gap:clamp(20px,3vw,40px); }
+
+/* INFO CARD */
+.info-card { background:var(--surface-card); border:1px solid var(--border); border-radius:10px; padding:clamp(20px,2.5vw,32px); }
+.info-card-title { font-family:'Playfair Display',serif; font-size:clamp(15px,1.8vw,20px); font-weight:600; color:var(--text-primary); margin-bottom:20px; padding-bottom:12px; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:10px; }
+.info-card-title-icon { font-size:18px; }
+
+/* contact rows */
+.ci-list { display:flex; flex-direction:column; gap:0; }
+.ci-row { display:flex; align-items:flex-start; gap:12px; padding:11px 0; border-bottom:1px solid var(--border); }
+.ci-row:last-child { border-bottom:none; padding-bottom:0; }
+.ci-icon { width:32px; height:32px; border-radius:7px; background:rgba(200,168,75,0.07); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:14px; flex-shrink:0; margin-top:1px; }
+.ci-label { font-size:9.5px; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.07em; margin-bottom:2px; }
+.ci-value { font-size:13.5px; color:var(--text-primary); font-weight:400; }
+.ci-value a { color:var(--gold); text-decoration:none; transition:color 0.2s; }
+.ci-value a:hover { color:var(--gold-light); text-decoration:underline; }
+.ci-value-sub { font-size:11.5px; color:var(--text-muted); margin-top:2px; font-weight:300; }
+
+/* opening hours note */
+.hours-note { margin-top:16px; padding:12px 14px; background:rgba(200,168,75,0.04); border:1px solid var(--border); border-radius:7px; font-size:12px; color:var(--text-muted); line-height:1.6; }
+.hours-note strong { color:var(--text-secondary); display:block; margin-bottom:3px; font-size:11px; letter-spacing:0.05em; text-transform:uppercase; }
+
+/* MAP */
+.map-card { background:var(--surface-card); border:1px solid var(--border); border-radius:10px; overflow:hidden; display:flex; flex-direction:column; }
+.map-embed { flex:1; min-height:280px; }
+.map-embed iframe { width:100%; height:100%; min-height:280px; border:none; display:block; filter:grayscale(0.3) contrast(0.9); }
+.map-footer { padding:14px 18px; border-top:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+.map-address { font-size:12.5px; color:var(--text-secondary); font-weight:300; line-height:1.5; }
+.map-address strong { color:var(--text-primary); display:block; font-size:13px; font-weight:500; }
+
+/* PEOPLE SECTION */
+.people-section { background:var(--surface); border-top:1px solid var(--border); }
+.people-grid { display:grid; grid-template-columns:1fr 1fr; gap:clamp(20px,3vw,40px); }
+
+/* person group */
+.person-group-title { font-family:'Playfair Display',serif; font-size:clamp(14px,1.6vw,18px); font-weight:600; color:var(--text-primary); margin-bottom:16px; padding-bottom:10px; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:8px; }
+.person-group-title-dot { width:8px; height:8px; border-radius:50%; background:var(--gold); flex-shrink:0; }
+
+.person-row { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; padding:9px 0; border-bottom:1px solid var(--border); }
+.person-row:last-child { border-bottom:none; }
+.person-role { font-size:10px; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:2px; }
+.person-name { font-size:13px; color:var(--text-primary); font-weight:400; }
+
+/* coaches grid */
+.coaches-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+.coach-card { background:var(--surface-card); border:1px solid var(--border); border-radius:8px; overflow:hidden; }
+.coach-photo { width:100%; aspect-ratio:1/1; overflow:hidden; background:var(--green-felt); position:relative; }
+.coach-photo img { width:100%; height:100%; object-fit:cover; filter:brightness(0.8) saturate(0.65); }
+.coach-photo-mono { width:100%; height:100%; display:flex; align-items:center; justify-content:center; }
+.coach-photo-mono-text { font-family:'Playfair Display',serif; font-size:28px; font-weight:600; color:var(--gold); opacity:0.5; }
+.coach-info { padding:10px 11px; }
+.coach-name { font-size:12px; font-weight:500; color:var(--text-primary); margin-bottom:2px; }
+.coach-role { font-size:10px; color:var(--text-muted); }
+
+/* CONTACT FORM SECTION */
+.form-section { background:var(--green-dark); border-top:1px solid var(--border); }
+.form-layout { display:grid; grid-template-columns:1fr 1.2fr; gap:clamp(28px,4vw,56px); align-items:start; }
+.form-intro p { font-size:clamp(13px,1.2vw,15px); color:var(--text-secondary); font-weight:300; line-height:1.75; margin-bottom:16px; }
+.form-intro-links { display:flex; flex-direction:column; gap:10px; margin-top:20px; }
+.form-intro-link { display:flex; align-items:center; gap:10px; font-size:13px; color:var(--text-secondary); text-decoration:none; padding:10px 14px; background:var(--surface-card); border:1px solid var(--border); border-radius:8px; transition:border-color 0.2s, color 0.2s; }
+.form-intro-link:hover { border-color:var(--border-strong); color:var(--gold); }
+.form-intro-link-icon { font-size:16px; flex-shrink:0; }
+
+/* form */
+.contact-form { background:var(--surface-card); border:1px solid var(--border); border-radius:10px; padding:clamp(20px,2.5vw,32px); }
+.form-group { margin-bottom:16px; }
+.form-label { font-size:10.5px; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.07em; display:block; margin-bottom:6px; }
+.form-input, .form-textarea {
+  width:100%; padding:10px 14px;
+  background:rgba(200,168,75,0.04); border:1px solid var(--border);
+  border-radius:6px; color:var(--text-primary);
+  font-family:'DM Sans',sans-serif; font-size:13.5px; font-weight:300;
+  transition:border-color 0.2s; outline:none; resize:none;
+}
+.form-input::placeholder, .form-textarea::placeholder { color:var(--text-muted); }
+.form-input:focus, .form-textarea:focus { border-color:var(--border-strong); }
+.form-textarea { min-height:120px; }
+.form-submit { width:100%; justify-content:center; font-size:13.5px; padding:12px 20px; margin-top:4px; border:none; cursor:pointer; }
+.form-success { display:none; text-align:center; padding:24px; }
+.form-success-icon { font-size:36px; margin-bottom:10px; }
+.form-success p { font-size:13px; color:var(--text-secondary); }
+.form-error-msg { font-size:11.5px; color:#E8956A; margin-top:8px; display:none; }
+
+/* FOOTER */
+footer { background:var(--green-dark); border-top:1px solid var(--border); padding:clamp(32px,4.5vw,52px) var(--px) 24px; }
+.footer-grid { display:grid; grid-template-columns:1.3fr 1fr 1fr 1fr; gap:clamp(20px,3.5vw,44px); margin-bottom:30px; }
+.footer-brand p { font-size:12.5px; font-weight:300; color:var(--text-muted); line-height:1.7; margin-top:12px; max-width:240px; }
+.footer-col h4 { font-family:'Playfair Display',serif; font-size:12.5px; font-weight:600; color:var(--text-primary); margin-bottom:14px; padding-bottom:9px; border-bottom:1px solid var(--border); }
+.footer-col ul { list-style:none; display:flex; flex-direction:column; gap:8px; }
+.footer-col a { font-size:12px; font-weight:300; color:var(--text-muted); text-decoration:none; transition:color 0.2s; }
+.footer-col a:hover { color:var(--gold); }
+.f-ci { display:flex; align-items:flex-start; gap:8px; font-size:12px; color:var(--text-muted); font-weight:300; line-height:1.5; }
+.f-ci-icon { color:var(--gold-dim); flex-shrink:0; margin-top:1px; }
+.footer-bottom { padding-top:18px; border-top:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; }
+.footer-bottom p { font-size:11px; color:var(--text-muted); }
+.social-btn { width:30px; height:30px; border-radius:6px; border:1px solid var(--border); display:flex; align-items:center; justify-content:center; color:var(--text-muted); text-decoration:none; font-size:12px; transition:border-color 0.2s, color 0.2s; }
+.social-btn:hover { border-color:var(--border-strong); color:var(--gold); }
+
+@keyframes fadeUp { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
+
+@media (max-width:900px) {
+  .nav-links { display:none; } .lang-switcher { display:none; } .hamburger { display:flex; }
+  .contact-grid { grid-template-columns:1fr; }
+  .people-grid { grid-template-columns:1fr; }
+  .form-layout { grid-template-columns:1fr; }
+  .footer-grid { grid-template-columns:1fr 1fr; }
+  .coaches-grid { grid-template-columns:repeat(3,1fr); }
+}
+@media (max-width:560px) {
+  .footer-grid { grid-template-columns:1fr; }
+  .coaches-grid { grid-template-columns:repeat(2,1fr); }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">
+    <div class="nav-logo-icon">EBK</div>
+    <div><div class="nav-logo-text">Espoon Biljardikerho</div><div class="nav-logo-sub">Perustettu 1980</div></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Etusivu</a></li>
+    <li><a href="esittely.html">Esittely</a></li>
+    <li><a href="uutiset.html">Uutiset</a></li>
+    <li><a href="tulospalvelu.html">Tulospalvelu</a></li>
+    <li><a href="tapahtumat.html">Tapahtumat</a></li>
+    <li><a href="jasenet.html">Jäsenet</a></li>
+    <li><a href="yhteystiedot.html" class="active">Yhteystiedot</a></li>
+    <li><a href="https://www.espoonbiljardikerho.com/esittely/jaseneksi/" class="nav-cta" target="_blank">Liity jäseneksi</a></li>
+  </ul>
+  <div class="lang-switcher">
+    <a href="#" class="lang-btn active">🇫🇮 FI</a>
+    <a href="#" class="lang-btn">🇸🇪 SV</a>
+    <a href="#" class="lang-btn">🇺🇦 UA</a>
+  </div>
+  <button class="hamburger" onclick="document.querySelector('.mobile-menu').classList.toggle('open')" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="mobile-menu">
+  <a href="index.html">Etusivu</a>
+  <a href="esittely.html">Esittely</a>
+  <a href="uutiset.html">Uutiset</a>
+  <a href="tulospalvelu.html">Tulospalvelu</a>
+  <a href="tapahtumat.html">Tapahtumat</a>
+  <a href="jasenet.html">Jäsenet</a>
+  <a href="yhteystiedot.html" class="active">Yhteystiedot</a>
+  <a href="https://www.espoonbiljardikerho.com/esittely/jaseneksi/" class="m-cta" target="_blank">Liity jäseneksi</a>
+  <div style="display:flex;gap:6px;margin-top:10px;padding-top:10px;border-top:1px solid var(--border);">
+    <a href="#" style="flex:1;text-align:center;padding:8px;border-radius:6px;background:rgba(200,168,75,0.1);border:1px solid var(--border-strong);font-size:12px;color:var(--gold);text-decoration:none;">🇫🇮 Suomi</a>
+    <a href="#" style="flex:1;text-align:center;padding:8px;border-radius:6px;border:1px solid var(--border);font-size:12px;color:var(--text-muted);text-decoration:none;">🇸🇪 Svenska</a>
+    <a href="#" style="flex:1;text-align:center;padding:8px;border-radius:6px;border:1px solid var(--border);font-size:12px;color:var(--text-muted);text-decoration:none;">🇺🇦 UA</a>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="page-hero">
+  <div class="page-hero-bg"></div>
+  <div class="page-hero-felt"></div>
+  <div class="page-hero-inner">
+    <div class="breadcrumb">
+      <a href="index.html">Etusivu</a>
+      <span class="breadcrumb-sep">›</span>
+      <span>Yhteystiedot</span>
+    </div>
+    <h1>Ota <em>yhteyttä</em></h1>
+    <p class="page-hero-desc">Löydät meidät Espoon Tillinmäestä. Klubi on yksityinen — käynnit sovittava etukäteen.</p>
+  </div>
+</section>
+
+<!-- CONTACT INFO + MAP -->
+<section class="contact-section">
+  <div class="contact-grid">
+
+    <div class="info-card">
+      <div class="info-card-title"><span class="info-card-title-icon">📍</span> Klubi & yhteystiedot</div>
+      <div class="ci-list">
+        <div class="ci-row">
+          <div class="ci-icon">📍</div>
+          <div>
+            <div class="ci-label">Osoite</div>
+            <div class="ci-value">Tillinmäentie 1 F, 2. kerros</div>
+            <div class="ci-value-sub">02330 Espoo · Kiviruukin teollisuusalue, Tillinmäki</div>
+          </div>
+        </div>
+        <div class="ci-row">
+          <div class="ci-icon">📞</div>
+          <div>
+            <div class="ci-label">Klubin puhelin</div>
+            <div class="ci-value"><a href="tel:+358457838220">045 7838 2201</a></div>
+          </div>
+        </div>
+        <div class="ci-row">
+          <div class="ci-icon">✉️</div>
+          <div>
+            <div class="ci-label">Sähköposti</div>
+            <div class="ci-value"><a href="mailto:espoonbiljardikerho@gmail.com">espoonbiljardikerho@gmail.com</a></div>
+          </div>
+        </div>
+        <div class="ci-row">
+          <div class="ci-icon">👤</div>
+          <div>
+            <div class="ci-label">EBK:n yhteyshenkilö</div>
+            <div class="ci-value">Joni Ahola</div>
+            <div class="ci-value-sub"><a href="tel:+358407563627" style="color:var(--text-muted);text-decoration:none;">040 756 3627</a> · <a href="mailto:joni.ahola@gmail.com" style="color:var(--gold);text-decoration:none;">joni.ahola@gmail.com</a></div>
+          </div>
+        </div>
+        <div class="ci-row">
+          <div class="ci-icon">🏠</div>
+          <div>
+            <div class="ci-label">Klubi-isäntä</div>
+            <div class="ci-value">Tuomas Komi</div>
+            <div class="ci-value-sub"><a href="tel:+358414323669" style="color:var(--text-muted);text-decoration:none;">041 432 3669</a> · <a href="mailto:tuomas.komi@gmail.com" style="color:var(--gold);text-decoration:none;">tuomas.komi@gmail.com</a></div>
+          </div>
+        </div>
+        <div class="ci-row">
+          <div class="ci-icon" style="font-size:11px;font-weight:700;color:var(--gold);font-family:serif;">f</div>
+          <div>
+            <div class="ci-label">Facebook</div>
+            <div class="ci-value"><a href="https://www.facebook.com/espoonbiljardikerho" target="_blank" rel="noopener">facebook.com/espoonbiljardikerho</a></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hours-note">
+        <strong>Aukioloajat</strong>
+        Klubi on yksityinen eikä sillä ole yleisiä aukioloaikoja. Käynnit sovitaan etukäteen — ota yhteyttä puhelimitse tai sähköpostitse.
+      </div>
+    </div>
+
+    <div class="map-card">
+      <div class="map-embed">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1982.4!2d24.7155!3d60.1642!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x468df5e1b3c3c3c3%3A0x0!2sTillinm%C3%A4entie+1%2C+02330+Espoo!5e0!3m2!1sfi!2sfi!4v1"
+          allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+          title="Espoon Biljardikerho sijainti">
+        </iframe>
+      </div>
+      <div class="map-footer">
+        <div class="map-address">
+          <strong>Espoon Biljardikerho</strong>
+          Tillinmäentie 1 F · 02330 Espoo
+        </div>
+        <a href="https://maps.google.com/?q=Tillinmäentie+1+F,+02330+Espoo" target="_blank" rel="noopener" class="btn-secondary" style="font-size:11.5px;padding:7px 14px;">
+          Avaa kartalla →
+        </a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- PEOPLE: BOARD + COACHES -->
+<section class="people-section">
+  <div style="margin-bottom:clamp(24px,3vw,40px);">
+    <span class="sec-label">Organisaatio</span>
+    <div class="divider"></div>
+    <h2 class="sec-title">Hallitus & valmentajat</h2>
+  </div>
+
+  <div class="people-grid">
+
+    <!-- Board -->
+    <div>
+      <div class="person-group-title"><div class="person-group-title-dot"></div>Hallitus 2026</div>
+      <div class="ci-list">
+        <div class="person-row"><div><div class="person-role">Puheenjohtaja</div><div class="person-name">Joni Ahola</div></div></div>
+        <div class="person-row"><div><div class="person-role">Varapuheenjohtaja</div><div class="person-name">Tuomas Komi</div></div></div>
+        <div class="person-row"><div><div class="person-role">Jäsen · sihteeri</div><div class="person-name">Mikko Kauppinen</div></div></div>
+        <div class="person-row"><div><div class="person-role">Jäsen · varainhoitaja</div><div class="person-name">Jaakko Kahima</div></div></div>
+        <div class="person-row"><div><div class="person-role">Jäsen</div><div class="person-name">Jarno Ahola</div></div></div>
+        <div class="person-row"><div><div class="person-role">Jäsen</div><div class="person-name">Antti Lohikoski</div></div></div>
+        <div class="person-row"><div><div class="person-role">Jäsen</div><div class="person-name">Petri Ahvonen</div></div></div>
+        <div class="person-row"><div><div class="person-role" style="color:var(--text-muted);opacity:0.7;">Varajäsen</div><div class="person-name" style="color:var(--text-secondary);">Lauri Kankkunen</div></div></div>
+        <div class="person-row"><div><div class="person-role" style="color:var(--text-muted);opacity:0.7;">Varajäsen</div><div class="person-name" style="color:var(--text-secondary);">Panu Pekkala</div></div></div>
+        <div class="person-row"><div><div class="person-role" style="color:var(--text-muted);opacity:0.7;">Varajäsen</div><div class="person-name" style="color:var(--text-secondary);">Pekka Räisänen</div></div></div>
+      </div>
+    </div>
+
+    <!-- Coaches -->
+    <div>
+      <div class="person-group-title"><div class="person-group-title-dot" style="background:var(--gold-light);"></div>Valmentajat</div>
+      <div class="coaches-grid">
+        <div class="coach-card">
+          <div class="coach-photo">
+            <img src="https://bin.yhdistysavain.fi/1604389/gRcQOS79VufAL0ZBg3qc0U_Ur4/JouniKelokaksi..jpg" alt="Jouni Kelokaski" onerror="this.style.display='none'">
+          </div>
+          <div class="coach-info"><div class="coach-name">Jouni Kelokaski</div><div class="coach-role">SBIL seuravalmentaja</div></div>
+        </div>
+        <div class="coach-card">
+          <div class="coach-photo">
+            <img src="https://bin.yhdistysavain.fi/1604389/L1hfYH8HJbYpdDSjBpvw0U_UrA/TuomoTr%C3%A4ff.jpg" alt="Tuomo Träff" onerror="this.style.display='none'">
+          </div>
+          <div class="coach-info"><div class="coach-name">Tuomo Träff</div><div class="coach-role">SBIL seuravalmentaja</div></div>
+        </div>
+        <div class="coach-card">
+          <div class="coach-photo">
+            <img src="https://bin.yhdistysavain.fi/1604389/bMplAIAiISOyYWnN3YaL0U_UrQ/MikkoKauppinen.jpg" alt="Mikko Kauppinen" onerror="this.style.display='none'">
+          </div>
+          <div class="coach-info"><div class="coach-name">Mikko Kauppinen</div><div class="coach-role">SBIL seuravalmentaja</div></div>
+        </div>
+        <div class="coach-card">
+          <div class="coach-photo">
+            <img src="https://bin.yhdistysavain.fi/1604389/L7bbQPKtZA1LVTEQc4vT0dYRo6/LohikoskiAntti.jpg" alt="Antti Lohikoski" onerror="this.style.display='none'">
+          </div>
+          <div class="coach-info"><div class="coach-name">Antti Lohikoski</div><div class="coach-role">SBIL seuravalmentaja</div></div>
+        </div>
+        <div class="coach-card">
+          <div class="coach-photo">
+            <img src="https://bin.yhdistysavain.fi/1604389/nZwWtkKEewPUWh0DIXrf0U_UrU/JarnoAhola.jpg" alt="Jarno Ahola" onerror="this.style.display='none'">
+          </div>
+          <div class="coach-info"><div class="coach-name">Jarno Ahola</div><div class="coach-role">Yleisvalmennus</div></div>
+        </div>
+        <div class="coach-card">
+          <div class="coach-photo">
+            <div class="coach-photo-mono"><div class="coach-photo-mono-text">EK</div></div>
+          </div>
+          <div class="coach-info"><div class="coach-name">Esa Kalela</div><div class="coach-role">Yleisvalmennus</div></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CONTACT FORM -->
+<section class="form-section">
+  <div class="form-layout">
+    <div class="form-intro">
+      <span class="sec-label">Yhteydenotto</span>
+      <div class="divider"></div>
+      <h2 class="sec-title" style="margin-bottom:16px;">Lähetä viesti</h2>
+      <p>Vastaamme viesteihin mahdollisimman pian. Voit myös soittaa suoraan tai lähettää sähköpostia.</p>
+      <div class="form-intro-links">
+        <a href="tel:+358457838220" class="form-intro-link">
+          <span class="form-intro-link-icon">📞</span>
+          <div><div style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:2px;">Puhelin</div>045 7838 2201</div>
+        </a>
+        <a href="mailto:espoonbiljardikerho@gmail.com" class="form-intro-link">
+          <span class="form-intro-link-icon">✉️</span>
+          <div><div style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:2px;">Sähköposti</div>espoonbiljardikerho@gmail.com</div>
+        </a>
+        <a href="https://www.espoonbiljardikerho.com/esittely/jaseneksi/" target="_blank" rel="noopener" class="form-intro-link">
+          <span class="form-intro-link-icon">🏆</span>
+          <div><div style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:2px;">Jäsenyys</div>Liity jäseneksi →</div>
+        </a>
+      </div>
+    </div>
+
+    <div class="contact-form">
+      <form id="contact-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+        <div class="form-group">
+          <label class="form-label" for="name">Nimi *</label>
+          <input class="form-input" type="text" id="name" name="name" required placeholder="Etunimi Sukunimi">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="email">Sähköposti *</label>
+          <input class="form-input" type="email" id="email" name="email" required placeholder="sinä@example.com">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="message">Viesti *</label>
+          <textarea class="form-textarea" id="message" name="message" required placeholder="Kirjoita viestisi tähän…"></textarea>
+        </div>
+        <div class="form-error-msg" id="form-error">Lähetys epäonnistui. Kokeile uudelleen tai lähetä sähköpostia suoraan.</div>
+        <button type="submit" class="btn-primary form-submit" id="form-submit">Lähetä viesti →</button>
+      </form>
+      <div class="form-success" id="form-success">
+        <div class="form-success-icon">✅</div>
+        <p style="font-size:15px;color:var(--text-primary);margin-bottom:6px;">Viesti lähetetty!</p>
+        <p>Vastaamme sinulle mahdollisimman pian.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div style="display:flex;gap:10px;align-items:center;">
+        <div class="nav-logo-icon">EBK</div>
+        <div><div class="nav-logo-text">Espoon Biljardikerho</div><div class="nav-logo-sub">Perustettu 1980</div></div>
+      </div>
+      <p>Yksityisklubi biljardista intohimoisille. Kotimme on Espoon Tillinmäessä — tule mukaan.</p>
+    </div>
+    <div class="footer-col"><h4>Sivut</h4><ul>
+      <li><a href="index.html">Etusivu</a></li>
+      <li><a href="esittely.html">Esittely</a></li>
+      <li><a href="uutiset.html">Uutiset</a></li>
+      <li><a href="tulospalvelu.html">Tulospalvelu</a></li>
+      <li><a href="tapahtumat.html">Tapahtumat</a></li>
+      <li><a href="jasenet.html">Jäsenet</a></li>
+    </ul></div>
+    <div class="footer-col"><h4>Lajit</h4><ul>
+      <li><a href="#">Kaisa</a></li><li><a href="#">Kara</a></li>
+      <li><a href="#">Pool</a></li><li><a href="#">Pyramidi</a></li>
+      <li><a href="#">Snooker</a></li>
+    </ul></div>
+    <div class="footer-col"><h4>Yhteystiedot</h4>
+      <div style="display:flex;flex-direction:column;gap:9px;margin-top:4px;">
+        <div class="f-ci"><span class="f-ci-icon">📍</span><span>Tillinmäentie 1 F, 02330 Espoo</span></div>
+        <div class="f-ci"><span class="f-ci-icon">✉️</span><span>espoonbiljardikerho@gmail.com</span></div>
+        <div class="f-ci"><span class="f-ci-icon">🔗</span><span>facebook.com/espoonbiljardikerho</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 Espoon Biljardikerho ry.</p>
+    <a href="https://www.facebook.com/espoonbiljardikerho" class="social-btn" title="Facebook">f</a>
+  </div>
+</footer>
+
+<script>
+document.getElementById('contact-form').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const btn = document.getElementById('form-submit');
+  const errEl = document.getElementById('form-error');
+  btn.textContent = 'Lähetetään…';
+  btn.style.opacity = '0.7';
+  btn.disabled = true;
+  errEl.style.display = 'none';
+
+  try {
+    const res = await fetch(this.action, {
+      method: 'POST',
+      body: new FormData(this),
+      headers: { 'Accept': 'application/json' }
+    });
+    if (res.ok) {
+      document.getElementById('contact-form').style.display = 'none';
+      document.getElementById('form-success').style.display = 'block';
+    } else {
+      throw new Error('Server error');
+    }
+  } catch {
+    errEl.style.display = 'block';
+    btn.textContent = 'Lähetä viesti →';
+    btn.style.opacity = '1';
+    btn.disabled = false;
+  }
+});
+</script>
+</body>
+</html>
