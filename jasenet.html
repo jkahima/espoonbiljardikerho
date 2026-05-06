@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jäsenet — Espoon Biljardikerho ry.</title>
+<meta name="description" content="Espoon Biljardikerho jäsenet — täysvaltaiset klubijäsenet, Espoon klubijäsenet ja pelaajajäsenet.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --gold: #C8A84B;
+  --gold-light: #E2C97A;
+  --gold-dim: #7a6528;
+  --green-dark: #0D1F0F;
+  --green-mid: #152B17;
+  --green-felt: #1A3A1C;
+  --surface: #111E12;
+  --surface-card: #192A1B;
+  --text-primary: #F0EDE4;
+  --text-secondary: #A8A090;
+  --text-muted: #6B6358;
+  --border: rgba(200,168,75,0.14);
+  --border-strong: rgba(200,168,75,0.28);
+  --px: clamp(1rem, 4vw, 3rem);
+  --spy: clamp(36px, 5vw, 64px);
+
+  /* member type colours */
+  --c-tays:  #C8A84B; /* gold  — täysvaltaiset */
+  --c-klubi: #4ECBA0; /* teal  — espoon klubi  */
+  --c-pelaa: #7DC8E8; /* blue  — pelaajajäsen  */
+}
+
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--green-dark);
+  color: var(--text-primary);
+  font-size: clamp(14px, 1.5vw, 16px);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* ── NAV ── */
+nav {
+  position:fixed; top:0; left:0; right:0; z-index:200;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:0 var(--px); height:clamp(52px,7vw,64px);
+  background:rgba(13,31,15,0.95); backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--border);
+}
+.nav-logo { display:flex; align-items:center; gap:10px; text-decoration:none; flex-shrink:0; }
+.nav-logo-icon { width:32px; height:32px; background:var(--gold); border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:'Playfair Display',serif; font-weight:700; font-size:12px; color:var(--green-dark); flex-shrink:0; }
+.nav-logo-text { font-family:'Playfair Display',serif; font-size:13.5px; font-weight:600; color:var(--text-primary); line-height:1.2; }
+.nav-logo-sub  { font-size:9.5px; font-weight:300; color:var(--gold); letter-spacing:0.1em; text-transform:uppercase; }
+.nav-links { display:flex; align-items:center; gap:1px; list-style:none; }
+.nav-links a { display:block; padding:5px 10px; font-size:12px; font-weight:400; color:var(--text-secondary); text-decoration:none; border-radius:5px; transition:color 0.2s, background 0.2s; }
+.nav-links a:hover { color:var(--text-primary); background:rgba(200,168,75,0.08); }
+.nav-links a.active { color:var(--gold); }
+.nav-cta { padding:6px 16px !important; background:var(--gold) !important; color:var(--green-dark) !important; font-weight:500 !important; border-radius:5px !important; }
+.nav-cta:hover { background:var(--gold-light) !important; }
+.lang-switcher { display:flex; align-items:center; gap:2px; margin-left:10px; padding-left:10px; border-left:1px solid var(--border); }
+.lang-btn { display:flex; align-items:center; gap:4px; padding:4px 7px; border-radius:4px; border:none; cursor:pointer; background:transparent; color:var(--text-muted); font-family:'DM Sans',sans-serif; font-size:11px; transition:color 0.2s, background 0.2s; text-decoration:none; }
+.lang-btn:hover { color:var(--text-primary); background:rgba(200,168,75,0.08); }
+.lang-btn.active { color:var(--gold); }
+.hamburger { display:none; flex-direction:column; gap:5px; cursor:pointer; padding:6px; background:none; border:none; }
+.hamburger span { display:block; width:22px; height:2px; background:var(--text-secondary); border-radius:2px; }
+.mobile-menu { display:none; position:fixed; top:clamp(52px,7vw,64px); left:0; right:0; background:rgba(13,31,15,0.98); border-bottom:1px solid var(--border); z-index:199; padding:14px var(--px) 20px; flex-direction:column; gap:3px; }
+.mobile-menu.open { display:flex; }
+.mobile-menu a { display:block; padding:10px 12px; font-size:15px; color:var(--text-secondary); text-decoration:none; border-radius:7px; }
+.mobile-menu a:hover, .mobile-menu a.active { color:var(--gold); background:rgba(200,168,75,0.06); }
+.mobile-menu .m-cta { background:var(--gold); color:var(--green-dark) !important; font-weight:500; margin-top:6px; text-align:center; }
+
+/* ── PAGE HERO ── */
+.page-hero {
+  padding-top:clamp(72px,10vw,90px); padding-bottom:clamp(24px,3vw,40px);
+  padding-left:var(--px); padding-right:var(--px);
+  background:var(--green-dark); border-bottom:1px solid var(--border);
+  position:relative; overflow:hidden;
+}
+.page-hero-bg { position:absolute; inset:0; pointer-events:none; background: radial-gradient(ellipse 60% 80% at 90% 50%, rgba(26,58,28,0.4) 0%, transparent 70%), radial-gradient(ellipse 30% 50% at 5% 100%, rgba(200,168,75,0.04) 0%, transparent 60%); }
+.page-hero-felt { position:absolute; inset:0; opacity:0.18; pointer-events:none; background-image: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(26,58,28,0.18) 3px, rgba(26,58,28,0.18) 4px), repeating-linear-gradient(90deg, transparent, transparent 3px, rgba(26,58,28,0.18) 3px, rgba(26,58,28,0.18) 4px); }
+.page-hero-inner { position:relative; z-index:1; animation:fadeUp 0.45s ease both; }
+.page-hero-top { display:flex; align-items:flex-end; justify-content:space-between; gap:20px; flex-wrap:wrap; }
+.breadcrumb { display:flex; align-items:center; gap:6px; font-size:11px; color:var(--text-muted); margin-bottom:14px; letter-spacing:0.04em; text-transform:uppercase; }
+.breadcrumb a { color:var(--text-muted); text-decoration:none; transition:color 0.2s; }
+.breadcrumb a:hover { color:var(--gold); }
+.breadcrumb-sep { color:var(--border-strong); }
+.page-hero h1 { font-family:'Playfair Display',serif; font-size:clamp(28px,3.8vw,48px); font-weight:700; line-height:1.1; color:var(--text-primary); margin-bottom:10px; }
+.page-hero h1 em { font-style:italic; color:var(--gold); }
+.page-hero-desc { font-size:clamp(13px,1.2vw,15px); font-weight:300; color:var(--text-secondary); line-height:1.7; }
+
+/* total count pills */
+.hero-counts { display:flex; gap:8px; flex-wrap:wrap; margin-top:18px; }
+.count-pill {
+  display:flex; align-items:center; gap:7px;
+  padding:5px 12px; border-radius:20px;
+  border:1px solid var(--border); background:rgba(200,168,75,0.04);
+  font-size:11px; color:var(--text-muted);
+}
+.count-pill-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
+.count-pill strong { color:var(--text-primary); font-weight:500; }
+
+/* search */
+.search-wrap {
+  position:relative; width:clamp(200px,28vw,300px);
+}
+.search-input {
+  width:100%; padding:8px 14px 8px 34px;
+  background:rgba(200,168,75,0.05); border:1px solid var(--border);
+  border-radius:6px; color:var(--text-primary);
+  font-family:'DM Sans',sans-serif; font-size:12.5px;
+  transition:border-color 0.2s;
+  outline:none;
+}
+.search-input::placeholder { color:var(--text-muted); }
+.search-input:focus { border-color:var(--border-strong); }
+.search-icon { position:absolute; left:10px; top:50%; transform:translateY(-50%); font-size:13px; pointer-events:none; opacity:0.45; }
+
+/* ── TYPE TABS ── */
+.type-tabs {
+  display:flex; align-items:center; gap:6px; flex-wrap:wrap;
+  padding:clamp(14px,2vw,20px) var(--px);
+  background:rgba(13,31,15,0.92);
+  border-bottom:1px solid var(--border);
+  position:sticky; top:clamp(52px,7vw,64px); z-index:10;
+  backdrop-filter:blur(10px);
+}
+.type-tab {
+  display:flex; align-items:center; gap:6px;
+  padding:5px 14px; border-radius:20px;
+  border:1px solid var(--border); background:transparent;
+  color:var(--text-muted); font-family:'DM Sans',sans-serif;
+  font-size:11.5px; cursor:pointer; transition:all 0.18s;
+}
+.type-tab:hover { border-color:var(--border-strong); color:var(--text-primary); }
+.type-tab.active { color:var(--text-primary); border-color:var(--border-strong); background:rgba(255,255,255,0.05); }
+.type-tab-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
+.type-tab .tab-count { font-size:10px; opacity:0.6; }
+
+/* ── MEMBER SECTIONS ── */
+.members-page { padding:0 var(--px) var(--spy); }
+
+.member-section { padding-top:clamp(28px,3.5vw,48px); }
+.member-section[data-hidden="true"] { display:none; }
+
+.section-header {
+  display:flex; align-items:center; gap:14px;
+  margin-bottom:clamp(16px,2vw,24px);
+  padding-bottom:12px;
+  border-bottom:1px solid var(--border);
+}
+.section-header-line { width:3px; height:24px; border-radius:2px; flex-shrink:0; }
+.section-header-text { flex:1; }
+.section-label { font-size:10px; font-weight:500; letter-spacing:0.13em; text-transform:uppercase; margin-bottom:3px; }
+.section-title { font-family:'Playfair Display',serif; font-size:clamp(16px,2vw,22px); font-weight:600; color:var(--text-primary); line-height:1.2; }
+.section-desc { font-size:11.5px; color:var(--text-muted); margin-top:3px; font-weight:300; }
+.section-count {
+  font-family:'Playfair Display',serif; font-size:clamp(22px,2.5vw,30px);
+  font-weight:700; line-height:1; flex-shrink:0;
+}
+
+/* ── MEMBER GRID ── */
+.member-grid {
+  display:grid;
+  grid-template-columns:repeat(4, 1fr);
+  gap:clamp(10px,1.5vw,16px);
+}
+
+/* ── MEMBER CARD ── */
+.member-card {
+  background:var(--surface-card);
+  border:1px solid var(--border);
+  border-radius:10px;
+  overflow:hidden;
+  cursor:pointer;
+  transition:border-color 0.2s, transform 0.2s;
+  position:relative;
+}
+.member-card:hover { border-color:var(--border-strong); transform:translateY(-3px); }
+.member-card[data-hidden="true"] { display:none; }
+
+/* photo area */
+.member-photo {
+  position:relative;
+  width:100%; aspect-ratio:3/4;
+  overflow:hidden; background:var(--green-felt);
+  flex-shrink:0;
+}
+.member-photo img {
+  width:100%; height:100%; object-fit:cover; display:block;
+  filter:brightness(0.82) saturate(0.65);
+  transition:transform 0.4s ease, filter 0.3s;
+}
+.member-card:hover .member-photo img { transform:scale(1.04); filter:brightness(0.9) saturate(0.75); }
+
+/* gradient overlay on photo */
+.member-photo::after {
+  content:''; position:absolute; inset:0; pointer-events:none;
+  background:linear-gradient(to bottom, transparent 45%, rgba(13,31,15,0.85) 100%);
+}
+
+/* monogram avatar for members without photo */
+.member-monogram {
+  width:100%; height:100%;
+  display:flex; align-items:center; justify-content:center;
+  background:radial-gradient(ellipse at 50% 40%, rgba(26,58,28,0.8) 0%, var(--green-felt) 100%);
+}
+.member-monogram-text {
+  font-family:'Playfair Display',serif;
+  font-size:clamp(28px,3.5vw,40px);
+  font-weight:600; color:var(--gold);
+  opacity:0.6; letter-spacing:0.04em;
+  user-select:none;
+}
+
+/* type dot on photo corner */
+.member-type-dot {
+  position:absolute; top:9px; right:9px; z-index:2;
+  width:9px; height:9px; border-radius:50%;
+  border:1.5px solid rgba(13,31,15,0.6);
+  box-shadow:0 0 0 1px rgba(255,255,255,0.08);
+}
+
+/* card body */
+.member-card-body {
+  padding:11px 12px 12px;
+}
+.member-name {
+  font-family:'Playfair Display',serif;
+  font-size:clamp(12px,1.2vw,14px);
+  font-weight:600; color:var(--text-primary);
+  line-height:1.25; margin-bottom:6px;
+  /* last name first on old site — we'll display as-is */
+}
+.member-sports {
+  display:flex; flex-wrap:wrap; gap:4px;
+}
+.sport-badge {
+  padding:2px 6px; border-radius:3px;
+  font-size:8.5px; font-weight:500; letter-spacing:0.04em; text-transform:uppercase;
+  white-space:nowrap;
+}
+.sb-kaisa   { background:rgba(200,168,75,0.10); color:var(--gold);   border:1px solid rgba(200,168,75,0.2); }
+.sb-pool    { background:rgba(29,158,117,0.10); color:#4ECBA0; border:1px solid rgba(29,158,117,0.2); }
+.sb-snooker { background:rgba(106,90,205,0.10); color:#9D8FE8; border:1px solid rgba(106,90,205,0.2); }
+.sb-kara    { background:rgba(210,90,50,0.10);  color:#E8956A; border:1px solid rgba(210,90,50,0.2); }
+.sb-pyramidi{ background:rgba(80,160,200,0.10); color:#7DC8E8; border:1px solid rgba(80,160,200,0.2); }
+
+/* ── PROFILE PANEL ── */
+/* Overlay + slide-up on mobile, side panel on desktop */
+.panel-overlay {
+  display:none; position:fixed; inset:0; z-index:300;
+  background:rgba(13,31,15,0.65); backdrop-filter:blur(4px);
+}
+.panel-overlay.open { display:block; }
+
+/* desktop: slides in from right */
+.profile-panel {
+  position:fixed; top:0; right:0; bottom:0; z-index:301;
+  width:clamp(300px,34vw,400px);
+  background:var(--surface-card);
+  border-left:1px solid var(--border-strong);
+  display:flex; flex-direction:column;
+  transform:translateX(100%);
+  transition:transform 0.32s cubic-bezier(0.32,0.72,0,1);
+  overflow:hidden;
+}
+.profile-panel.open { transform:translateX(0); }
+
+.panel-close {
+  position:absolute; top:14px; right:16px; z-index:2;
+  background:rgba(13,31,15,0.7); border:1px solid var(--border);
+  border-radius:6px; width:30px; height:30px;
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer; color:var(--text-muted); font-size:14px;
+  transition:color 0.2s, border-color 0.2s;
+}
+.panel-close:hover { color:var(--text-primary); border-color:var(--border-strong); }
+
+.panel-photo {
+  width:100%; aspect-ratio:4/3; overflow:hidden;
+  background:var(--green-felt); flex-shrink:0; position:relative;
+}
+.panel-photo img { width:100%; height:100%; object-fit:cover; display:block; filter:brightness(0.82) saturate(0.65); }
+.panel-photo::after { content:''; position:absolute; inset:0; background:linear-gradient(to bottom, transparent 50%, rgba(13,31,15,0.9) 100%); }
+
+.panel-monogram {
+  width:100%; height:100%;
+  display:flex; align-items:center; justify-content:center;
+  background:radial-gradient(ellipse at 50% 40%, rgba(26,58,28,0.8) 0%, var(--green-felt) 100%);
+}
+.panel-monogram-text {
+  font-family:'Playfair Display',serif; font-size:72px;
+  font-weight:600; color:var(--gold); opacity:0.45; user-select:none;
+}
+
+.panel-name-overlay {
+  position:absolute; bottom:0; left:0; right:0; z-index:2;
+  padding:16px;
+}
+.panel-type-badge {
+  display:inline-flex; align-items:center; gap:5px;
+  padding:3px 9px; border-radius:20px;
+  font-size:9.5px; font-weight:500; letter-spacing:0.05em; text-transform:uppercase;
+  margin-bottom:8px;
+}
+.panel-name {
+  font-family:'Playfair Display',serif;
+  font-size:clamp(18px,2vw,22px); font-weight:700;
+  color:#fff; line-height:1.15;
+  text-shadow:0 1px 12px rgba(0,0,0,0.5);
+}
+
+.panel-body {
+  flex:1; overflow-y:auto; padding:18px;
+  scrollbar-width:thin; scrollbar-color:var(--border) transparent;
+}
+
+.panel-sports { display:flex; flex-wrap:wrap; gap:5px; margin-bottom:16px; }
+
+.panel-field { margin-bottom:14px; }
+.panel-field-label { font-size:9.5px; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:3px; }
+.panel-field-value { font-size:13px; color:var(--text-secondary); font-weight:300; line-height:1.5; }
+.panel-field-value strong { color:var(--text-primary); font-weight:500; }
+
+.panel-bio {
+  font-size:12.5px; color:var(--text-secondary); font-weight:300;
+  font-style:italic; line-height:1.7;
+  padding:12px 14px;
+  background:rgba(200,168,75,0.04);
+  border-left:2px solid var(--gold-dim);
+  border-radius:0 5px 5px 0;
+  margin-top:4px;
+}
+
+.panel-achievements {
+  margin-top:14px;
+}
+.panel-achievements-label { font-size:9.5px; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:8px; display:flex; align-items:center; gap:6px; }
+.panel-achievements-label::after { content:''; flex:1; height:1px; background:var(--border); }
+.achievement-item {
+  display:flex; align-items:flex-start; gap:8px;
+  font-size:12.5px; color:var(--text-secondary); font-weight:300;
+  padding:6px 0; border-bottom:1px solid var(--border);
+  line-height:1.4;
+}
+.achievement-item:last-child { border-bottom:none; }
+.achievement-item::before { content:'🏆'; font-size:11px; margin-top:1px; flex-shrink:0; }
+
+/* skeleton in panel */
+@keyframes shimmer { 0%{background-position:-600px 0} 100%{background-position:600px 0} }
+.skel { border-radius:4px; background:linear-gradient(90deg,var(--green-mid) 25%,rgba(200,168,75,0.06) 50%,var(--green-mid) 75%); background-size:600px 100%; animation:shimmer 1.4s infinite linear; }
+.panel-skel-photo { width:100%; aspect-ratio:4/3; }
+.panel-skel-line { height:12px; margin-bottom:10px; }
+
+/* mobile: slides up from bottom */
+@media (max-width:900px) {
+  .profile-panel {
+    top:auto; left:0; right:0; bottom:0;
+    width:100%; max-height:88svh;
+    border-left:none; border-top:1px solid var(--border-strong);
+    border-radius:16px 16px 0 0;
+    transform:translateY(100%);
+  }
+  .profile-panel.open { transform:translateY(0); }
+  .panel-handle { width:36px; height:4px; background:var(--border-strong); border-radius:2px; margin:12px auto 0; }
+  .panel-photo { aspect-ratio:16/7; }
+  .panel-monogram-text { font-size:48px; }
+}
+
+/* ── EMPTY SEARCH STATE ── */
+.no-results { display:none; text-align:center; padding:clamp(40px,6vw,80px) 0; grid-column:1/-1; }
+.no-results.visible { display:block; }
+.no-results-icon { font-size:36px; margin-bottom:12px; opacity:0.4; }
+.no-results p { font-size:13px; color:var(--text-muted); }
+
+/* ── FOOTER ── */
+footer { background:var(--green-dark); border-top:1px solid var(--border); padding:clamp(32px,4.5vw,52px) var(--px) 24px; }
+.footer-grid { display:grid; grid-template-columns:1.3fr 1fr 1fr 1fr; gap:clamp(20px,3.5vw,44px); margin-bottom:30px; }
+.footer-brand p { font-size:12.5px; font-weight:300; color:var(--text-muted); line-height:1.7; margin-top:12px; max-width:240px; }
+.footer-col h4 { font-family:'Playfair Display',serif; font-size:12.5px; font-weight:600; color:var(--text-primary); margin-bottom:14px; padding-bottom:9px; border-bottom:1px solid var(--border); }
+.footer-col ul { list-style:none; display:flex; flex-direction:column; gap:8px; }
+.footer-col a  { font-size:12px; font-weight:300; color:var(--text-muted); text-decoration:none; transition:color 0.2s; }
+.footer-col a:hover { color:var(--gold); }
+.f-ci { display:flex; align-items:flex-start; gap:8px; font-size:12px; color:var(--text-muted); font-weight:300; line-height:1.5; }
+.f-ci-icon { color:var(--gold-dim); flex-shrink:0; margin-top:1px; }
+.footer-bottom { padding-top:18px; border-top:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; }
+.footer-bottom p { font-size:11px; color:var(--text-muted); }
+.social-btn { width:30px; height:30px; border-radius:6px; border:1px solid var(--border); display:flex; align-items:center; justify-content:center; color:var(--text-muted); text-decoration:none; font-size:12px; transition:border-color 0.2s, color 0.2s; }
+.social-btn:hover { border-color:var(--border-strong); color:var(--gold); }
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
+
+/* ── RESPONSIVE ── */
+@media (max-width:1100px) { .member-grid { grid-template-columns:repeat(3,1fr); } }
+@media (max-width:900px) {
+  .nav-links { display:none; } .lang-switcher { display:none; } .hamburger { display:flex; }
+  .member-grid { grid-template-columns:repeat(3,1fr); }
+  .footer-grid { grid-template-columns:1fr 1fr; }
+  .search-wrap { width:100%; }
+  .page-hero-top { flex-direction:column; align-items:flex-start; }
+}
+@media (max-width:560px) {
+  .member-grid { grid-template-columns:repeat(2,1fr); }
+  .footer-grid { grid-template-columns:1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">
+    <div class="nav-logo-icon">EBK</div>
+    <div>
+      <div class="nav-logo-text">Espoon Biljardikerho</div>
+      <div class="nav-logo-sub">Perustettu 1980</div>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Etusivu</a></li>
+    <li><a href="esittely.html">Esittely</a></li>
+    <li><a href="uutiset.html">Uutiset</a></li>
+    <li><a href="tulospalvelu.html">Tulospalvelu</a></li>
+    <li><a href="tapahtumat.html">Tapahtumat</a></li>
+    <li><a href="jasenet.html" class="active">Jäsenet</a></li>
+    <li><a href="yhteystiedot.html">Yhteystiedot</a></li>
+    <li><a href="https://www.espoonbiljardikerho.com/esittely/jaseneksi/" class="nav-cta" target="_blank">Liity jäseneksi</a></li>
+  </ul>
+  <div class="lang-switcher">
+    <a href="#" class="lang-btn active">🇫🇮 FI</a>
+    <a href="#" class="lang-btn">🇸🇪 SV</a>
+    <a href="#" class="lang-btn">🇺🇦 UA</a>
+  </div>
+  <button class="hamburger" onclick="document.querySelector('.mobile-menu').classList.toggle('open')" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="mobile-menu">
+  <a href="index.html">Etusivu</a>
+  <a href="esittely.html">Esittely</a>
+  <a href="uutiset.html">Uutiset</a>
+  <a href="tulospalvelu.html">Tulospalvelu</a>
+  <a href="tapahtumat.html">Tapahtumat</a>
+  <a href="jasenet.html" class="active">Jäsenet</a>
+  <a href="yhteystiedot.html">Yhteystiedot</a>
+  <a href="https://www.espoonbiljardikerho.com/esittely/jaseneksi/" class="m-cta" target="_blank">Liity jäseneksi</a>
+  <div style="display:flex;gap:6px;margin-top:10px;padding-top:10px;border-top:1px solid var(--border);">
+    <a href="#" style="flex:1;text-align:center;padding:8px;border-radius:6px;background:rgba(200,168,75,0.1);border:1px solid var(--border-strong);font-size:12px;color:var(--gold);text-decoration:none;">🇫🇮 Suomi</a>
+    <a href="#" style="flex:1;text-align:center;padding:8px;border-radius:6px;border:1px solid var(--border);font-size:12px;color:var(--text-muted);text-decoration:none;">🇸🇪 Svenska</a>
+    <a href="#" style="flex:1;text-align:center;padding:8px;border-radius:6px;border:1px solid var(--border);font-size:12px;color:var(--text-muted);text-decoration:none;">🇺🇦 UA</a>
+  </div>
+</div>
+
+<!-- PAGE HERO -->
+<section class="page-hero">
+  <div class="page-hero-bg"></div>
+  <div class="page-hero-felt"></div>
+  <div class="page-hero-inner">
+    <div class="breadcrumb">
+      <a href="index.html">Etusivu</a>
+      <span class="breadcrumb-sep">›</span>
+      <span>Jäsenet</span>
+    </div>
+    <div class="page-hero-top">
+      <div>
+        <h1>Kerhon <em>jäsenet</em></h1>
+        <p class="page-hero-desc">Espoon Biljardikerho ry:n jäsenet ja Espoon klubilaiset.</p>
+        <div class="hero-counts" id="hero-counts">
+          <div class="count-pill"><div class="count-pill-dot" style="background:var(--c-tays);"></div><strong id="cnt-tays">44</strong> Täysvaltaista</div>
+          <div class="count-pill"><div class="count-pill-dot" style="background:var(--c-klubi);"></div><strong id="cnt-klubi">19</strong> Espoon klubijäsentä</div>
+          <div class="count-pill"><div class="count-pill-dot" style="background:var(--c-pelaa);"></div><strong id="cnt-pelaa">18</strong> Pelaajajäsentä</div>
+        </div>
+      </div>
+      <div class="search-wrap">
+        <span class="search-icon">🔍</span>
+        <input type="text" class="search-input" id="search-input" placeholder="Hae jäsentä…" autocomplete="off">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TYPE TABS -->
+<div class="type-tabs">
+  <button class="type-tab active" data-type="all">
+    Kaikki <span class="tab-count" id="tab-count-all">(81)</span>
+  </button>
+  <button class="type-tab" data-type="tays" style="--dot-color:var(--c-tays)">
+    <div class="type-tab-dot" style="background:var(--c-tays);"></div>
+    Täysvaltaiset <span class="tab-count">(44)</span>
+  </button>
+  <button class="type-tab" data-type="klubi" style="--dot-color:var(--c-klubi)">
+    <div class="type-tab-dot" style="background:var(--c-klubi);"></div>
+    Espoon klubi <span class="tab-count">(19)</span>
+  </button>
+  <button class="type-tab" data-type="pelaa" style="--dot-color:var(--c-pelaa)">
+    <div class="type-tab-dot" style="background:var(--c-pelaa);"></div>
+    Pelaajajäsenet <span class="tab-count">(18)</span>
+  </button>
+</div>
+
+<!-- MEMBER SECTIONS -->
+<div class="members-page" id="members-page">
+
+  <!-- Section: Täysvaltaiset -->
+  <div class="member-section" data-type="tays" id="section-tays">
+    <div class="section-header">
+      <div class="section-header-line" style="background:var(--c-tays);"></div>
+      <div class="section-header-text">
+        <div class="section-label" style="color:var(--c-tays);">Täysvaltaiset jäsenet</div>
+        <div class="section-title">EBK Klubijäsenet</div>
+        <div class="section-desc">Sekä klubin että EBK:n jäsen — täydet pelioikeudet ja edustusoikeus</div>
+      </div>
+      <div class="section-count" style="color:var(--c-tays);" id="count-tays">44</div>
+    </div>
+    <div class="member-grid" id="grid-tays"></div>
+  </div>
+
+  <!-- Section: Espoon Klubijäsenet -->
+  <div class="member-section" data-type="klubi" id="section-klubi">
+    <div class="section-header">
+      <div class="section-header-line" style="background:var(--c-klubi);"></div>
+      <div class="section-header-text">
+        <div class="section-label" style="color:var(--c-klubi);">Espoon klubi</div>
+        <div class="section-title">Espoon Klubijäsenet</div>
+        <div class="section-desc">Vain klubin jäsenyys — pelioikeus Espoon klubilla</div>
+      </div>
+      <div class="section-count" style="color:var(--c-klubi);" id="count-klubi">19</div>
+    </div>
+    <div class="member-grid" id="grid-klubi"></div>
+  </div>
+
+  <!-- Section: Pelaajajäsenet -->
+  <div class="member-section" data-type="pelaa" id="section-pelaa">
+    <div class="section-header">
+      <div class="section-header-line" style="background:var(--c-pelaa);"></div>
+      <div class="section-header-text">
+        <div class="section-label" style="color:var(--c-pelaa);">Pelaajajäsenet</div>
+        <div class="section-title">EBK Pelaajajäsenet</div>
+        <div class="section-desc">Vain EBK:n jäsenyys — edustusoikeus EBK:n nimissä</div>
+      </div>
+      <div class="section-count" style="color:var(--c-pelaa);" id="count-pelaa">18</div>
+    </div>
+    <div class="member-grid" id="grid-pelaa"></div>
+  </div>
+
+</div>
+
+<!-- PROFILE PANEL -->
+<div class="panel-overlay" id="panel-overlay" onclick="closePanel()"></div>
+<div class="profile-panel" id="profile-panel">
+  <div class="panel-handle" style="display:none;" id="panel-handle"></div>
+  <button class="panel-close" onclick="closePanel()">✕</button>
+  <div id="panel-content">
+    <!-- populated by JS -->
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div style="display:flex;gap:10px;align-items:center;">
+        <div class="nav-logo-icon">EBK</div>
+        <div><div class="nav-logo-text">Espoon Biljardikerho</div><div class="nav-logo-sub">Perustettu 1980</div></div>
+      </div>
+      <p>Yksityisklubi biljardista intohimoisille. Kotimme on Espoon Tillinmäessä — tule mukaan.</p>
+    </div>
+    <div class="footer-col"><h4>Sivut</h4><ul>
+      <li><a href="index.html">Etusivu</a></li>
+      <li><a href="esittely.html">Esittely</a></li>
+      <li><a href="uutiset.html">Uutiset</a></li>
+      <li><a href="tulospalvelu.html">Tulospalvelu</a></li>
+      <li><a href="tapahtumat.html">Tapahtumat</a></li>
+      <li><a href="jasenet.html">Jäsenet</a></li>
+    </ul></div>
+    <div class="footer-col"><h4>Lajit</h4><ul>
+      <li><a href="#">Kaisa</a></li><li><a href="#">Kara</a></li>
+      <li><a href="#">Pool</a></li><li><a href="#">Pyramidi</a></li>
+      <li><a href="#">Snooker</a></li>
+    </ul></div>
+    <div class="footer-col"><h4>Yhteystiedot</h4>
+      <div style="display:flex;flex-direction:column;gap:9px;margin-top:4px;">
+        <div class="f-ci"><span class="f-ci-icon">📍</span><span>Tillinmäentie 1 F, 02330 Espoo</span></div>
+        <div class="f-ci"><span class="f-ci-icon">✉️</span><span>espoonbiljardikerho@gmail.com</span></div>
+        <div class="f-ci"><span class="f-ci-icon">🔗</span><span>facebook.com/espoonbiljardikerho</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 Espoon Biljardikerho ry.</p>
+    <a href="https://www.facebook.com/espoonbiljardikerho" class="social-btn" title="Facebook">f</a>
+  </div>
+</footer>
+
+<script>
+(function () {
+  const BASE  = 'https://www.espoonbiljardikerho.com';
+  const PROXY = 'https://corsproxy.io/?url=';
+
+  // ── Member data scraped from /jasenet/ table ──────────────────────────────
+  // Parsed from the three-column table on the live site.
+  // type: 'tays' | 'klubi' | 'pelaa'
+  const MEMBERS = [
+    // Täysvaltaiset (column 1)
+    {slug:'ahola-jarno',       name:'Jarno Ahola',       type:'tays'},
+    {slug:'ahola-joni',        name:'Joni Ahola',        type:'tays'},
+    {slug:'ahola-risto',       name:'Risto Ahola',       type:'tays'},
+    {slug:'ahvonen-petri',     name:'Petri Ahvonen',     type:'tays'},
+    {slug:'asp-kaj',           name:'Kaj Asp',           type:'tays'},
+    {slug:'asp-niklas',        name:'Niklas Asp',        type:'tays'},
+    {slug:'gustafsson-jesse',  name:'Jesse Gustafsson',  type:'tays'},
+    {slug:'hallstrom-jukka',   name:'Jukka Hällström',   type:'tays'},
+    {slug:'janzon-tor',        name:'Tor Janzon',        type:'tays'},
+    {slug:'jansson-jari',      name:'Jari Jansson',      type:'tays'},
+    {slug:'kahima-jaakko',     name:'Jaakko Kahima',     type:'tays'},
+    {slug:'kalela-esa',        name:'Esa Kalela',        type:'tays'},
+    {slug:'kalliomaki-pentti', name:'Pentti Kalliomäki', type:'tays'},
+    {slug:'kankkunen-lauri',   name:'Lauri Kankkunen',   type:'tays'},
+    {slug:'kauppinen-mikko',   name:'Mikko Kauppinen',   type:'tays'},
+    {slug:'kelokaski-jouni',   name:'Jouni Kelokaski',   type:'tays'},
+    {slug:'kilpelainen-matti', name:'Matti Kilpeläinen', type:'tays'},
+    {slug:'kilpivaara-pasi',   name:'Pasi Kilpivaara',   type:'tays'},
+    {slug:'kivekas-sauli',     name:'Sauli Kivekäs',     type:'tays'},
+    {slug:'komi-tuomas',       name:'Tuomas Komi',       type:'tays'},
+    {slug:'kuosmanen-timo',    name:'Timo Kuosmanen',    type:'tays'},
+    {slug:'lahdensuu-jouko',   name:'Jouko Lahdensuu',   type:'tays'},
+    {slug:'larinen-simo',      name:'Simo Larinen',      type:'tays'},
+    {slug:'latvala-santeri',   name:'Santeri Latvala',   type:'tays'},
+    {slug:'lehto-jukka',       name:'Jukka Lehto',       type:'tays'},
+    {slug:'leppakorpi-lasse',  name:'Lasse Leppäkorpi',  type:'tays'},
+    {slug:'lohikoski-antti',   name:'Antti Lohikoski',   type:'tays'},
+    {slug:'lukkari-juuso',     name:'Juuso Lukkari',     type:'tays'},
+    {slug:'matikainen-casper', name:'Casper Matikainen', type:'tays'},
+    {slug:'montonen-timo',     name:'Timo Montonen',     type:'tays'},
+    {slug:'paajanen-mikko',    name:'Mikko Paajanen',    type:'tays'},
+    {slug:'pekkala-panu',      name:'Panu Pekkala',      type:'tays'},
+    {slug:'peltonen-tommi',    name:'Tommi Peltonen',    type:'tays'},
+    {slug:'pesakivi-pekka',    name:'Pekka Pesäkivi',    type:'tays'},
+    {slug:'piiparinen-tomi',   name:'Tomi Piiparinen',   type:'tays'},
+    {slug:'ronkainen-tuomas',  name:'Tuomas Ronkainen',  type:'tays'},
+    {slug:'ruuska-markku',     name:'Markku Ruuska',     type:'tays'},
+    {slug:'raisanen-pekka',    name:'Pekka Räisänen',    type:'tays'},
+    {slug:'sarkisilta-jesse',  name:'Jesse Särkisilta',  type:'tays'},
+    {slug:'timonen-henri',     name:'Henri Timonen',     type:'tays'},
+    {slug:'traff-tuomo',       name:'Tuomo Träff',       type:'tays'},
+    {slug:'vanhanen-hannu',    name:'Hannu Vanhanen',    type:'tays'},
+    {slug:'verho-pekka',       name:'Pekka Verho',       type:'tays'},
+    {slug:'wigelius-pauli',    name:'Pauli Wigelius',    type:'tays'},
+    // Espoon Klubijäsenet (column 2)
+    {slug:'bilyk-vitaliy',     name:'Vitaliy Bilyk',     type:'klubi'},
+    {slug:'grannas-kai',       name:'Kai Grannas',       type:'klubi'},
+    {slug:'gronberg-markku',   name:'Markku Grönberg',   type:'klubi'},
+    {slug:'gronholm-max',      name:'Max Grönholm',      type:'klubi'},
+    {slug:'holmberg-samuli',   name:'Samuli Holmberg',   type:'klubi'},
+    {slug:'hyvonen-tuomas',    name:'Tuomas Hyvönen',    type:'klubi'},
+    {slug:'hallstrom-niko',    name:'Niko Hällström',    type:'klubi'},
+    {slug:'kandoi-rajat',      name:'Rajat Kandoi',      type:'klubi'},
+    {slug:'kolesov-aleksander',name:'Aleksander Kolesov',type:'klubi'},
+    {slug:'kronback-tuomo',    name:'Tuomo Kronbäck',    type:'klubi'},
+    {slug:'nissinen-ilkka',    name:'Ilkka Nissinen',    type:'klubi'},
+    {slug:'noponen-jaakko',    name:'Jaakko Noponen',    type:'klubi'},
+    {slug:'poyhonen-aki',      name:'Aki Pöyhönen',      type:'klubi'},
+    {slug:'ranta-mikko',       name:'Mikko Ranta',       type:'klubi'},
+    {slug:'remes-markus',      name:'Markus Remes',      type:'klubi'},
+    {slug:'riipinen-vesa',     name:'Vesa Riipinen',     type:'klubi'},
+    {slug:'sironen-jari',      name:'Jari Sironen',      type:'klubi'},
+    {slug:'sutinen-mikko',     name:'Mikko Sutinen',     type:'klubi'},
+    {slug:'vesterinen-hannu',  name:'Hannu Vesterinen',  type:'klubi'},
+    // Pelaajajäsenet (column 3)
+    {slug:'alho-janne',        name:'Janne Alho',        type:'pelaa'},
+    {slug:'fredriksson-tommi', name:'Tommi Fredriksson', type:'pelaa'},
+    {slug:'grahn-henry',       name:'Henry Grahn',       type:'pelaa'},
+    {slug:'karna-matti',       name:'Matti Kärnä',       type:'pelaa'},
+    {slug:'lahelma-mikko',     name:'Mikko Lahelma',     type:'pelaa'},
+    {slug:'latvala-samuel',    name:'Samuel Latvala',    type:'pelaa'},
+    {slug:'lindroos-hannu',    name:'Hannu Lindroos',    type:'pelaa'},
+    {slug:'lindroos-tomi',     name:'Tomi Lindroos',     type:'pelaa'},
+    {slug:'lounamaa-joonas',   name:'Joonas Lounamaa',   type:'pelaa'},
+    {slug:'muhonen-timo',      name:'Timo Muhonen',      type:'pelaa'},
+    {slug:'narvanto-pekka',    name:'Pekka Narvanto',    type:'pelaa'},
+    {slug:'pekkarinen-juha',   name:'Juha Pekkarinen',   type:'pelaa'},
+    {slug:'puustinen-vesa',    name:'Vesa Puustinen',    type:'pelaa'},
+    {slug:'ronkainen-pasi',    name:'Pasi Ronkainen',    type:'pelaa'},
+    {slug:'saarinen-santeri',  name:'Santeri Saarinen',  type:'pelaa'},
+    {slug:'traff-teemu',       name:'Teemu Träff',       type:'pelaa'},
+    {slug:'vahasarja-jaakko',  name:'Jaakko Vähäsarja',  type:'pelaa'},
+    {slug:'wongwai-ulaiporn',  name:'Ulaiporn Wongwai',  type:'pelaa'},
+  ];
+
+  const TYPE_COLOR = { tays:'var(--c-tays)', klubi:'var(--c-klubi)', pelaa:'var(--c-pelaa)' };
+  const TYPE_LABEL = { tays:'Täysvaltainen', klubi:'Espoon klubi', pelaa:'Pelaajajäsen' };
+
+  // ── Sport parsing ─────────────────────────────────────────────────────────
+  function parseSports(text) {
+    if (!text || text === '-') return [];
+    const raw = text.toLowerCase();
+    const sports = [];
+    if (raw.includes('kaisa'))    sports.push('Kaisa');
+    if (raw.includes('pool') || raw.includes('8-pallo') || raw.includes('9-pallo')) sports.push('Pool');
+    if (raw.includes('snooker'))  sports.push('Snooker');
+    if (raw.includes('kara'))     sports.push('Kara');
+    if (raw.includes('pyramidi')) sports.push('Pyramidi');
+    return sports;
+  }
+
+  function sportBadge(sport) {
+    const cls = { Kaisa:'sb-kaisa', Pool:'sb-pool', Snooker:'sb-snooker', Kara:'sb-kara', Pyramidi:'sb-pyramidi' }[sport] || '';
+    return `<span class="sport-badge ${cls}">${sport}</span>`;
+  }
+
+  // ── Initials ──────────────────────────────────────────────────────────────
+  function initials(name) {
+    return name.split(' ').map(w => w[0]).join('').slice(0,2).toUpperCase();
+  }
+
+  // ── Build card ────────────────────────────────────────────────────────────
+  function buildCard(member) {
+    const { slug, name, type } = member;
+    const mono = initials(name);
+    const color = TYPE_COLOR[type];
+    return `
+      <div class="member-card" data-slug="${slug}" data-type="${type}" data-name="${name.toLowerCase()}" onclick="openProfile('${slug}')">
+        <div class="member-photo">
+          <div class="member-monogram" id="mono-${slug}">
+            <div class="member-monogram-text">${mono}</div>
+          </div>
+          <img src="" alt="${name}" data-slug="${slug}"
+            style="display:none;position:absolute;inset:0;"
+            onerror="this.style.display='none';document.getElementById('mono-${slug}').style.display='flex';">
+          <div class="member-type-dot" style="background:${color};"></div>
+        </div>
+        <div class="member-card-body">
+          <div class="member-name">${name}</div>
+          <div class="member-sports" id="sports-${slug}"></div>
+        </div>
+      </div>`;
+  }
+
+  // ── Render all grids ──────────────────────────────────────────────────────
+  function renderGrids() {
+    const groups = { tays:[], klubi:[], pelaa:[] };
+    MEMBERS.forEach(m => groups[m.type].push(m));
+    ['tays','klubi','pelaa'].forEach(type => {
+      document.getElementById('grid-' + type).innerHTML = groups[type].map(buildCard).join('');
+    });
+  }
+
+  // ── Lazy-load og:image for visible cards ─────────────────────────────────
+  // We fetch profiles lazily on click, but pre-load photos via og:image meta
+  // using a lightweight HEAD-free scrape approach: just the og:image from meta desc.
+  // Actually og:image requires a page fetch — so we load photos on card
+  // intersection (IntersectionObserver) rather than upfront.
+
+  const photoCache = {};
+
+  async function loadPhoto(slug) {
+    if (photoCache[slug] !== undefined) return photoCache[slug];
+    try {
+      const url = BASE + '/jasenet/' + slug + '/';
+      let html;
+      try {
+        const r = await fetch(url);
+        if (!r.ok) throw new Error(r.status);
+        html = await r.text();
+      } catch {
+        const r = await fetch(PROXY + encodeURIComponent(url));
+        if (!r.ok) throw new Error(r.status);
+        html = await r.text();
+      }
+      const doc = new DOMParser().parseFromString(html, 'text/html');
+      const imgUrl = doc.querySelector('meta[property="og:image"]')?.getAttribute('content') || null;
+      // Also grab sports while we're here — cache for profile panel too
+      const sportsText = extractField(doc, 'biljardilajit');
+      profileCache[slug] = profileCache[slug] || {};
+      profileCache[slug].sports = parseSports(sportsText);
+      profileCache[slug].raw = html;
+      profileCache[slug].doc = doc;
+      photoCache[slug] = imgUrl;
+      return imgUrl;
+    } catch {
+      photoCache[slug] = null;
+      return null;
+    }
+  }
+
+  // Intersection observer: load photos as cards scroll into view
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(async entry => {
+      if (!entry.isIntersecting) return;
+      observer.unobserve(entry.target);
+      const slug = entry.target.dataset.slug;
+      const imgEl = entry.target.querySelector('img[data-slug]');
+      const monoEl = document.getElementById('mono-' + slug);
+      const sportsEl = document.getElementById('sports-' + slug);
+
+      const imgUrl = await loadPhoto(slug);
+      if (imgUrl && imgEl) {
+        imgEl.src = imgUrl;
+        imgEl.style.display = 'block';
+        imgEl.style.position = 'absolute';
+        imgEl.style.inset = '0';
+        if (monoEl) monoEl.style.display = 'none';
+      }
+      // Render sports badges
+      if (sportsEl && profileCache[slug]?.sports?.length) {
+        sportsEl.innerHTML = profileCache[slug].sports.map(sportBadge).join('');
+      }
+    });
+  }, { rootMargin: '200px' });
+
+  function observeCards() {
+    document.querySelectorAll('.member-card').forEach(card => observer.observe(card));
+  }
+
+  // ── Profile panel ─────────────────────────────────────────────────────────
+  const profileCache = {};
+
+  function extractField(doc, labelKey) {
+    const strongs = doc.querySelectorAll('strong, b');
+    for (const el of strongs) {
+      const label = el.textContent.replace(/:/g,'').trim().toLowerCase();
+      if (label.includes(labelKey)) {
+        // value is sibling text node or parent text minus label
+        const parent = el.parentElement;
+        const full   = parent.textContent.replace(el.textContent,'').replace(/^[\s:]+/,'').trim();
+        if (full && full !== '-' && full !== '') return full;
+      }
+    }
+    return null;
+  }
+
+  function isBlank(v) {
+    return !v || v === '-' || v.toLowerCase().includes('ei tiedossa') || v.toLowerCase().includes('- ');
+  }
+
+  async function fetchProfile(slug) {
+    if (profileCache[slug]?.loaded) return profileCache[slug];
+    profileCache[slug] = profileCache[slug] || {};
+
+    try {
+      let doc = profileCache[slug].doc;
+      if (!doc) {
+        const url = BASE + '/jasenet/' + slug + '/';
+        let html;
+        try {
+          const r = await fetch(url);
+          if (!r.ok) throw new Error(r.status);
+          html = await r.text();
+        } catch {
+          const r = await fetch(PROXY + encodeURIComponent(url));
+          if (!r.ok) throw new Error(r.status);
+          html = await r.text();
+        }
+        doc = new DOMParser().parseFromString(html, 'text/html');
+        photoCache[slug] = doc.querySelector('meta[property="og:image"]')?.getAttribute('content') || null;
+      }
+
+      const main = doc.querySelector('main, .content main, article') || doc.body;
+
+      // Fields
+      const joined   = extractField(doc, 'liittynyt');
+      const sports   = parseSports(extractField(doc, 'biljardilajit'));
+      const achievRaw = extractField(doc, 'parhaat saavutukset') || extractField(doc, 'saavutukset');
+      const achievements = isBlank(achievRaw) ? [] : achievRaw.split(/[\n,;]+/).map(s => s.replace(/^[-–•\s]+/,'').trim()).filter(s => s && !isBlank(s));
+
+      // Italic bio paragraph
+      const bioEl = main.querySelector('em, i');
+      const bio   = bioEl?.textContent?.trim();
+      const bioClean = (bio && bio.length > 20) ? bio : null;
+
+      // Joined year — extract first 4-digit year
+      const joinedYear = joined ? (joined.match(/\d{4}/) || [])[0] || joined : null;
+
+      profileCache[slug] = {
+        loaded: true,
+        photo: photoCache[slug] || null,
+        sports,
+        joined: joinedYear,
+        achievements,
+        bio: bioClean,
+        doc,
+      };
+    } catch {
+      profileCache[slug] = { loaded: true, photo: null, sports: [], joined: null, achievements: [], bio: null };
+    }
+
+    return profileCache[slug];
+  }
+
+  let activePanelSlug = null;
+
+  window.openProfile = async function(slug) {
+    activePanelSlug = slug;
+    const member = MEMBERS.find(m => m.slug === slug);
+    if (!member) return;
+
+    const panel = document.getElementById('profile-panel');
+    const content = document.getElementById('panel-content');
+    const isMobile = window.innerWidth <= 900;
+
+    // Show handle on mobile
+    document.getElementById('panel-handle').style.display = isMobile ? 'block' : 'none';
+
+    // Show skeleton immediately
+    content.innerHTML = `
+      <div class="panel-skel-photo skel"></div>
+      <div style="padding:18px;">
+        <div class="skel panel-skel-line" style="width:60%;height:9px;margin-bottom:12px;"></div>
+        <div class="skel panel-skel-line" style="width:80%;height:20px;margin-bottom:18px;"></div>
+        <div class="skel panel-skel-line" style="width:45%;height:10px;margin-bottom:8px;"></div>
+        <div class="skel panel-skel-line" style="width:70%;height:10px;margin-bottom:8px;"></div>
+        <div class="skel panel-skel-line" style="width:55%;height:10px;"></div>
+      </div>`;
+
+    document.getElementById('panel-overlay').classList.add('open');
+    panel.classList.add('open');
+    document.body.style.overflow = 'hidden';
+
+    // Fetch profile
+    const profile = await fetchProfile(slug);
+    if (activePanelSlug !== slug) return; // panel was closed/changed
+
+    const color = TYPE_COLOR[member.type];
+    const mono  = initials(member.name);
+
+    const photoHTML = profile.photo
+      ? `<img src="${profile.photo}" alt="${member.name}" onerror="this.style.display='none';document.getElementById('panel-mono-${slug}').style.display='flex';">`
+      : '';
+    const monoHTML = `<div class="panel-monogram" id="panel-mono-${slug}" style="${profile.photo ? 'display:none;' : ''}"><div class="panel-monogram-text">${mono}</div></div>`;
+
+    const sportsHTML = profile.sports.length
+      ? profile.sports.map(s => `<span class="sport-badge ${({Kaisa:'sb-kaisa',Pool:'sb-pool',Snooker:'sb-snooker',Kara:'sb-kara',Pyramidi:'sb-pyramidi'}[s]||'')}">${s}</span>`).join('')
+      : '';
+
+    const achievHTML = profile.achievements.length
+      ? `<div class="panel-achievements">
+           <div class="panel-achievements-label">Parhaat saavutukset</div>
+           ${profile.achievements.map(a => `<div class="achievement-item">${a}</div>`).join('')}
+         </div>`
+      : '';
+
+    const bioHTML = profile.bio
+      ? `<div class="panel-bio">${profile.bio}</div>`
+      : '';
+
+    const joinedHTML = profile.joined
+      ? `<div class="panel-field"><div class="panel-field-label">Liittynyt</div><div class="panel-field-value"><strong>${profile.joined}</strong></div></div>`
+      : '';
+
+    content.innerHTML = `
+      <div class="panel-photo">
+        ${monoHTML}${photoHTML}
+        <div class="panel-name-overlay">
+          <div class="panel-type-badge" style="background:${color}22;border:1px solid ${color}44;color:${color};">
+            <div style="width:6px;height:6px;border-radius:50%;background:${color};"></div>
+            ${TYPE_LABEL[member.type]}
+          </div>
+          <div class="panel-name">${member.name}</div>
+        </div>
+      </div>
+      <div class="panel-body">
+        ${sportsHTML ? `<div class="panel-sports">${sportsHTML}</div>` : ''}
+        ${joinedHTML}
+        ${bioHTML}
+        ${achievHTML}
+      </div>`;
+  };
+
+  window.closePanel = function() {
+    activePanelSlug = null;
+    document.getElementById('profile-panel').classList.remove('open');
+    document.getElementById('panel-overlay').classList.remove('open');
+    document.body.style.overflow = '';
+  };
+
+  // close on Escape
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closePanel(); });
+
+  // ── Type tabs ─────────────────────────────────────────────────────────────
+  let activeType = 'all';
+
+  document.querySelectorAll('.type-tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.type-tab').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeType = btn.dataset.type;
+      applyFilters();
+    });
+  });
+
+  function applyFilters() {
+    const q = document.getElementById('search-input').value.toLowerCase().trim();
+
+    ['tays','klubi','pelaa'].forEach(type => {
+      const section = document.getElementById('section-' + type);
+      // Hide whole section if type tab doesn't match
+      if (activeType !== 'all' && activeType !== type) {
+        section.dataset.hidden = 'true';
+        return;
+      }
+      section.dataset.hidden = 'false';
+
+      let visibleCount = 0;
+      section.querySelectorAll('.member-card').forEach(card => {
+        const nameMatch = !q || card.dataset.name.includes(q);
+        card.dataset.hidden = nameMatch ? 'false' : 'true';
+        if (nameMatch) visibleCount++;
+      });
+
+      // Update section count
+      const countEl = document.getElementById('count-' + type);
+      if (countEl) countEl.textContent = visibleCount;
+
+      // Show/hide section based on whether any results
+      section.dataset.hidden = visibleCount === 0 ? 'true' : 'false';
+    });
+  }
+
+  // ── Search ────────────────────────────────────────────────────────────────
+  document.getElementById('search-input').addEventListener('input', applyFilters);
+
+  // ── Init ──────────────────────────────────────────────────────────────────
+  renderGrids();
+  observeCards();
+
+})();
+</script>
+
+</body>
+</html>

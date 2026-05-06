@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tapahtumat — Espoon Biljardikerho ry.</title>
+<meta name="description" content="Espoon Biljardikerho tapahtumat ja kilpailut 2026 — kalenteri, ilmoittautuminen ja kilpailutiedot.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --gold: #C8A84B;
+  --gold-light: #E2C97A;
+  --gold-dim: #7a6528;
+  --green-dark: #0D1F0F;
+  --green-mid: #152B17;
+  --green-felt: #1A3A1C;
+  --surface: #111E12;
+  --surface-card: #192A1B;
+  --text-primary: #F0EDE4;
+  --text-secondary: #A8A090;
+  --text-muted: #6B6358;
+  --border: rgba(200,168,75,0.14);
+  --border-strong: rgba(200,168,75,0.28);
+  --px: clamp(1rem, 4vw, 3rem);
+  --spy: clamp(36px, 5vw, 64px);
+}
+
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--green-dark);
+  color: var(--text-primary);
+  font-size: clamp(14px, 1.5vw, 16px);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* ── NAV ── */
+nav {
+  position: fixed; top:0; left:0; right:0; z-index:200;
+  display:flex; align-items:center; justify-content:space-between;
+  padding: 0 var(--px);
+  height: clamp(52px, 7vw, 64px);
+  background: rgba(13,31,15,0.95);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-logo { display:flex; align-items:center; gap:10px; text-decoration:none; flex-shrink:0; }
+.nav-logo-icon {
+  width:32px; height:32px; background:var(--gold); border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Playfair Display',serif; font-weight:700; font-size:12px;
+  color:var(--green-dark); flex-shrink:0;
+}
+.nav-logo-text { font-family:'Playfair Display',serif; font-size:13.5px; font-weight:600; color:var(--text-primary); line-height:1.2; }
+.nav-logo-sub  { font-size:9.5px; font-weight:300; color:var(--gold); letter-spacing:0.1em; text-transform:uppercase; }
+.nav-links { display:flex; align-items:center; gap:1px; list-style:none; }
+.nav-links a { display:block; padding:5px 10px; font-size:12px; font-weight:400; color:var(--text-secondary); text-decoration:none; border-radius:5px; transition:color 0.2s, background 0.2s; }
+.nav-links a:hover { color:var(--text-primary); background:rgba(200,168,75,0.08); }
+.nav-links a.active { color:var(--gold); }
+.nav-cta { padding:6px 16px !important; background:var(--gold) !important; color:var(--green-dark) !important; font-weight:500 !important; border-radius:5px !important; }
+.nav-cta:hover { background:var(--gold-light) !important; }
+.lang-switcher { display:flex; align-items:center; gap:2px; margin-left:10px; padding-left:10px; border-left:1px solid var(--border); }
+.lang-btn { display:flex; align-items:center; gap:4px; padding:4px 7px; border-radius:4px; border:none; cursor:pointer; background:transparent; color:var(--text-muted); font-family:'DM Sans',sans-serif; font-size:11px; transition:color 0.2s, background 0.2s; text-decoration:none; }
+.lang-btn:hover { color:var(--text-primary); background:rgba(200,168,75,0.08); }
+.lang-btn.active { color:var(--gold); }
+.hamburger { display:none; flex-direction:column; gap:5px; cursor:pointer; padding:6px; background:none; border:none; }
+.hamburger span { display:block; width:22px; height:2px; background:var(--text-secondary); border-radius:2px; }
+.mobile-menu { display:none; position:fixed; top:clamp(52px,7vw,64px); left:0; right:0; background:rgba(13,31,15,0.98); border-bottom:1px solid var(--border); z-index:199; padding:14px var(--px) 20px; flex-direction:column; gap:3px; }
+.mobile-menu.open { display:flex; }
+.mobile-menu a { display:block; padding:10px 12px; font-size:15px; color:var(--text-secondary); text-decoration:none; border-radius:7px; }
+.mobile-menu a:hover, .mobile-menu a.active { color:var(--gold); background:rgba(200,168,75,0.06); }
+.mobile-menu .m-cta { background:var(--gold); color:var(--green-dark) !important; font-weight:500; margin-top:6px; text-align:center; }
+
+/* ── SHARED ── */
+section { padding: var(--spy) var(--px); }
+.sec-label { display:inline-block; font-size:10px; font-weight:500; color:var(--gold); letter-spacing:0.13em; text-transform:uppercase; margin-bottom:7px; }
+.divider   { width:28px; height:2px; background:var(--gold); margin:7px 0 12px; }
+.sec-title { font-family:'Playfair Display',serif; font-size:clamp(20px,2.8vw,32px); font-weight:600; color:var(--text-primary); line-height:1.2; }
+.sec-header { display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:clamp(18px,2.5vw,30px); gap:14px; flex-wrap:wrap; }
+.btn-primary { display:inline-flex; align-items:center; gap:7px; padding:clamp(9px,1.3vw,12px) clamp(16px,2.2vw,24px); background:var(--gold); color:var(--green-dark); font-family:'DM Sans',sans-serif; font-size:clamp(11.5px,1.1vw,13.5px); font-weight:500; border-radius:6px; text-decoration:none; transition:background 0.2s, transform 0.15s; border:none; cursor:pointer; }
+.btn-primary:hover { background:var(--gold-light); transform:translateY(-1px); }
+.btn-secondary { display:inline-flex; align-items:center; gap:7px; padding:clamp(8px,1.2vw,11px) clamp(12px,1.8vw,20px); background:transparent; color:var(--text-primary); font-family:'DM Sans',sans-serif; font-size:clamp(11.5px,1.1vw,13.5px); font-weight:400; border:1px solid var(--border-strong); border-radius:6px; text-decoration:none; transition:border-color 0.2s, color 0.2s; cursor:pointer; }
+.btn-secondary:hover { border-color:var(--gold); color:var(--gold); }
+.ebadge { padding:3px 8px; border-radius:20px; font-size:9.5px; font-weight:500; letter-spacing:0.04em; text-transform:uppercase; white-space:nowrap; }
+.b-kaisa   { background:rgba(200,168,75,0.12); color:var(--gold);  border:1px solid rgba(200,168,75,0.25); }
+.b-pool    { background:rgba(29,158,117,0.12); color:#4ECBA0; border:1px solid rgba(29,158,117,0.25); }
+.b-snooker { background:rgba(106,90,205,0.12); color:#9D8FE8; border:1px solid rgba(106,90,205,0.25); }
+.b-kara    { background:rgba(210,90,50,0.12);  color:#E8956A; border:1px solid rgba(210,90,50,0.25); }
+.b-pyramidi{ background:rgba(80,160,200,0.12); color:#7DC8E8; border:1px solid rgba(80,160,200,0.25); }
+.b-klubi   { background:rgba(150,150,150,0.1); color:var(--text-secondary); border:1px solid rgba(150,150,150,0.2); }
+
+/* ── PAGE HERO ── */
+.page-hero {
+  padding-top: clamp(72px,10vw,90px);
+  padding-bottom: clamp(24px,3vw,40px);
+  padding-left: var(--px); padding-right: var(--px);
+  background: var(--green-dark);
+  border-bottom: 1px solid var(--border);
+  position: relative; overflow: hidden;
+}
+.page-hero-bg {
+  position:absolute; inset:0; pointer-events:none;
+  background:
+    radial-gradient(ellipse 60% 80% at 90% 50%, rgba(26,58,28,0.4) 0%, transparent 70%),
+    radial-gradient(ellipse 30% 50% at 5% 100%, rgba(200,168,75,0.04) 0%, transparent 60%);
+}
+.page-hero-felt {
+  position:absolute; inset:0; opacity:0.18; pointer-events:none;
+  background-image:
+    repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(26,58,28,0.18) 3px, rgba(26,58,28,0.18) 4px),
+    repeating-linear-gradient(90deg, transparent, transparent 3px, rgba(26,58,28,0.18) 3px, rgba(26,58,28,0.18) 4px);
+}
+.page-hero-inner { position:relative; z-index:1; max-width:600px; animation: fadeUp 0.45s ease both; }
+.breadcrumb { display:flex; align-items:center; gap:6px; font-size:11px; color:var(--text-muted); margin-bottom:14px; letter-spacing:0.04em; text-transform:uppercase; }
+.breadcrumb a { color:var(--text-muted); text-decoration:none; transition:color 0.2s; }
+.breadcrumb a:hover { color:var(--gold); }
+.breadcrumb-sep { color:var(--border-strong); }
+.page-hero h1 { font-family:'Playfair Display',serif; font-size:clamp(28px,3.8vw,48px); font-weight:700; line-height:1.1; color:var(--text-primary); margin-bottom:10px; }
+.page-hero h1 em { font-style:italic; color:var(--gold); }
+.page-hero-desc { font-size:clamp(13px,1.2vw,15px); font-weight:300; color:var(--text-secondary); line-height:1.7; }
+
+/* ── FILTER BAR ── */
+.filter-bar {
+  display:flex; align-items:center; gap:8px; flex-wrap:wrap;
+  padding: clamp(14px,2vw,22px) var(--px);
+  background: var(--green-dark);
+  border-bottom: 1px solid var(--border);
+  position: sticky; top: clamp(52px,7vw,64px); z-index:10;
+  backdrop-filter: blur(10px);
+  background: rgba(13,31,15,0.92);
+}
+.filter-label { font-size:10.5px; color:var(--text-muted); letter-spacing:0.06em; text-transform:uppercase; margin-right:2px; flex-shrink:0; }
+.filter-btn { padding:5px 13px; border-radius:20px; border:1px solid var(--border); background:transparent; color:var(--text-muted); font-family:'DM Sans',sans-serif; font-size:11px; cursor:pointer; transition:all 0.18s; letter-spacing:0.03em; }
+.filter-btn:hover { border-color:var(--border-strong); color:var(--text-primary); }
+.filter-btn.active { background:rgba(200,168,75,0.1); border-color:var(--border-strong); color:var(--gold); }
+
+/* ── EVENTS SECTION ── */
+.events-section { padding-top: clamp(28px,3.5vw,44px); padding-bottom: var(--spy); padding-left: var(--px); padding-right: var(--px); }
+
+.events-layout {
+  display: grid;
+  grid-template-columns: 1fr clamp(260px,28vw,340px);
+  gap: clamp(20px,3vw,40px);
+  align-items: start;
+}
+
+/* ── EVENT LIST ── */
+.event-list { display:flex; flex-direction:column; gap:0; }
+
+.evt-row {
+  display: grid;
+  grid-template-columns: 58px 1fr auto;
+  align-items: center;
+  gap: 14px;
+  padding: 13px 14px;
+  border-bottom: 1px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+  position: relative;
+  margin-bottom: 2px;
+}
+.evt-row:hover { background: rgba(200,168,75,0.05); border-color: var(--border-strong); }
+.evt-row.active {
+  background: rgba(200,168,75,0.08);
+  border-color: var(--border-strong);
+  box-shadow: inset 3px 0 0 var(--gold);
+}
+.evt-row[data-hidden="true"] { display:none; }
+
+.evt-date-block {
+  text-align:center;
+  padding: 8px 6px;
+  background: rgba(200,168,75,0.07);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+.evt-day   { font-family:'Playfair Display',serif; font-size:clamp(16px,1.8vw,20px); font-weight:700; color:var(--gold); line-height:1; }
+.evt-month { font-size:9px; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.07em; margin-top:2px; }
+
+.evt-info { min-width:0; }
+.evt-name { font-size:clamp(12px,1.2vw,14px); font-weight:500; color:var(--text-primary); margin-bottom:3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.evt-sub  { font-size:11px; color:var(--text-muted); display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+.evt-sub-dot { width:2px; height:2px; background:var(--text-muted); border-radius:50%; opacity:0.5; flex-shrink:0; }
+
+.evt-badge-wrap { flex-shrink:0; }
+
+/* Multi-day / series indicator */
+.evt-row.is-series .evt-date-block {
+  background: rgba(200,168,75,0.04);
+  border-style: dashed;
+}
+.evt-row.is-series .evt-day { font-size:11px; font-weight:500; color:var(--text-muted); font-family:'DM Sans',sans-serif; letter-spacing:0.02em; }
+
+/* skeleton rows */
+.evt-skeleton { pointer-events:none; }
+@keyframes shimmer { 0%{background-position:-600px 0} 100%{background-position:600px 0} }
+.skel { border-radius:4px; background:linear-gradient(90deg,var(--green-mid) 25%,rgba(200,168,75,0.06) 50%,var(--green-mid) 75%); background-size:600px 100%; animation:shimmer 1.4s infinite linear; }
+
+/* ── SIDE SUMMARY ── */
+.events-summary { position:sticky; top:calc(clamp(52px,7vw,64px) + clamp(14px,2vw,22px) + 44px); }
+
+.summary-card {
+  background: var(--surface-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.summary-header {
+  padding: 16px 18px 14px;
+  border-bottom: 1px solid var(--border);
+  background: rgba(200,168,75,0.04);
+}
+.summary-title { font-family:'Playfair Display',serif; font-size:15px; font-weight:600; color:var(--text-primary); margin-bottom:2px; }
+.summary-sub { font-size:11px; color:var(--text-muted); }
+.summary-body { padding: 18px; }
+
+/* Empty state */
+.summary-empty { text-align:center; padding: 28px 0; }
+.summary-empty-icon { font-size:32px; margin-bottom:10px; opacity:0.4; }
+.summary-empty p { font-size:12px; color:var(--text-muted); line-height:1.6; }
+
+/* Populated detail */
+.summary-event-img {
+  width:100%; aspect-ratio:16/9; object-fit:cover;
+  filter:brightness(0.75) saturate(0.65);
+  border-radius:7px; margin-bottom:14px;
+  display:none;
+}
+.summary-event-name { font-family:'Playfair Display',serif; font-size:clamp(15px,1.6vw,18px); font-weight:600; color:var(--text-primary); line-height:1.25; margin-bottom:12px; }
+.summary-details { display:flex; flex-direction:column; gap:8px; margin-bottom:16px; }
+.summary-detail-row { display:flex; align-items:flex-start; gap:9px; font-size:12px; }
+.summary-detail-icon { font-size:13px; flex-shrink:0; margin-top:1px; opacity:0.7; }
+.summary-detail-label { font-size:9.5px; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.06em; display:block; margin-bottom:1px; }
+.summary-detail-value { color:var(--text-secondary); font-weight:300; line-height:1.4; }
+.summary-detail-value strong { color:var(--text-primary); font-weight:500; }
+
+.summary-reg-info {
+  background: rgba(200,168,75,0.05);
+  border: 1px solid var(--border);
+  border-radius:6px; padding:10px 12px;
+  font-size:11.5px; color:var(--text-muted);
+  margin-bottom:14px; line-height:1.5;
+}
+.summary-reg-info strong { color:var(--gold); display:block; margin-bottom:2px; font-size:10px; letter-spacing:0.05em; text-transform:uppercase; }
+
+.summary-cta { width:100%; justify-content:center; font-size:13px !important; padding:11px 20px !important; }
+.summary-cta-note { text-align:center; font-size:10.5px; color:var(--text-muted); margin-top:8px; line-height:1.5; }
+
+/* members-only badge */
+.members-only-note {
+  display:inline-flex; align-items:center; gap:5px;
+  font-size:10px; color:var(--text-muted);
+  background:rgba(150,150,150,0.07); border:1px solid rgba(150,150,150,0.15);
+  border-radius:4px; padding:3px 8px; margin-bottom:12px;
+}
+
+/* ── FOOTER ── */
+footer { background:var(--green-dark); border-top:1px solid var(--border); padding:clamp(32px,4.5vw,52px) var(--px) 24px; }
+.footer-grid { display:grid; grid-template-columns:1.3fr 1fr 1fr 1fr; gap:clamp(20px,3.5vw,44px); margin-bottom:30px; }
+.footer-brand p { font-size:12.5px; font-weight:300; color:var(--text-muted); line-height:1.7; margin-top:12px; max-width:240px; }
+.footer-col h4 { font-family:'Playfair Display',serif; font-size:12.5px; font-weight:600; color:var(--text-primary); margin-bottom:14px; padding-bottom:9px; border-bottom:1px solid var(--border); }
+.footer-col ul { list-style:none; display:flex; flex-direction:column; gap:8px; }
+.footer-col a  { font-size:12px; font-weight:300; color:var(--text-muted); text-decoration:none; transition:color 0.2s; }
+.footer-col a:hover { color:var(--gold); }
+.f-ci { display:flex; align-items:flex-start; gap:8px; font-size:12px; color:var(--text-muted); font-weight:300; line-height:1.5; }
+.f-ci-icon { color:var(--gold-dim); flex-shrink:0; margin-top:1px; }
+.footer-bottom { padding-top:18px; border-top:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; }
+.footer-bottom p { font-size:11px; color:var(--text-muted); }
+.social-btn { width:30px; height:30px; border-radius:6px; border:1px solid var(--border); display:flex; align-items:center; justify-content:center; color:var(--text-muted); text-decoration:none; font-size:12px; transition:border-color 0.2s, color 0.2s; }
+.social-btn:hover { border-color:var(--border-strong); color:var(--gold); }
+
+/* ── MOBILE PANEL (slide up from bottom on mobile) ── */
+.mobile-panel-overlay {
+  display:none;
+  position:fixed; inset:0; z-index:150;
+  background: rgba(13,31,15,0.7);
+  backdrop-filter: blur(4px);
+}
+.mobile-panel-overlay.open { display:block; }
+.mobile-panel {
+  position:fixed; bottom:0; left:0; right:0; z-index:151;
+  background: var(--surface-card);
+  border-top: 1px solid var(--border-strong);
+  border-radius: 16px 16px 0 0;
+  padding: 0 var(--px) clamp(20px,4vw,32px);
+  max-height: 88svh;
+  overflow-y: auto;
+  transform: translateY(100%);
+  transition: transform 0.32s cubic-bezier(0.32, 0.72, 0, 1);
+}
+.mobile-panel.open { transform: translateY(0); }
+.mobile-panel-handle {
+  width:36px; height:4px; background:var(--border-strong);
+  border-radius:2px; margin:12px auto 18px;
+}
+.mobile-panel-close {
+  position:absolute; top:14px; right:var(--px);
+  background:none; border:none; color:var(--text-muted);
+  font-size:18px; cursor:pointer; padding:4px;
+}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
+.evt-row { animation: fadeUp 0.3s ease both; }
+
+/* ── RESPONSIVE ── */
+@media (max-width:900px) {
+  .nav-links { display:none; }
+  .lang-switcher { display:none; }
+  .hamburger { display:flex; }
+  .events-layout { grid-template-columns:1fr; }
+  .events-summary { display:none; } /* replaced by mobile panel */
+  .footer-grid { grid-template-columns:1fr 1fr; }
+}
+@media (max-width:560px) {
+  .footer-grid { grid-template-columns:1fr; }
+  .evt-row { grid-template-columns:50px 1fr auto; gap:10px; padding:11px 10px; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">
+    <div class="nav-logo-icon">EBK</div>
+    <div>
+      <div class="nav-logo-text">Espoon Biljardikerho</div>
+      <div class="nav-logo-sub">Perustettu 1980</div>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Etusivu</a></li>
+    <li><a href="esittely.html">Esittely</a></li>
+    <li><a href="uutiset.html">Uutiset</a></li>
+    <li><a href="tulospalvelu.html">Tulospalvelu</a></li>
+    <li><a href="tapahtumat.html" class="active">Tapahtumat</a></li>
+    <li><a href="jasenet.html">Jäsenet</a></li>
+    <li><a href="yhteystiedot.html">Yhteystiedot</a></li>
+    <li><a href="https://www.espoonbiljardikerho.com/esittely/jaseneksi/" class="nav-cta" target="_blank">Liity jäseneksi</a></li>
+  </ul>
+  <div class="lang-switcher">
+    <a href="#" class="lang-btn active">🇫🇮 FI</a>
+    <a href="#" class="lang-btn">🇸🇪 SV</a>
+    <a href="#" class="lang-btn">🇺🇦 UA</a>
+  </div>
+  <button class="hamburger" onclick="document.querySelector('.mobile-menu').classList.toggle('open')" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="mobile-menu">
+  <a href="index.html">Etusivu</a>
+  <a href="esittely.html">Esittely</a>
+  <a href="uutiset.html">Uutiset</a>
+  <a href="tulospalvelu.html">Tulospalvelu</a>
+  <a href="tapahtumat.html" class="active">Tapahtumat</a>
+  <a href="jasenet.html">Jäsenet</a>
+  <a href="yhteystiedot.html">Yhteystiedot</a>
+  <a href="https://www.espoonbiljardikerho.com/esittely/jaseneksi/" class="m-cta" target="_blank">Liity jäseneksi</a>
+  <div style="display:flex;gap:6px;margin-top:10px;padding-top:10px;border-top:1px solid var(--border);">
+    <a href="#" style="flex:1;text-align:center;padding:8px;border-radius:6px;background:rgba(200,168,75,0.1);border:1px solid var(--border-strong);font-size:12px;color:var(--gold);text-decoration:none;">🇫🇮 Suomi</a>
+    <a href="#" style="flex:1;text-align:center;padding:8px;border-radius:6px;border:1px solid var(--border);font-size:12px;color:var(--text-muted);text-decoration:none;">🇸🇪 Svenska</a>
+    <a href="#" style="flex:1;text-align:center;padding:8px;border-radius:6px;border:1px solid var(--border);font-size:12px;color:var(--text-muted);text-decoration:none;">🇺🇦 UA</a>
+  </div>
+</div>
+
+<!-- PAGE HERO -->
+<section class="page-hero">
+  <div class="page-hero-bg"></div>
+  <div class="page-hero-felt"></div>
+  <div class="page-hero-inner">
+    <div class="breadcrumb">
+      <a href="index.html">Etusivu</a>
+      <span class="breadcrumb-sep">›</span>
+      <span>Tapahtumat</span>
+    </div>
+    <h1>Tapahtumat &<br><em>kilpailut</em></h1>
+    <p class="page-hero-desc">Klikkaa tapahtumaa nähdäksesi lisätiedot ja ilmoittautumislinkin.</p>
+  </div>
+</section>
+
+<!-- FILTER BAR -->
+<div class="filter-bar">
+  <span class="filter-label">Laji:</span>
+  <button class="filter-btn active" data-tag="all">Kaikki</button>
+  <button class="filter-btn" data-tag="Kaisa">Kaisa</button>
+  <button class="filter-btn" data-tag="Pool">Pool</button>
+  <button class="filter-btn" data-tag="Snooker">Snooker</button>
+  <button class="filter-btn" data-tag="Kara">Kara</button>
+  <button class="filter-btn" data-tag="Pyramidi">Pyramidi</button>
+  <button class="filter-btn" data-tag="Klubi">Klubi</button>
+</div>
+
+<!-- EVENTS SECTION -->
+<div class="events-section">
+  <div class="events-layout">
+
+    <!-- EVENT LIST -->
+    <div class="event-list" id="event-list">
+      <!-- Skeleton rows while loading -->
+      <div class="evt-row evt-skeleton" style="border-bottom:1px solid var(--border);">
+        <div class="skel" style="width:58px;height:58px;border-radius:6px;"></div>
+        <div><div class="skel" style="width:65%;height:13px;margin-bottom:8px;"></div><div class="skel" style="width:40%;height:10px;"></div></div>
+        <div class="skel" style="width:48px;height:18px;border-radius:20px;"></div>
+      </div>
+      <div class="evt-row evt-skeleton" style="border-bottom:1px solid var(--border);">
+        <div class="skel" style="width:58px;height:58px;border-radius:6px;"></div>
+        <div><div class="skel" style="width:55%;height:13px;margin-bottom:8px;"></div><div class="skel" style="width:35%;height:10px;"></div></div>
+        <div class="skel" style="width:42px;height:18px;border-radius:20px;"></div>
+      </div>
+      <div class="evt-row evt-skeleton" style="border-bottom:1px solid var(--border);">
+        <div class="skel" style="width:58px;height:58px;border-radius:6px;"></div>
+        <div><div class="skel" style="width:72%;height:13px;margin-bottom:8px;"></div><div class="skel" style="width:45%;height:10px;"></div></div>
+        <div class="skel" style="width:52px;height:18px;border-radius:20px;"></div>
+      </div>
+      <div class="evt-row evt-skeleton" style="border-bottom:1px solid var(--border);">
+        <div class="skel" style="width:58px;height:58px;border-radius:6px;"></div>
+        <div><div class="skel" style="width:60%;height:13px;margin-bottom:8px;"></div><div class="skel" style="width:38%;height:10px;"></div></div>
+        <div class="skel" style="width:46px;height:18px;border-radius:20px;"></div>
+      </div>
+      <div class="evt-row evt-skeleton">
+        <div class="skel" style="width:58px;height:58px;border-radius:6px;"></div>
+        <div><div class="skel" style="width:50%;height:13px;margin-bottom:8px;"></div><div class="skel" style="width:30%;height:10px;"></div></div>
+        <div class="skel" style="width:44px;height:18px;border-radius:20px;"></div>
+      </div>
+    </div>
+
+    <!-- DESKTOP SIDE PANEL -->
+    <aside class="events-summary">
+      <div class="summary-card">
+        <div class="summary-header">
+          <div class="summary-title">Tapahtuman tiedot</div>
+          <div class="summary-sub">Valitse tapahtuma listalta</div>
+        </div>
+        <div class="summary-body" id="summary-body">
+          <div class="summary-empty">
+            <div class="summary-empty-icon">🎱</div>
+            <p>Klikkaa tapahtumaa<br>nähdäksesi tiedot ja<br>ilmoittautumislinkin.</p>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+  </div>
+</div>
+
+<!-- MOBILE SLIDE-UP PANEL -->
+<div class="mobile-panel-overlay" id="mobile-overlay" onclick="closePanel()"></div>
+<div class="mobile-panel" id="mobile-panel">
+  <div class="mobile-panel-handle"></div>
+  <button class="mobile-panel-close" onclick="closePanel()">✕</button>
+  <div id="mobile-panel-body"></div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div style="display:flex;gap:10px;align-items:center;">
+        <div class="nav-logo-icon">EBK</div>
+        <div><div class="nav-logo-text">Espoon Biljardikerho</div><div class="nav-logo-sub">Perustettu 1980</div></div>
+      </div>
+      <p>Yksityisklubi biljardista intohimoisille. Kotimme on Espoon Tillinmäessä — tule mukaan.</p>
+    </div>
+    <div class="footer-col"><h4>Sivut</h4><ul>
+      <li><a href="index.html">Etusivu</a></li>
+      <li><a href="esittely.html">Esittely</a></li>
+      <li><a href="uutiset.html">Uutiset</a></li>
+      <li><a href="tulospalvelu.html">Tulospalvelu</a></li>
+      <li><a href="tapahtumat.html">Tapahtumat</a></li>
+      <li><a href="jasenet.html">Jäsenet</a></li>
+    </ul></div>
+    <div class="footer-col"><h4>Lajit</h4><ul>
+      <li><a href="#">Kaisa</a></li><li><a href="#">Kara</a></li>
+      <li><a href="#">Pool</a></li><li><a href="#">Pyramidi</a></li>
+      <li><a href="#">Snooker</a></li>
+    </ul></div>
+    <div class="footer-col"><h4>Yhteystiedot</h4>
+      <div style="display:flex;flex-direction:column;gap:9px;margin-top:4px;">
+        <div class="f-ci"><span class="f-ci-icon">📍</span><span>Tillinmäentie 1 F, 02330 Espoo</span></div>
+        <div class="f-ci"><span class="f-ci-icon">✉️</span><span>espoonbiljardikerho@gmail.com</span></div>
+        <div class="f-ci"><span class="f-ci-icon">🔗</span><span>facebook.com/espoonbiljardikerho</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 Espoon Biljardikerho ry.</p>
+    <a href="https://www.facebook.com/espoonbiljardikerho" class="social-btn" title="Facebook">f</a>
+  </div>
+</footer>
+
+<script>
+(function () {
+  const BASE  = 'https://www.espoonbiljardikerho.com';
+  const PROXY = 'https://corsproxy.io/?url=';
+  const REG_URL = BASE + '/ilmoittautuminen/';
+
+  // Finnish month abbreviations
+  const MONTHS = ['Tam','Hel','Maa','Huh','Tou','Kes','Hei','Elo','Syy','Lok','Mar','Jou'];
+  const MONTHS_LONG = ['tammikuu','helmikuu','maaliskuu','huhtikuu','toukokuu','kesäkuu','heinäkuu','elokuu','syyskuu','lokakuu','marraskuu','joulukuu'];
+
+  // Sport detection
+  function guessTag(title) {
+    const t = title.toLowerCase();
+    if (t.includes('pool') || t.includes('8-pallo') || t.includes('9-pallo') || t.includes('tasoitussarja') && t.includes('pallo')) return 'Pool';
+    if (t.includes('kaisa'))    return 'Kaisa';
+    if (t.includes('snooker'))  return 'Snooker';
+    if (t.includes('kara'))     return 'Kara';
+    if (t.includes('pyramidi')) return 'Pyramidi';
+    if (t.includes('pikkujoulut') || t.includes('kinkkuk') || t.includes('kesärieha')) return 'Klubi';
+    return 'Klubi';
+  }
+
+  function tagClass(tag) {
+    return { Kaisa:'b-kaisa', Pool:'b-pool', Snooker:'b-snooker', Kara:'b-kara', Pyramidi:'b-pyramidi', Klubi:'b-klubi' }[tag] || 'b-klubi';
+  }
+
+  // Parse "3.6.–26.8.2026" or "la 13.6.2026" style dates
+  function parseEventDate(text) {
+    // Series: "3.6.–26.8.2026"
+    const seriesMatch = text.match(/(\d+)\.(\d+)\.?[–-](\d+)\.(\d+)\.(\d{4})/);
+    if (seriesMatch) {
+      const [,sd,sm,,em,ey] = seriesMatch;
+      return { day: sd, month: MONTHS[parseInt(sm)-1], isSeries: true, startLabel: `${sd}.${sm}–${em}.${parseInt(sm)!==parseInt(seriesMatch[4])?seriesMatch[4]+'.':''}${ey}` };
+    }
+    // Single: "la 13.6.2026" or "pe 4.12.2026" or "13.6.2026"
+    const single = text.match(/(\d+)\.(\d+)\.(\d{4})/);
+    if (single) {
+      const [,d,m,y] = single;
+      return { day: d, month: MONTHS[parseInt(m)-1], year: y, isSeries: false };
+    }
+    return null;
+  }
+
+  // Parse time "klo 10–23" → "klo 10:00"
+  function parseTime(text) {
+    const t = text.match(/klo[\s.]*(\d+)[:\-–]?(\d*)/i);
+    if (!t) return null;
+    return `klo ${t[1]}:${t[2] ? t[2].padStart(2,'0') : '00'}`;
+  }
+
+  // Parse fee
+  function parseFee(text) {
+    const m = text.match(/(\d+)\s*€/);
+    return m ? m[1] + ' €' : null;
+  }
+
+  // Parse "Osallistumisoikeus" — members only?
+  function parseAccess(text) {
+    const t = text.toLowerCase();
+    if (t.includes('jäsenille') || t.includes('klubilaisille')) return 'members';
+    if (t.includes('kaikilla') || t.includes('avoin')) return 'open';
+    return null;
+  }
+
+  async function fetchHTML(url) {
+    const r = await fetch(url);
+    if (!r.ok) throw new Error(r.status);
+    return r.text();
+  }
+
+  async function fetchWithFallback(url) {
+    try { return await fetchHTML(url); }
+    catch { return fetchHTML(PROXY + encodeURIComponent(url)); }
+  }
+
+  // ── Parse events list page ────────────────────────────────────────────────
+
+  function parseEventsList(html) {
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+    // Events are <a href="/tapahtumat/slug/"> inside main content
+    const links = Array.from(doc.querySelectorAll('main a[href*="/tapahtumat/"], .content a[href*="/tapahtumat/"]'))
+      .filter(a => {
+        const h = a.getAttribute('href') || '';
+        // exclude the "Selaa menneitä" link and the section index
+        return h.match(/\/tapahtumat\/[^?]+\//) && !h.includes('?past');
+      });
+
+    return links.map(a => {
+      const href  = a.getAttribute('href');
+      const slug  = href.replace(/.*\/tapahtumat\//, '').replace(/\/$/, '');
+      const full  = a.textContent.trim();
+
+      // Format: "Name - daterange - venue description..."
+      const parts = full.split(/\s*[-–]\s*/);
+      const name  = parts[0]?.trim() || full;
+      const tag   = guessTag(name);
+
+      // Find date in the full text
+      let dateInfo = null;
+      for (const p of parts) {
+        dateInfo = parseEventDate(p);
+        if (dateInfo) break;
+      }
+
+      // Time from parts
+      let time = null;
+      for (const p of parts) {
+        time = parseTime(p);
+        if (time) break;
+      }
+
+      return { slug, href, name, tag, dateInfo, time, raw: full };
+    });
+  }
+
+  // ── Parse individual event detail page ───────────────────────────────────
+
+  async function fetchEventDetail(slug) {
+    const url = BASE + '/tapahtumat/' + slug + '/';
+    const html = await fetchWithFallback(url);
+    const doc  = new DOMParser().parseFromString(html, 'text/html');
+
+    // og:image for the lead photo
+    const img = doc.querySelector('meta[property="og:image"]')?.getAttribute('content') || null;
+
+    // Parse bold-label fields from main content
+    const main = doc.querySelector('main, .content main, article') || doc.body;
+    const detail = {};
+
+    // Walk through strong tags to find field:value pairs
+    main.querySelectorAll('strong, b').forEach(el => {
+      const label = el.textContent.replace(/:/,'').trim().toLowerCase();
+      const next  = el.nextSibling?.textContent?.trim() || el.parentElement?.textContent?.replace(el.textContent,'').trim() || '';
+      if (!next || next === ':') return;
+      if (label.includes('laji'))             detail.sport    = next;
+      if (label.includes('pelipaikka'))       detail.venue    = next;
+      if (label.includes('pvm') || label.includes('aika')) detail.date = next;
+      if (label.includes('alkamisaika'))      detail.time     = next;
+      if (label.includes('osallistumismaksu')) detail.fee     = next;
+      if (label.includes('osallistumisoikeus')) detail.access = next;
+      if (label.includes('ilmoittautuminen') && next.match(/\d/)) detail.deadline = next;
+      if (label.includes('kapasiteetti') || label.includes('nopeinta') || label.includes('paikk')) detail.capacity = next;
+    });
+
+    // Capacity often embedded in "osallistumisoikeus" text
+    if (!detail.capacity) {
+      const oikeusEl = Array.from(main.querySelectorAll('strong,b')).find(el => el.textContent.toLowerCase().includes('oikeus'));
+      if (oikeusEl) {
+        const txt = oikeusEl.parentElement?.textContent || '';
+        const cap = txt.match(/(\d+)\s+nopeinta/);
+        if (cap) detail.capacity = cap[1] + ' paikkaa';
+      }
+    }
+
+    // Registration deadline — look for "To.XX.X. klo XX:XX mennessä" pattern
+    if (!detail.deadline) {
+      const bodyText = main.textContent;
+      const dl = bodyText.match(/[A-Za-z]{2}\.?\s*(\d+\.\d+\.)\s*klo\s*[\d:]+\s*mennessä/i);
+      if (dl) detail.deadline = dl[0];
+    }
+
+    // Signups count — count non-empty numbered items
+    const bodyText = main.textContent;
+    const signupLines = bodyText.match(/^\d+\.\s+\S/gm) || [];
+    detail.signupCount = signupLines.length;
+
+    return { img, detail };
+  }
+
+  // ── Render event row ──────────────────────────────────────────────────────
+
+  let activeSlug = null;
+  let eventsData = [];
+
+  function renderRow(evt, idx) {
+    const { slug, name, tag, dateInfo, time } = evt;
+    const cls   = tagClass(tag);
+    const isSeries = dateInfo?.isSeries;
+
+    let dateBlock;
+    if (!dateInfo) {
+      dateBlock = `<div class="evt-date-block"><div class="evt-day" style="font-size:11px;font-family:'DM Sans',sans-serif;color:var(--text-muted);">TBA</div></div>`;
+    } else if (isSeries) {
+      dateBlock = `<div class="evt-date-block" style="border-style:dashed;"><div class="evt-day" style="font-size:10px;font-family:'DM Sans',sans-serif;color:var(--text-muted);letter-spacing:0.01em;">Sarja</div><div class="evt-month">${dateInfo.month}</div></div>`;
+    } else {
+      dateBlock = `<div class="evt-date-block"><div class="evt-day">${dateInfo.day}</div><div class="evt-month">${dateInfo.month}</div></div>`;
+    }
+
+    const sub = [time, isSeries ? dateInfo.startLabel : null].filter(Boolean).join(' · ');
+
+    return `
+      <div class="evt-row${isSeries?' is-series':''}" data-slug="${slug}" data-tag="${tag}" data-idx="${idx}" style="animation-delay:${idx*0.04}s" onclick="selectEvent(this)">
+        ${dateBlock}
+        <div class="evt-info">
+          <div class="evt-name">${name}</div>
+          ${sub ? `<div class="evt-sub">${sub}</div>` : ''}
+        </div>
+        <div class="evt-badge-wrap"><span class="ebadge ${cls}">${tag}</span></div>
+      </div>`;
+  }
+
+  // ── Render detail panel ───────────────────────────────────────────────────
+
+  function renderDetail(evt, fetched) {
+    const { name, tag, dateInfo, time, href } = evt;
+    const { img, detail } = fetched;
+    const cls = tagClass(tag);
+
+    const regUrl = REG_URL; // always go to the main registration page
+
+    const accessText = detail.access ? parseAccess(detail.access) : null;
+    const membersOnly = accessText === 'members';
+
+    const fee = detail.fee ? parseFee(detail.fee) || detail.fee : null;
+
+    return `
+      ${img ? `<img class="summary-event-img" src="${img}" alt="${name}" style="display:block;" onerror="this.style.display='none'">` : ''}
+      <div style="margin-bottom:10px;"><span class="ebadge ${cls}">${tag}</span></div>
+      <div class="summary-event-name">${name}</div>
+      ${membersOnly ? `<div class="members-only-note">🔒 Jäsenille / klubilaisille</div>` : ''}
+      <div class="summary-details">
+        ${detail.date || dateInfo ? `
+        <div class="summary-detail-row">
+          <span class="summary-detail-icon">📅</span>
+          <div>
+            <span class="summary-detail-label">Päivämäärä</span>
+            <span class="summary-detail-value"><strong>${detail.date || (dateInfo?.isSeries ? dateInfo.startLabel : dateInfo?.day+'. '+MONTHS_LONG[MONTHS.indexOf(dateInfo?.month)])}</strong></span>
+          </div>
+        </div>` : ''}
+        ${detail.time || time ? `
+        <div class="summary-detail-row">
+          <span class="summary-detail-icon">🕙</span>
+          <div>
+            <span class="summary-detail-label">Alkamisaika</span>
+            <span class="summary-detail-value"><strong>${detail.time || time}</strong></span>
+          </div>
+        </div>` : ''}
+        ${detail.venue ? `
+        <div class="summary-detail-row">
+          <span class="summary-detail-icon">📍</span>
+          <div>
+            <span class="summary-detail-label">Pelipaikka</span>
+            <span class="summary-detail-value">${detail.venue}</span>
+          </div>
+        </div>` : ''}
+        ${fee ? `
+        <div class="summary-detail-row">
+          <span class="summary-detail-icon">💶</span>
+          <div>
+            <span class="summary-detail-label">Osallistumismaksu</span>
+            <span class="summary-detail-value"><strong>${fee}</strong> · 100% palkintoihin</span>
+          </div>
+        </div>` : ''}
+        ${detail.capacity ? `
+        <div class="summary-detail-row">
+          <span class="summary-detail-icon">👥</span>
+          <div>
+            <span class="summary-detail-label">Kapasiteetti</span>
+            <span class="summary-detail-value">${detail.capacity}${detail.signupCount > 0 ? ` · <strong>${detail.signupCount} ilmoittautunut</strong>` : ''}</span>
+          </div>
+        </div>` : ''}
+      </div>
+      ${detail.deadline ? `
+      <div class="summary-reg-info">
+        <strong>Ilmoittautuminen</strong>
+        Viimeistään ${detail.deadline}
+      </div>` : ''}
+      <a href="${regUrl}" target="_blank" rel="noopener" class="btn-primary summary-cta">
+        Ilmoittaudu →
+      </a>
+      <p class="summary-cta-note">Siirtyy Yhdistysavain-lomakkeelle.<br>Kuittausviesti lähetetään sähköpostiisi.</p>
+    `;
+  }
+
+  // ── Render loading state in panel ────────────────────────────────────────
+
+  function renderPanelLoading(name) {
+    return `
+      <div style="padding:8px 0;">
+        <div style="font-family:'Playfair Display',serif;font-size:15px;color:var(--text-primary);margin-bottom:16px;line-height:1.3;">${name}</div>
+        <div class="skel" style="width:100%;height:140px;border-radius:7px;margin-bottom:14px;"></div>
+        <div class="skel" style="width:70%;height:11px;margin-bottom:10px;"></div>
+        <div class="skel" style="width:55%;height:11px;margin-bottom:10px;"></div>
+        <div class="skel" style="width:60%;height:11px;margin-bottom:18px;"></div>
+        <div class="skel" style="width:100%;height:42px;border-radius:6px;"></div>
+      </div>`;
+  }
+
+  // ── Select event ──────────────────────────────────────────────────────────
+
+  const detailCache = {};
+
+  window.selectEvent = async function(el) {
+    const slug = el.dataset.slug;
+    const idx  = parseInt(el.dataset.idx);
+    const evt  = eventsData[idx];
+    if (!evt) return;
+
+    // Mark active row
+    document.querySelectorAll('.evt-row').forEach(r => r.classList.remove('active'));
+    el.classList.add('active');
+    activeSlug = slug;
+
+    const isMobile = window.innerWidth <= 900;
+    const loadingHTML = renderPanelLoading(evt.name);
+
+    if (isMobile) {
+      document.getElementById('mobile-panel-body').innerHTML = loadingHTML;
+      document.getElementById('mobile-panel').classList.add('open');
+      document.getElementById('mobile-overlay').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.getElementById('summary-body').innerHTML = loadingHTML;
+    }
+
+    // Fetch detail (with cache)
+    if (!detailCache[slug]) {
+      try {
+        detailCache[slug] = await fetchEventDetail(slug);
+      } catch(e) {
+        detailCache[slug] = { img: null, detail: {} };
+      }
+    }
+
+    const html = renderDetail(evt, detailCache[slug]);
+
+    if (isMobile) {
+      if (activeSlug === slug) document.getElementById('mobile-panel-body').innerHTML = html;
+    } else {
+      if (activeSlug === slug) document.getElementById('summary-body').innerHTML = html;
+    }
+  };
+
+  window.closePanel = function() {
+    document.getElementById('mobile-panel').classList.remove('open');
+    document.getElementById('mobile-overlay').classList.remove('open');
+    document.body.style.overflow = '';
+    document.querySelectorAll('.evt-row').forEach(r => r.classList.remove('active'));
+    activeSlug = null;
+  };
+
+  // ── Filter ────────────────────────────────────────────────────────────────
+
+  function applyFilter(tag) {
+    document.querySelectorAll('.evt-row:not(.evt-skeleton)').forEach(row => {
+      const match = tag === 'all' || row.dataset.tag === tag;
+      row.dataset.hidden = match ? 'false' : 'true';
+    });
+    // If active row is now hidden, close panel
+    if (activeSlug) {
+      const activeRow = document.querySelector(`.evt-row[data-slug="${activeSlug}"]`);
+      if (activeRow?.dataset.hidden === 'true') closePanel();
+    }
+  }
+
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      applyFilter(btn.dataset.tag);
+    });
+  });
+
+  // ── Load events ───────────────────────────────────────────────────────────
+
+  async function load() {
+    try {
+      const html   = await fetchWithFallback(BASE + '/tapahtumat/');
+      const parsed = parseEventsList(html);
+
+      if (!parsed.length) throw new Error('No events found');
+
+      eventsData = parsed;
+      const list = document.getElementById('event-list');
+      list.innerHTML = parsed.map((e,i) => renderRow(e,i)).join('');
+
+      // Auto-select first event on desktop
+      if (window.innerWidth > 900) {
+        const first = list.querySelector('.evt-row');
+        if (first) first.click();
+      }
+
+    } catch(err) {
+      console.warn('Events load failed:', err);
+      document.getElementById('event-list').innerHTML = `
+        <div style="text-align:center;padding:clamp(40px,6vw,80px) 0;">
+          <div style="font-size:36px;margin-bottom:12px;opacity:0.4;">📅</div>
+          <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px;">Tapahtumia ei voitu ladata.</p>
+          <a href="${BASE}/tapahtumat/" target="_blank" class="btn-secondary" style="font-size:12px;">Avaa tapahtumat →</a>
+        </div>`;
+    }
+  }
+
+  load();
+})();
+</script>
+
+</body>
+</html>
