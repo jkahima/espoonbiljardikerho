@@ -269,6 +269,7 @@ nav {
   transform:translateX(100%);
   transition:transform 0.32s cubic-bezier(0.32,0.72,0,1);
   overflow:hidden;
+  display:flex; flex-direction:column;
 }
 .profile-panel.open { transform:translateX(0); }
 
@@ -400,14 +401,17 @@ nav {
 @media (max-width:900px) {
   .profile-panel {
     top:auto; left:0; right:0; bottom:0;
-    width:100%; max-height:88svh;
+    width:100%; height:88svh; max-height:88svh;
     border-left:none; border-top:1px solid var(--border-strong);
     border-radius:16px 16px 0 0;
     transform:translateY(100%);
+    display:flex; flex-direction:column;
   }
   .profile-panel.open { transform:translateY(0); }
-  .panel-handle { width:36px; height:4px; background:var(--border-strong); border-radius:2px; margin:12px auto 0; }
-  .panel-photo { aspect-ratio:16/7; }
+  .panel-handle { width:36px; height:4px; background:var(--border-strong); border-radius:2px; margin:12px auto 4px; flex-shrink:0; }
+  .panel-close { position:absolute; top:14px; right:14px; }
+  .panel-photo { aspect-ratio:16/6; flex-shrink:0; }
+  .panel-body { flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; }
   .panel-monogram-text { font-size:48px; }
 }
 
@@ -510,8 +514,7 @@ footer { background:var(--green-dark); border-top:1px solid var(--border); paddi
       <div>
         <h1>Kerhon <em>jäsenet</em></h1>
         <p class="page-hero-desc">Espoon Biljardikerho ry:n jäsenet ja Espoon klubilaiset.</p>
-        <div class="hero-counts" id="hero-counts">
-          <div class="count-pill"><div class="count-pill-dot" style="background:var(--c-tays);"></div><strong id="cnt-tays">44</strong> Täysvaltaista</div>
+        <strong id="cnt-tays">44</strong> Täysvaltaista</div>
           <div class="count-pill"><div class="count-pill-dot" style="background:var(--c-klubi);"></div><strong id="cnt-klubi">19</strong> Espoon klubijäsentä</div>
           <div class="count-pill"><div class="count-pill-dot" style="background:var(--c-pelaa);"></div><strong id="cnt-pelaa">18</strong> Pelaajajäsentä</div>
         </div>
@@ -595,7 +598,7 @@ footer { background:var(--green-dark); border-top:1px solid var(--border); paddi
 <div class="profile-panel" id="profile-panel">
   <div class="panel-handle" style="display:none;" id="panel-handle"></div>
   <button class="panel-close" onclick="closePanel()">✕</button>
-  <div id="panel-content">
+  <div id="panel-content" style="display:flex;flex-direction:column;flex:1;overflow:hidden;">
     <!-- populated by JS -->
   </div>
 </div>
@@ -643,17 +646,16 @@ footer { background:var(--green-dark); border-top:1px solid var(--border); paddi
   const WORKER = 'https://ebk-proxy.jkahima.workers.dev';
 
   async function fetchWithFallback(url) {
-    // Extract just the path from the full URL and proxy through our worker
     let path;
     try {
       const u = new URL(url);
       path = u.pathname + u.search;
     } catch {
-      path = url;
+      path = url.startsWith('/') ? url : '/' + url;
     }
     const proxyUrl = WORKER + path;
     const r = await fetch(proxyUrl);
-    if (!r.ok) throw new Error('Worker returned ' + r.status);
+    if (!r.ok) throw new Error('Worker ' + r.status + ' for ' + path);
     return r.text();
   }
 
@@ -812,8 +814,7 @@ footer { background:var(--green-dark); border-top:1px solid var(--border); paddi
   }
 
   async function loadNicknames() {
-    // Process in small batches to avoid hammering the server
-    const batch = 5;
+    const batch = 3;
     for (let i = 0; i < MEMBERS.length; i += batch) {
       const slice = MEMBERS.slice(i, i + batch);
       await Promise.all(slice.map(async member => {
@@ -825,10 +826,11 @@ footer { background:var(--green-dark); border-top:1px solid var(--border); paddi
               monoEl.innerHTML = '<div class="member-monogram-text member-monogram-nick">' + profile.nickname + '</div>';
             }
           }
-        } catch(e) { /* silently skip */ }
+        } catch(e) {
+          console.warn('Nickname fetch failed:', member.slug, e.message);
+        }
       }));
-      // Small delay between batches to be kind to the server
-      await new Promise(r => setTimeout(r, 200));
+      await new Promise(r => setTimeout(r, 400));
     }
   }
 
