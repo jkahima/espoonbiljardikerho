@@ -846,16 +846,7 @@ footer { background:var(--green-dark); border-top:1px solid var(--border); paddi
     if (photoCache[slug] !== undefined) return photoCache[slug];
     try {
       const url = BASE + '/jasenet/' + slug + '/';
-      let html;
-      try {
-        const r = await fetch(url);
-        if (!r.ok) throw new Error(r.status);
-        html = await r.text();
-      } catch {
-        const r = await fetchWithFallback(url);
-        if (!r.ok) throw new Error(r.status);
-        html = await r.text();
-      }
+      const html = await fetchWithFallback(url);
       const doc = new DOMParser().parseFromString(html, 'text/html');
       const imgUrl = doc.querySelector('meta[property="og:image"]')?.getAttribute('content') || null;
       // Also grab sports while we're here — cache for profile panel too
@@ -905,16 +896,10 @@ footer { background:var(--green-dark); border-top:1px solid var(--border); paddi
       if (!doc) {
         const url = BASE + '/jasenet/' + slug + '/';
         let html;
-        // Always try proxy first for cross-origin requests from GitHub Pages
         try {
-          const r = await fetchWithFallback(url);
-          if (!r.ok) throw new Error('proxy ' + r.status);
-          html = await r.text();
-        } catch(proxyErr) {
-          console.warn('proxy failed, trying direct:', proxyErr);
-          const r = await fetch(url);
-          if (!r.ok) throw new Error('direct ' + r.status);
-          html = await r.text();
+          html = await fetchWithFallback(url);
+        } catch(err) {
+          throw new Error('fetch failed: ' + err.message);
         }
         doc = new DOMParser().parseFromString(html, 'text/html');
         photoCache[slug] = doc.querySelector('meta[property="og:image"]')?.getAttribute('content') || null;
