@@ -593,10 +593,13 @@ footer { background:var(--green-dark); border-top:1px solid var(--border); paddi
       // Format: "Name - daterange - venue description..."
       const parts = full.split(/\s*[-–]\s*/);
       let name  = parts[0]?.trim() || full;
-      // Strip date/time/venue info accidentally included in the title
-      name = name.replace(/\s+(ma|ti|ke|to|pe|la|su)\.?\s+\d+\.\d+\.\d{4}.*$/i, '').trim();
-      name = name.replace(/\s+\d+\.\d+\.\d{4}.*$/i, '').trim();
+      // Strip embedded date/time/venue from title
+      // Handles: "Title la 13.6.2026 klo 10", "Title 26.8.–30.11.2026", "Title 26.8."
+      name = name.replace(/\s+(ma|ti|ke|to|pe|la|su)\.?\s+\d+\.\d+.*$/i, '').trim();
+      name = name.replace(/\s+\d{1,2}\.\d{1,2}(\.\d{4})?[.–-]?.*$/i, '').trim();
       name = name.replace(/\s+klo\s+[\d:–-]+.*$/i, '').trim();
+      // Remove trailing punctuation left after stripping
+      name = name.replace(/[\s.–-]+$/, '').trim();
       const tag   = guessTag(name);
 
       // Find date in the full text
@@ -778,7 +781,7 @@ footer { background:var(--green-dark); border-top:1px solid var(--border); paddi
         <strong>Ilmoittautuminen</strong>
         Viimeistään ${detail.deadline}
       </div>` : ''}
-      <button class="btn-primary summary-cta" onclick="openRegModal(currentEventData)">
+      <button class="btn-primary summary-cta" id="reg-cta-btn" onclick="openRegModal(window._activeEvt)">
         Ilmoittaudu →
       </button>
       <p class="summary-cta-note">Kuittausviesti lähetetään sähköpostiisi.</p>
@@ -808,7 +811,7 @@ footer { background:var(--green-dark); border-top:1px solid var(--border); paddi
     const idx  = parseInt(el.dataset.idx);
     const evt  = eventsData[idx];
     if (!evt) return;
-    window.currentEventData = evt;
+    window._activeEvt = evt;
 
     // Mark active row
     document.querySelectorAll('.evt-row').forEach(r => r.classList.remove('active'));
@@ -1379,6 +1382,7 @@ footer { background:var(--green-dark); border-top:1px solid var(--border); paddi
   const FORMSPREE = 'https://formspree.io/f/YOUR_FORM_ID';
 
   window.openRegModal = function(evt) {
+    evt = evt || window._activeEvt;
     if (!evt) return;
     document.getElementById('rm-event-name').textContent = evt.name || 'Tapahtuma';
     document.getElementById('rm-hidden-event').value = evt.name || '';
