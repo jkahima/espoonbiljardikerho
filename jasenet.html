@@ -175,7 +175,7 @@ nav {
 /* ── MEMBER GRID ── */
 .member-grid {
   display:grid;
-  grid-template-columns:repeat(4, 1fr);
+  grid-template-columns:repeat(5, 1fr);
   gap:clamp(10px,1.5vw,16px);
 }
 
@@ -195,21 +195,9 @@ nav {
 /* photo area */
 .member-photo {
   position:relative;
-  width:100%; aspect-ratio:3/4;
+  width:100%; aspect-ratio:1/1;
   overflow:hidden; background:var(--green-felt);
   flex-shrink:0;
-}
-.member-photo img {
-  width:100%; height:100%; object-fit:cover; display:block;
-  filter:brightness(0.82) saturate(0.65);
-  transition:transform 0.4s ease, filter 0.3s;
-}
-.member-card:hover .member-photo img { transform:scale(1.04); filter:brightness(0.9) saturate(0.75); }
-
-/* gradient overlay on photo */
-.member-photo::after {
-  content:''; position:absolute; inset:0; pointer-events:none;
-  background:linear-gradient(to bottom, transparent 45%, rgba(13,31,15,0.85) 100%);
 }
 
 /* monogram avatar for members without photo */
@@ -220,10 +208,15 @@ nav {
 }
 .member-monogram-text {
   font-family:'Playfair Display',serif;
-  font-size:clamp(28px,3.5vw,40px);
+  font-size:clamp(22px,2.5vw,32px);
   font-weight:600; color:var(--gold);
-  opacity:0.6; letter-spacing:0.04em;
+  opacity:0.65; letter-spacing:0.04em;
   user-select:none;
+}
+.member-monogram-nick {
+  font-size:clamp(14px,1.6vw,20px);
+  opacity:0.75; font-style:italic;
+  letter-spacing:0.02em;
 }
 
 /* type dot on photo corner */
@@ -236,7 +229,7 @@ nav {
 
 /* card body */
 .member-card-body {
-  padding:11px 12px 12px;
+  padding:8px 10px 10px;
 }
 .member-name {
   font-family:'Playfair Display',serif;
@@ -406,10 +399,11 @@ footer { background:var(--green-dark); border-top:1px solid var(--border); paddi
 @keyframes fadeUp { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
 
 /* ── RESPONSIVE ── */
-@media (max-width:1100px) { .member-grid { grid-template-columns:repeat(3,1fr); } }
+@media (max-width:1200px) { .member-grid { grid-template-columns:repeat(4,1fr); } }
+@media (max-width:900px) { .member-grid { grid-template-columns:repeat(4,1fr); } }
 @media (max-width:900px) {
   .nav-links { display:none; } .lang-switcher { display:none; } .hamburger { display:flex; }
-  .member-grid { grid-template-columns:repeat(3,1fr); }
+  .member-grid { grid-template-columns:repeat(3,1fr); } /* overridden above */
   .footer-grid { grid-template-columns:1fr 1fr; }
   .search-wrap { width:100%; }
   .page-hero-top { flex-direction:column; align-items:flex-start; }
@@ -729,22 +723,23 @@ footer { background:var(--green-dark); border-top:1px solid var(--border); paddi
   // ── Build card ────────────────────────────────────────────────────────────
   function buildCard(member) {
     const { slug, name, type } = member;
-    const mono = initials(name);
+    // Extract nickname from parentheses e.g. "Jaakko Kahima (Kahi)"
+    const nickMatch = name.match(/\(([^)]+)\)/);
+    const nickname = nickMatch ? nickMatch[1] : null;
+    const cleanName = name.replace(/\s*\([^)]+\)/, '').trim();
+    const mono = nickname || initials(cleanName);
+    const isNick = !!nickname;
     const color = TYPE_COLOR[type];
     return `
-      <div class="member-card" data-slug="${slug}" data-type="${type}" data-name="${name.toLowerCase()}" onclick="openProfile('${slug}')">
+      <div class="member-card" data-slug="${slug}" data-type="${type}" data-name="${cleanName.toLowerCase()}" onclick="openProfile('${slug}')">
         <div class="member-photo">
           <div class="member-monogram" id="mono-${slug}">
-            <div class="member-monogram-text">${mono}</div>
+            <div class="member-monogram-text${isNick ? ' member-monogram-nick' : ''}">${mono}</div>
           </div>
-          <img src="" alt="${name}" data-slug="${slug}"
-            style="display:none;position:absolute;inset:0;"
-            onerror="this.style.display='none';document.getElementById('mono-${slug}').style.display='flex';">
           <div class="member-type-dot" style="background:${color};"></div>
         </div>
         <div class="member-card-body">
-          <div class="member-name">${name}</div>
-          <div class="member-sports" id="sports-${slug}"></div>
+          <div class="member-name">${cleanName}</div>
         </div>
       </div>`;
   }
@@ -762,7 +757,7 @@ footer { background:var(--green-dark); border-top:1px solid var(--border); paddi
   // We fetch profiles lazily on click, but pre-load photos via og:image meta
   // using a lightweight HEAD-free scrape approach: just the og:image from meta desc.
   // Actually og:image requires a page fetch — so we load photos on card
-  // intersection (IntersectionObserver) rather than upfront.
+
 
   const photoCache = {};
 
@@ -797,33 +792,7 @@ footer { background:var(--green-dark); border-top:1px solid var(--border); paddi
   }
 
   // Intersection observer: load photos as cards scroll into view
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(async entry => {
-      if (!entry.isIntersecting) return;
-      observer.unobserve(entry.target);
-      const slug = entry.target.dataset.slug;
-      const imgEl = entry.target.querySelector('img[data-slug]');
-      const monoEl = document.getElementById('mono-' + slug);
-      const sportsEl = document.getElementById('sports-' + slug);
 
-      const imgUrl = await loadPhoto(slug);
-      if (imgUrl && imgEl) {
-        imgEl.src = imgUrl;
-        imgEl.style.display = 'block';
-        imgEl.style.position = 'absolute';
-        imgEl.style.inset = '0';
-        if (monoEl) monoEl.style.display = 'none';
-      }
-      // Render sports badges
-      if (sportsEl && profileCache[slug]?.sports?.length) {
-        sportsEl.innerHTML = profileCache[slug].sports.map(sportBadge).join('');
-      }
-    });
-  }, { rootMargin: '200px' });
-
-  function observeCards() {
-    document.querySelectorAll('.member-card').forEach(card => observer.observe(card));
-  }
 
   // ── Profile panel ─────────────────────────────────────────────────────────
   const profileCache = {};
@@ -934,12 +903,13 @@ footer { background:var(--green-dark); border-top:1px solid var(--border); paddi
     if (activePanelSlug !== slug) return; // panel was closed/changed
 
     const color = TYPE_COLOR[member.type];
-    const mono  = initials(member.name);
+    const nickM = member.name.match(/\(([^)]+)\)/);
+    const nick = nickM ? nickM[1] : null;
+    const cleanMemberName = member.name.replace(/\s*\([^)]+\)/, '').trim();
+    const mono  = initials(cleanMemberName);
 
-    const photoHTML = profile.photo
-      ? `<img src="${profile.photo}" alt="${member.name}" onerror="this.style.display='none';document.getElementById('panel-mono-${slug}').style.display='flex';">`
-      : '';
-    const monoHTML = `<div class="panel-monogram" id="panel-mono-${slug}" style="${profile.photo ? 'display:none;' : ''}"><div class="panel-monogram-text">${mono}</div></div>`;
+    const photoHTML = '';
+    const monoHTML = `<div class="panel-monogram" id="panel-mono-${slug}"><div class="panel-monogram-text" style="font-size:52px;opacity:0.45;">${nick || mono}</div></div>`;
 
     const sportsHTML = profile.sports.length
       ? profile.sports.map(s => `<span class="sport-badge ${({Kaisa:'sb-kaisa',Pool:'sb-pool',Snooker:'sb-snooker',Kara:'sb-kara',Pyramidi:'sb-pyramidi'}[s]||'')}">${s}</span>`).join('')
@@ -968,7 +938,7 @@ footer { background:var(--green-dark); border-top:1px solid var(--border); paddi
             <div style="width:6px;height:6px;border-radius:50%;background:${color};"></div>
             ${TYPE_LABEL[member.type]}
           </div>
-          <div class="panel-name">${member.name}</div>
+          <div class="panel-name">${cleanMemberName}${nick ? '<span style="font-size:0.65em;font-style:italic;opacity:0.7;margin-left:8px;">(' + nick + ')</span>' : ''}</div>
         </div>
       </div>
       <div class="panel-body">
@@ -1034,7 +1004,6 @@ footer { background:var(--green-dark); border-top:1px solid var(--border); paddi
 
   // ── Init ──────────────────────────────────────────────────────────────────
   renderGrids();
-  observeCards();
 
 })();
 </script>
