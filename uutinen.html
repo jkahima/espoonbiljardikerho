@@ -249,7 +249,7 @@ section { padding: var(--spy) var(--px); }
   color:var(--text-secondary);
   font-weight:300;
 }
-.article-content p { margin-bottom:1.2em; }
+.article-content p { margin-bottom:0.8em; }
 .article-content h2, .article-content h3 {
   font-family:'Playfair Display',serif;
   color:var(--text-primary);
@@ -260,12 +260,16 @@ section { padding: var(--spy) var(--px); }
 .article-content h3 { font-size:clamp(15px,1.6vw,19px); }
 .article-content img {
   max-width:100%; width:auto; display:block;
-  max-height:480px; object-fit:contain;
-  border-radius:7px; margin:1.4em auto;
+  max-height:360px; object-fit:contain;
+  border-radius:7px; margin:0.6em auto;
   filter:brightness(0.88) saturate(0.75);
   border:1px solid var(--border);
   background:var(--surface-card);
 }
+/* Collapse empty paragraphs that Yhdistysavain inserts around images */
+.article-content p:empty { display:none; margin:0; }
+.article-content p:has(> img:only-child) { margin:0.3em 0; }
+.article-content br + br { display:none; }
 .article-content a { color:var(--gold); text-decoration:underline; text-underline-offset:2px; }
 .article-content a:hover { color:var(--gold-light); }
 .article-content ul, .article-content ol {

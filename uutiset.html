@@ -206,6 +206,15 @@ section { padding: var(--spy) var(--px); }
   grid-column: 1 / -1;
   display: grid;
   grid-template-columns: 1.2fr 1fr;
+  overflow: hidden;
+  position: relative;
+}
+/* Fade from image into text panel on featured card */
+.news-grid.has-featured .news-card:first-child .news-img-wrap::after {
+  background:
+    linear-gradient(to right, transparent 60%, var(--surface-card) 100%),
+    linear-gradient(to bottom, rgba(13,31,15,0.1) 0%, transparent 25%, transparent 55%, rgba(13,31,15,0.92) 100%),
+    linear-gradient(to right, rgba(13,31,15,0.35) 0%, transparent 18%);
 }
 .news-grid.has-featured .news-card:first-child .news-img-wrap {
   aspect-ratio: 4/3;
@@ -581,7 +590,8 @@ footer { background:var(--green-dark); border-top:1px solid var(--border); paddi
     }
 
     grid.className = 'news-grid has-featured';
-    grid.innerHTML = filtered.map((a, i) => buildCard(a, i === 0)).join('');
+    const display = filtered.slice(0, 10);
+    grid.innerHTML = display.map((a, i) => buildCard(a, i === 0)).join('');
   }
 
   function renderPagination(total) {

@@ -564,7 +564,9 @@ footer { background:var(--green-dark); border-top:1px solid var(--border); paddi
   function parseTime(text) {
     const t = text.match(/klo[\s.]*(\d+)[:\-–]?(\d*)/i);
     if (!t) return null;
-    return `klo ${t[1]}:${t[2] ? t[2].padStart(2,'0') : '00'}`;
+    const mins = t[2] ? parseInt(t[2], 10) : 0;
+    const roundedMins = mins <= 5 ? '00' : String(mins).padStart(2,'0');
+    return `klo ${t[1]}:${roundedMins}`;
   }
 
   // Parse fee
@@ -635,7 +637,10 @@ footer { background:var(--green-dark); border-top:1px solid var(--border); paddi
 
       if (!dateInfo) dateInfo = parseEventDate(full);
       if (!time) time = parseTime(full);
-      return { slug, href, name, tag, dateInfo, time, raw: full };
+      // Extract fee from list text (e.g. "30 €", "10€")
+      const feeMatch = full.match(/(\d+)\s*€/);
+      const listFee = feeMatch ? feeMatch[1] + ' €' : null;
+      return { slug, href, name, tag, dateInfo, time, fee: listFee, raw: full };
     });
   }
 
@@ -661,7 +666,15 @@ footer { background:var(--green-dark); border-top:1px solid var(--border); paddi
       if (label.includes('laji'))             detail.sport    = next;
       if (label.includes('pelipaikka'))       detail.venue    = next;
       if (label.includes('pvm') || label.includes('aika')) detail.date = next;
-      if (label.includes('alkamisaika'))      detail.time     = next;
+      if (label.includes('alkamisaika')) {
+          const tm = next.match(/(\d+):(\d+)/);
+          if (tm) {
+            const m = parseInt(tm[2], 10);
+            detail.time = `klo ${parseInt(tm[1], 10)}:${m <= 5 ? '00' : String(m).padStart(2,'0')}`;
+          } else {
+            detail.time = next;
+          }
+        }
       if (label.includes('osallistumismaksu')) detail.fee     = next;
       if (label.includes('osallistumisoikeus')) detail.access = next;
       if (label.includes('ilmoittautuminen') && next.match(/\d/)) detail.deadline = next;
@@ -719,7 +732,7 @@ footer { background:var(--green-dark); border-top:1px solid var(--border); paddi
     } else if (isSeries && dateInfo) {
       dateStr = dateInfo.startLabel;
     }
-    const sub = [dateStr, time].filter(Boolean).join(' · ');
+    const sub = [dateStr, time, evt.fee ? evt.fee : null].filter(Boolean).join(' · ');
 
     return `
       <div class="evt-row${isSeries?' is-series':''}" data-slug="${slug}" data-tag="${tag}" data-idx="${idx}" style="animation-delay:${idx*0.04}s" onclick="selectEvent(this)">
@@ -908,8 +921,18 @@ footer { background:var(--green-dark); border-top:1px solid var(--border); paddi
       const list = document.getElementById('event-list');
       list.innerHTML = parsed.map((e,i) => renderRow(e,i)).join('');
 
-      // Auto-select first event on desktop
-      if (window.innerWidth > 900) {
+      // Auto-select: check URL hash first, then first event on desktop
+      const hashSlug = location.hash.replace('#','');
+      if (hashSlug) {
+        const hashRow = list.querySelector(`.evt-row[data-slug="${hashSlug}"]`);
+        if (hashRow) {
+          hashRow.scrollIntoView({ behavior:'smooth', block:'center' });
+          setTimeout(() => hashRow.click(), 200);
+        } else if (window.innerWidth > 900) {
+          const first = list.querySelector('.evt-row');
+          if (first) first.click();
+        }
+      } else if (window.innerWidth > 900) {
         const first = list.querySelector('.evt-row');
         if (first) first.click();
       }
