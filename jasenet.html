@@ -1091,7 +1091,7 @@ footer { background:var(--green-dark); border-top:1px solid var(--border); paddi
       if (t.includes('sm-hopea') || t.includes('sm hopea') || t.includes('hopea')) return '🥈';
       if (t.includes('sm-pronssi') || t.includes('sm pronssi') || t.includes('pronssi')) return '🥉';
       if (t.includes('mestaru') || t.includes('voitto') || t.includes('mestaruus')) return '🏆';
-      return '·';
+      return '★';
     }
 
     const displayNick = profile.nickname || nick;
@@ -1135,7 +1135,7 @@ footer { background:var(--green-dark); border-top:1px solid var(--border); paddi
         <div class="panel-achieve-list">
           ${profile.achievements.map(a => {
             const icon = medalIcon(a);
-            const iconStyle = icon === '·' ? 'opacity:0.3;font-size:18px;' : 'font-size:14px;';
+            const iconStyle = icon === '★' ? 'opacity:0.35;font-size:11px;' : 'font-size:14px;';
             return `<div class="panel-achieve-item"><span class="panel-achieve-medal" style="${iconStyle}">${icon}</span><span>${a}</span></div>`;
           }).join('')}
         </div>
