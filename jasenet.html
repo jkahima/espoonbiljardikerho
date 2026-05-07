@@ -928,35 +928,80 @@ footer { background:var(--green-dark); border-top:1px solid var(--border); paddi
       const started   = extractField(doc, 'aloittanut biljardin');
       const motto     = extractField(doc, 'motto');
 
-      // Achievements — parse bullet list items after "Parhaat saavutukset"
-      const allText = main.innerHTML;
-      const achievSection = allText.match(/parhaat saavutukset[^]*?(?=ennätykset|tavoitteet|<\/|$)/i);
-      let achievements = [];
-      if (achievSection) {
-        const tmp = new DOMParser().parseFromString('<div>' + achievSection[0] + '</div>', 'text/html');
-        achievements = Array.from(tmp.querySelectorAll('li')).map(li => li.textContent.trim()).filter(s => s && !isBlank(s));
-        if (!achievements.length) {
-          // fallback: split by newline/dash
-          const raw = tmp.body.textContent.replace(/parhaat saavutukset/i,'').trim();
-          achievements = raw.split(/\n|\r/).map(s => s.replace(/^[-–•\s]+/,'').trim()).filter(s => s.length > 4 && !isBlank(s));
+      // The Yhdistysavain page renders as:
+      // <p><strong>Label:</strong> value</p>
+      // <p><strong>Parhaat saavutukset:</strong></p>
+      // <ul><li>achievement</li>...</ul>
+      // <p><em>bio text</em></p>
+
+      // Helper: find text after a bold label in the same or sibling element
+      function fieldText(label) {
+        const strongs = Array.from(main.querySelectorAll('strong, b'));
+        for (const s of strongs) {
+          if (s.textContent.toLowerCase().includes(label.toLowerCase())) {
+            // Value is either next sibling text node or next element
+            const parent = s.parentElement;
+            // Get text after the strong tag within same paragraph
+            let val = parent.textContent.replace(s.textContent, '').replace(/^[:\s]+/, '').trim();
+            if (val) return val;
+            // Or next sibling element
+            const next = parent.nextElementSibling;
+            if (next) return next.textContent.trim();
+          }
         }
+        return null;
       }
 
-      // Records
-      const recSection = allText.match(/ennätykset[^]*?(?=tavoitteet|<\/section|<footer|$)/i);
-      let records = [];
-      if (recSection) {
-        const tmp = new DOMParser().parseFromString('<div>' + recSection[0] + '</div>', 'text/html');
-        records = Array.from(tmp.querySelectorAll('li')).map(li => li.textContent.trim()).filter(s => s && !isBlank(s));
-        if (!records.length) {
-          const raw = tmp.body.textContent.replace(/ennätykset/i,'').trim();
-          records = raw.split(/\n|\r/).map(s => s.replace(/^[-–•\s]+/,'').trim()).filter(s => s.length > 3 && !isBlank(s));
+      // Helper: collect list items after a bold heading
+      function listAfter(label) {
+        const strongs = Array.from(main.querySelectorAll('strong, b'));
+        for (const s of strongs) {
+          if (s.textContent.toLowerCase().includes(label.toLowerCase())) {
+            // Find the next <ul> or <ol> after this element
+            let el = s.parentElement;
+            while (el) {
+              el = el.nextElementSibling;
+              if (!el) break;
+              if (el.tagName === 'UL' || el.tagName === 'OL') {
+                return Array.from(el.querySelectorAll('li'))
+                  .map(li => li.textContent.trim())
+                  .filter(t => t.length > 2);
+              }
+              // Stop if we hit another strong heading
+              if (el.querySelector('strong, b') && el.textContent.length < 100) break;
+            }
+            // Fallback: collect <li> items that are next siblings
+            const items = [];
+            let sib = s.closest('p, div')?.nextElementSibling;
+            while (sib) {
+              if (sib.tagName === 'LI') items.push(sib.textContent.trim());
+              else if (sib.tagName === 'UL' || sib.tagName === 'OL') {
+                sib.querySelectorAll('li').forEach(li => items.push(li.textContent.trim()));
+                break;
+              } else if (sib.querySelector?.('strong')) break;
+              sib = sib.nextElementSibling;
+            }
+            return items.filter(t => t.length > 2);
+          }
         }
+        return [];
       }
 
-      // Bio paragraphs — italic text blocks
-      const bioEls = Array.from(main.querySelectorAll('em, i')).filter(el => el.textContent.trim().length > 30);
-      const bio = bioEls.map(el => el.textContent.trim()).join(' ').slice(0, 600) || null;
+      const achievements = listAfter('Parhaat saavutukset');
+      const records      = listAfter('Ennätykset');
+
+      // Motto: strip surrounding quotes
+      const mottoRaw = fieldText('Motto') || extractField(doc, 'motto');
+      const mottoVal = mottoRaw ? mottoRaw.replace(/^[""'\s*]+|[""'\s*]+$/g, '').trim() : null;
+
+      // Bio: italic <em> paragraphs — filter out short ones and field-like values
+      const bioEls = Array.from(main.querySelectorAll('em, i')).filter(el => {
+        const t = el.textContent.trim();
+        return t.length > 80 && !t.includes('Motto') && el.closest('p');
+      });
+      const bio = bioEls.length
+        ? bioEls.map(el => el.textContent.trim()).join('\n\n').slice(0, 1200)
+        : null;
 
       // Joined year
       const joinedYear = joined ? (joined.match(/\d{4}/) || [])[0] || joined : null;
@@ -971,7 +1016,7 @@ footer { background:var(--green-dark); border-top:1px solid var(--border); paddi
         nickname,
         achievements,
         records,
-        motto: motto && !isBlank(motto) ? motto.replace(/^["']|["']$/g,'').trim() : null,
+        motto: mottoVal && !isBlank(mottoVal) ? mottoVal : null,
         bio: bio && bio.length > 20 ? bio : null,
         doc,
       };
