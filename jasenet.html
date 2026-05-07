@@ -850,7 +850,7 @@ footer { background:var(--green-dark); border-top:1px solid var(--border); paddi
         if (!r.ok) throw new Error(r.status);
         html = await r.text();
       } catch {
-        const r = await fetch(PROXIES[0] + encodeURIComponent(url));
+        const r = await fetchWithFallback(url);
         if (!r.ok) throw new Error(r.status);
         html = await r.text();
       }
@@ -905,7 +905,7 @@ footer { background:var(--green-dark); border-top:1px solid var(--border); paddi
         let html;
         // Always try proxy first for cross-origin requests from GitHub Pages
         try {
-          const r = await fetch(PROXIES[0] + encodeURIComponent(url));
+          const r = await fetchWithFallback(url);
           if (!r.ok) throw new Error('proxy ' + r.status);
           html = await r.text();
         } catch(proxyErr) {
