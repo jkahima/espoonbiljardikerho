@@ -275,40 +275,59 @@ nav {
 .panel-close:hover { color:var(--text-primary); border-color:var(--border-strong); }
 
 .panel-photo {
-  width:100%; aspect-ratio:16/6; overflow:hidden;
-  background:var(--green-felt); flex-shrink:0; position:relative;
+  width:100%; height:220px; overflow:hidden;
+  background:var(--green-dark); flex-shrink:0; position:relative;
+  display:flex;
 }
-.panel-photo img {
-  position:absolute; inset:0;
+/* Left 1/3 — dark green, name anchored to bottom */
+.panel-photo-left {
+  width:34%; flex-shrink:0; position:relative; z-index:3;
+  background:var(--green-dark);
+  display:flex; flex-direction:column; justify-content:flex-end;
+  padding:14px 16px;
+}
+/* Right 2/3 — photo */
+.panel-photo-right {
+  flex:1; position:relative; overflow:hidden;
+}
+.panel-photo-right img {
   width:100%; height:100%; object-fit:cover;
-  object-position:center 25%;
-  filter:brightness(0.82) saturate(0.65);
+  object-position:center 20%;
+  filter:brightness(0.88) saturate(0.65);
   display:block;
 }
-.panel-photo-overlay {
-  position:absolute; inset:0; z-index:1; pointer-events:none;
-  background:linear-gradient(
-    to bottom,
-    rgba(13,31,15,0.1) 0%,
-    transparent 25%,
-    transparent 45%,
-    rgba(13,31,15,0.75) 75%,
-    rgba(13,31,15,0.97) 100%
+/* Fade left edge of photo into dark green */
+.panel-photo-right::before {
+  content:''; position:absolute; inset:0; z-index:1; pointer-events:none;
+  background:linear-gradient(to right,
+    var(--green-dark) 0%,
+    rgba(13,31,15,0.7) 12%,
+    rgba(13,31,15,0.2) 35%,
+    transparent 60%
   );
 }
+/* Fade bottom edge for depth */
+.panel-photo-right::after {
+  content:''; position:absolute; inset:0; z-index:1; pointer-events:none;
+  background:linear-gradient(to bottom,
+    transparent 50%,
+    rgba(13,31,15,0.6) 100%
+  );
+}
+/* Monogram fallback */
 .panel-monogram {
-  position:absolute; inset:0;
+  width:100%; height:100%;
   display:flex; align-items:center; justify-content:center;
-  background:radial-gradient(ellipse at 50% 40%, rgba(26,58,28,0.8) 0%, var(--green-felt) 100%);
+  background:radial-gradient(ellipse at 60% 40%, rgba(26,58,28,0.9) 0%, var(--green-felt) 100%);
 }
 .panel-monogram-text {
-  font-family:'Playfair Display',serif; font-size:72px;
-  font-weight:600; color:var(--gold); opacity:0.45; user-select:none;
+  font-family:'Playfair Display',serif; font-size:64px;
+  font-weight:600; color:var(--gold); opacity:0.4; user-select:none;
 }
 .panel-name-overlay {
-  position:absolute; bottom:0; left:0; right:0; z-index:2;
-  padding:16px;
+  display:flex; flex-direction:column; gap:4px;
 }
+.panel-photo-overlay { display:none; }
 .panel-type-badge {
   display:inline-flex; align-items:center; gap:5px;
   padding:3px 9px; border-radius:20px;
@@ -1082,6 +1101,7 @@ footer { background:var(--green-dark); border-top:1px solid var(--border); paddi
     const hasPhoto = !!profile.photo;
     const photoImg = hasPhoto
       ? `<img src="${profile.photo}" alt="${displayName}"
+           style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 20%;filter:brightness(0.88) saturate(0.65);"
            onerror="this.style.display='none'">`
       : '';
     const monoDiv = `<div class="panel-monogram" id="panel-mono-${slug}" style="${hasPhoto ? 'display:none;' : ''}">
