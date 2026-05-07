@@ -275,53 +275,40 @@ nav {
 .panel-close:hover { color:var(--text-primary); border-color:var(--border-strong); }
 
 .panel-photo {
-  width:100%; height:200px; overflow:hidden;
-  background:var(--surface-card); flex-shrink:0; position:relative;
-  display:grid; grid-template-columns:1fr 1fr;
+  width:100%; aspect-ratio:16/6; overflow:hidden;
+  background:var(--green-felt); flex-shrink:0; position:relative;
 }
-/* Left side — dark green with name info */
-.panel-photo-left {
-  position:relative; z-index:3;
-  background:linear-gradient(135deg, var(--green-dark) 0%, var(--green-mid) 100%);
-  display:flex; flex-direction:column; justify-content:flex-end;
-  padding:16px;
-}
-/* Right side — photo */
-.panel-photo-right {
-  position:relative; overflow:hidden;
-}
-.panel-photo-right img {
+.panel-photo img {
+  position:absolute; inset:0;
   width:100%; height:100%; object-fit:cover;
-  object-position:center top;
-  filter:brightness(0.85) saturate(0.6);
+  object-position:center 25%;
+  filter:brightness(0.82) saturate(0.65);
   display:block;
 }
-/* Fade from photo into left side */
-.panel-photo-right::after {
-  content:''; position:absolute; inset:0; z-index:1; pointer-events:none;
-  background:linear-gradient(to right,
-    var(--green-dark) 0%,
-    rgba(13,31,15,0.85) 15%,
-    rgba(13,31,15,0.3) 45%,
-    transparent 100%
+.panel-photo-overlay {
+  position:absolute; inset:0; z-index:1; pointer-events:none;
+  background:linear-gradient(
+    to bottom,
+    rgba(13,31,15,0.1) 0%,
+    transparent 25%,
+    transparent 45%,
+    rgba(13,31,15,0.75) 75%,
+    rgba(13,31,15,0.97) 100%
   );
 }
-/* Monogram fallback on right side */
 .panel-monogram {
-  width:100%; height:100%;
+  position:absolute; inset:0;
   display:flex; align-items:center; justify-content:center;
-  background:radial-gradient(ellipse at 60% 40%, rgba(26,58,28,0.9) 0%, var(--green-felt) 100%);
+  background:radial-gradient(ellipse at 50% 40%, rgba(26,58,28,0.8) 0%, var(--green-felt) 100%);
 }
 .panel-monogram-text {
-  font-family:'Playfair Display',serif; font-size:64px;
-  font-weight:600; color:var(--gold); opacity:0.4; user-select:none;
+  font-family:'Playfair Display',serif; font-size:72px;
+  font-weight:600; color:var(--gold); opacity:0.45; user-select:none;
 }
-
-/* Name overlay — now sits in left column, not absolute over photo */
 .panel-name-overlay {
-  display:flex; flex-direction:column; gap:5px;
+  position:absolute; bottom:0; left:0; right:0; z-index:2;
+  padding:16px;
 }
-.panel-photo-overlay { display:none; } /* not needed in split layout */
 .panel-type-badge {
   display:inline-flex; align-items:center; gap:5px;
   padding:3px 9px; border-radius:20px;
@@ -1095,9 +1082,9 @@ footer { background:var(--green-dark); border-top:1px solid var(--border); paddi
     const hasPhoto = !!profile.photo;
     const photoImg = hasPhoto
       ? `<img src="${profile.photo}" alt="${displayName}"
-           onerror="this.style.display='none';this.parentElement.innerHTML='<div class=panel-monogram><div class=panel-monogram-text>${displayNick || mono}</div></div>'">`
+           onerror="this.style.display='none'">`
       : '';
-    const monoDiv = `<div class="panel-monogram" id="panel-mono-${slug}">
+    const monoDiv = `<div class="panel-monogram" id="panel-mono-${slug}" style="${hasPhoto ? 'display:none;' : ''}">
       <div class="panel-monogram-text">${displayNick || mono}</div>
     </div>`;
 
