@@ -591,7 +591,8 @@ footer { background:var(--green-dark); border-top:1px solid var(--border); paddi
       const full  = a.textContent.trim();
 
       // Format: "Name - daterange - venue description..."
-      const parts = full.split(/\s*[-–]\s*/);
+      // Split only on dash/en-dash surrounded by spaces (not hyphens inside words like 8-pallon)
+      const parts = full.split(/\s+[-–]\s+/);
       let name  = parts[0]?.trim() || full;
       // Strip embedded date/time/venue from title
       // Handles: "Title la 13.6.2026 klo 10", "Title 26.8.–30.11.2026", "Title 26.8."

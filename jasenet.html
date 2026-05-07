@@ -197,24 +197,24 @@ nav {
   position:relative;
   width:100%; aspect-ratio:1/1;
   overflow:hidden; background:var(--green-felt);
-  flex-shrink:0;
+  flex-shrink:0; display:flex;
 }
 
 /* monogram avatar for members without photo */
 .member-monogram {
-  width:100%; height:100%;
+  position:absolute; inset:0;
   display:flex; align-items:center; justify-content:center;
   background:radial-gradient(ellipse at 50% 40%, rgba(26,58,28,0.8) 0%, var(--green-felt) 100%);
 }
 .member-monogram-text {
   font-family:'Playfair Display',serif;
-  font-size:clamp(28px,3.2vw,42px);
+  font-size:clamp(32px,4.5vw,56px);
   font-weight:600; color:var(--gold);
   opacity:0.7; letter-spacing:0.04em;
-  user-select:none;
+  user-select:none; line-height:1;
 }
 .member-monogram-nick {
-  font-size:clamp(18px,2vw,26px);
+  font-size:clamp(20px,2.8vw,34px);
   opacity:0.8; font-style:italic;
   letter-spacing:0.02em;
 }
@@ -233,10 +233,9 @@ nav {
 }
 .member-name {
   font-family:'Playfair Display',serif;
-  font-size:clamp(12px,1.2vw,14px);
+  font-size:clamp(11px,1.1vw,13px);
   font-weight:600; color:var(--text-primary);
-  line-height:1.25; margin-bottom:6px;
-  /* last name first on old site — we'll display as-is */
+  line-height:1.25;
 }
 .member-sports {
   display:flex; flex-wrap:wrap; gap:4px;
