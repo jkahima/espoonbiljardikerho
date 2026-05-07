@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Jäsenet — Espoon Biljardikerho ry.</title>
-<meta name="description" content="Espoon Biljardikerho jäsenet — täysvaltaiset klubijäsenet, Espoon klubijäsenet ja pelaajajäsenet.">
+<meta name="description" content="Espoon Biljardikerho jäsenet — täysvaltaiset jäsenet, klubin jäsenet ja seuran jäsenet.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
@@ -103,15 +103,6 @@ nav {
 .page-hero-desc { font-size:clamp(13px,1.2vw,15px); font-weight:300; color:var(--text-secondary); line-height:1.7; }
 
 /* total count pills */
-.hero-counts { display:flex; gap:8px; flex-wrap:wrap; margin-top:18px; }
-.count-pill {
-  display:flex; align-items:center; gap:7px;
-  padding:5px 12px; border-radius:20px;
-  border:1px solid var(--border); background:rgba(200,168,75,0.04);
-  font-size:11px; color:var(--text-muted);
-}
-.count-pill-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
-.count-pill strong { color:var(--text-primary); font-weight:500; }
 
 /* search */
 .search-wrap {
@@ -284,36 +275,53 @@ nav {
 .panel-close:hover { color:var(--text-primary); border-color:var(--border-strong); }
 
 .panel-photo {
-  width:100%; aspect-ratio:3/2; overflow:hidden;
-  background:var(--green-felt); flex-shrink:0; position:relative;
+  width:100%; height:200px; overflow:hidden;
+  background:var(--surface-card); flex-shrink:0; position:relative;
+  display:grid; grid-template-columns:1fr 1fr;
 }
-.panel-photo img { width:100%; height:100%; object-fit:cover; display:block; filter:brightness(0.82) saturate(0.65); }
-.panel-photo-overlay {
-  position:absolute; inset:0; z-index:1; pointer-events:none;
-  background:linear-gradient(
-    to bottom,
-    rgba(13,31,15,0.15) 0%,
-    transparent 30%,
-    transparent 45%,
-    rgba(13,31,15,0.7) 72%,
-    rgba(13,31,15,0.95) 100%
+/* Left side — dark green with name info */
+.panel-photo-left {
+  position:relative; z-index:3;
+  background:linear-gradient(135deg, var(--green-dark) 0%, var(--green-mid) 100%);
+  display:flex; flex-direction:column; justify-content:flex-end;
+  padding:16px;
+}
+/* Right side — photo */
+.panel-photo-right {
+  position:relative; overflow:hidden;
+}
+.panel-photo-right img {
+  width:100%; height:100%; object-fit:cover;
+  object-position:center top;
+  filter:brightness(0.85) saturate(0.6);
+  display:block;
+}
+/* Fade from photo into left side */
+.panel-photo-right::after {
+  content:''; position:absolute; inset:0; z-index:1; pointer-events:none;
+  background:linear-gradient(to right,
+    var(--green-dark) 0%,
+    rgba(13,31,15,0.85) 15%,
+    rgba(13,31,15,0.3) 45%,
+    transparent 100%
   );
 }
-
+/* Monogram fallback on right side */
 .panel-monogram {
   width:100%; height:100%;
   display:flex; align-items:center; justify-content:center;
-  background:radial-gradient(ellipse at 50% 40%, rgba(26,58,28,0.8) 0%, var(--green-felt) 100%);
+  background:radial-gradient(ellipse at 60% 40%, rgba(26,58,28,0.9) 0%, var(--green-felt) 100%);
 }
 .panel-monogram-text {
-  font-family:'Playfair Display',serif; font-size:72px;
-  font-weight:600; color:var(--gold); opacity:0.45; user-select:none;
+  font-family:'Playfair Display',serif; font-size:64px;
+  font-weight:600; color:var(--gold); opacity:0.4; user-select:none;
 }
 
+/* Name overlay — now sits in left column, not absolute over photo */
 .panel-name-overlay {
-  position:absolute; bottom:0; left:0; right:0; z-index:2;
-  padding:16px;
+  display:flex; flex-direction:column; gap:5px;
 }
+.panel-photo-overlay { display:none; } /* not needed in split layout */
 .panel-type-badge {
   display:inline-flex; align-items:center; gap:5px;
   padding:3px 9px; border-radius:20px;
@@ -523,11 +531,7 @@ footer { background:var(--green-dark); border-top:1px solid var(--border); paddi
     <div class="page-hero-top">
       <div>
         <h1>Kerhon <em>jäsenet</em></h1>
-        <p class="page-hero-desc">Espoon Biljardikerho ry:n jäsenet ja Espoon klubilaiset.</p>
-        <strong id="cnt-tays">44</strong> Täysvaltaista</div>
-          <div class="count-pill"><div class="count-pill-dot" style="background:var(--c-klubi);"></div><strong id="cnt-klubi">19</strong> Espoon klubijäsentä</div>
-          <div class="count-pill"><div class="count-pill-dot" style="background:var(--c-pelaa);"></div><strong id="cnt-pelaa">18</strong> Pelaajajäsentä</div>
-        </div>
+        <p class="page-hero-desc">Espoon Biljardikerho ry:n jäsenet.</p>
       </div>
       <div class="search-wrap">
         <span class="search-icon">🔍</span>
@@ -548,11 +552,11 @@ footer { background:var(--green-dark); border-top:1px solid var(--border); paddi
   </button>
   <button class="type-tab" data-type="klubi" style="--dot-color:var(--c-klubi)">
     <div class="type-tab-dot" style="background:var(--c-klubi);"></div>
-    Espoon klubi <span class="tab-count">(19)</span>
+    Klubin jäsenet <span class="tab-count">(19)</span>
   </button>
   <button class="type-tab" data-type="pelaa" style="--dot-color:var(--c-pelaa)">
     <div class="type-tab-dot" style="background:var(--c-pelaa);"></div>
-    Pelaajajäsenet <span class="tab-count">(18)</span>
+    Seuran jäsenet <span class="tab-count">(18)</span>
   </button>
 </div>
 
@@ -578,9 +582,9 @@ footer { background:var(--green-dark); border-top:1px solid var(--border); paddi
     <div class="section-header">
       <div class="section-header-line" style="background:var(--c-klubi);"></div>
       <div class="section-header-text">
-        <div class="section-label" style="color:var(--c-klubi);">Espoon klubi</div>
-        <div class="section-title">Espoon Klubijäsenet</div>
-        <div class="section-desc">Vain klubin jäsenyys — pelioikeus Espoon klubilla</div>
+        <div class="section-label" style="color:var(--c-klubi);">Klubin jäsenet</div>
+        <div class="section-title">Klubin jäsenet</div>
+        <div class="section-desc">Klubijäsenyys — pelioikeus Espoon klubilla 24/7</div>
       </div>
       <div class="section-count" style="color:var(--c-klubi);" id="count-klubi">19</div>
     </div>
@@ -592,9 +596,9 @@ footer { background:var(--green-dark); border-top:1px solid var(--border); paddi
     <div class="section-header">
       <div class="section-header-line" style="background:var(--c-pelaa);"></div>
       <div class="section-header-text">
-        <div class="section-label" style="color:var(--c-pelaa);">Pelaajajäsenet</div>
-        <div class="section-title">EBK Pelaajajäsenet</div>
-        <div class="section-desc">Vain EBK:n jäsenyys — edustusoikeus EBK:n nimissä</div>
+        <div class="section-label" style="color:var(--c-pelaa);">Seuran jäsenet</div>
+        <div class="section-title">Seuran jäsenet</div>
+        <div class="section-desc">Seurajäsenyys — edustusoikeus EBK:n nimissä kilpailuissa</div>
       </div>
       <div class="section-count" style="color:var(--c-pelaa);" id="count-pelaa">18</div>
     </div>
@@ -763,7 +767,7 @@ footer { background:var(--green-dark); border-top:1px solid var(--border); paddi
   ];
 
   const TYPE_COLOR = { tays:'var(--c-tays)', klubi:'var(--c-klubi)', pelaa:'var(--c-pelaa)' };
-  const TYPE_LABEL = { tays:'Täysvaltainen', klubi:'Espoon klubi', pelaa:'Pelaajajäsen' };
+  const TYPE_LABEL = { tays:'Täysvaltainen', klubi:'Klubin jäsen', pelaa:'Seuran jäsen' };
 
   // ── Sport parsing ─────────────────────────────────────────────────────────
   function parseSports(text) {
@@ -1091,11 +1095,10 @@ footer { background:var(--green-dark); border-top:1px solid var(--border); paddi
     const hasPhoto = !!profile.photo;
     const photoImg = hasPhoto
       ? `<img src="${profile.photo}" alt="${displayName}"
-           style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top;filter:brightness(0.82) saturate(0.65);"
-           onerror="this.style.display='none'">`
+           onerror="this.style.display='none';this.parentElement.innerHTML='<div class=panel-monogram><div class=panel-monogram-text>${displayNick || mono}</div></div>'">`
       : '';
-    const monoDiv = `<div class="panel-monogram" id="panel-mono-${slug}" style="${hasPhoto ? 'display:none;' : ''}">
-      <div class="panel-monogram-text" style="font-size:56px;opacity:0.45;">${displayNick || mono}</div>
+    const monoDiv = `<div class="panel-monogram" id="panel-mono-${slug}">
+      <div class="panel-monogram-text">${displayNick || mono}</div>
     </div>`;
 
     // Sports badges
