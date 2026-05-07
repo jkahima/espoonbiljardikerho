@@ -329,13 +329,51 @@ nav {
 .panel-field-value strong { color:var(--text-primary); font-weight:500; }
 
 .panel-bio {
-  font-size:12.5px; color:var(--text-secondary); font-weight:300;
+  font-size:12px; color:var(--text-secondary); font-weight:300;
   font-style:italic; line-height:1.7;
-  padding:12px 14px;
+  padding:10px 12px;
   background:rgba(200,168,75,0.04);
   border-left:2px solid var(--gold-dim);
   border-radius:0 5px 5px 0;
   margin-top:4px;
+}
+.panel-nickname {
+  font-size:12px; color:var(--gold); font-style:italic;
+  font-family:'Playfair Display',serif; opacity:0.8;
+  margin-top:2px;
+}
+.panel-stats {
+  display:flex; gap:10px; margin-bottom:14px; flex-wrap:wrap;
+}
+.panel-stat {
+  flex:1; min-width:80px;
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:7px; padding:9px 12px; text-align:center;
+}
+.panel-stat-num { font-family:'Playfair Display',serif; font-size:17px; font-weight:700; color:var(--gold); line-height:1; margin-bottom:3px; }
+.panel-stat-label { font-size:9px; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.07em; }
+.panel-section { margin-bottom:16px; }
+.panel-section-label {
+  font-size:9.5px; color:var(--text-muted); text-transform:uppercase;
+  letter-spacing:0.08em; margin-bottom:8px;
+  display:flex; align-items:center; gap:6px;
+}
+.panel-section-label::after { content:''; flex:1; height:1px; background:var(--border); }
+.panel-achieve-list { display:flex; flex-direction:column; gap:4px; }
+.panel-achieve-item {
+  display:flex; align-items:flex-start; gap:8px;
+  font-size:12px; color:var(--text-secondary); font-weight:300;
+  padding:5px 0; border-bottom:1px solid var(--border); line-height:1.45;
+}
+.panel-achieve-item:last-child { border-bottom:none; }
+.panel-achieve-medal { font-size:13px; flex-shrink:0; margin-top:0px; min-width:18px; }
+.panel-motto {
+  font-size:12px; color:var(--text-secondary); font-style:italic;
+  font-weight:300; line-height:1.6;
+  padding:10px 12px; margin-bottom:14px;
+  background:rgba(200,168,75,0.04);
+  border-left:2px solid var(--gold-dim);
+  border-radius:0 5px 5px 0;
 }
 
 .panel-achievements {
@@ -601,7 +639,7 @@ footer { background:var(--green-dark); border-top:1px solid var(--border); paddi
 <script>
 (function () {
   const BASE  = 'https://espoonbiljardikerho.yhdistysavain.fi';
-  const PROXY = 'https://corsproxy.io/?url=';
+  const PROXY = 'https://api.allorigins.win/raw?url=';
 
   // ── Member data scraped from /jasenet/ table ──────────────────────────────
   // Parsed from the three-column table on the live site.
@@ -750,6 +788,29 @@ footer { background:var(--green-dark); border-top:1px solid var(--border); paddi
     ['tays','klubi','pelaa'].forEach(type => {
       document.getElementById('grid-' + type).innerHTML = groups[type].map(buildCard).join('');
     });
+    // Lazily fetch nicknames for all members in batches
+    loadNicknames();
+  }
+
+  async function loadNicknames() {
+    // Process in small batches to avoid hammering the server
+    const batch = 5;
+    for (let i = 0; i < MEMBERS.length; i += batch) {
+      const slice = MEMBERS.slice(i, i + batch);
+      await Promise.all(slice.map(async member => {
+        try {
+          const profile = await fetchProfile(member.slug);
+          if (profile.nickname) {
+            const monoEl = document.getElementById('mono-' + member.slug);
+            if (monoEl) {
+              monoEl.innerHTML = '<div class="member-monogram-text member-monogram-nick">' + profile.nickname + '</div>';
+            }
+          }
+        } catch(e) { /* silently skip */ }
+      }));
+      // Small delay between batches to be kind to the server
+      await new Promise(r => setTimeout(r, 200));
+    }
   }
 
   // ── Lazy-load og:image for visible cards ─────────────────────────────────
@@ -816,20 +877,22 @@ footer { background:var(--green-dark); border-top:1px solid var(--border); paddi
 
   async function fetchProfile(slug) {
     if (profileCache[slug]?.loaded) return profileCache[slug];
-    profileCache[slug] = profileCache[slug] || {};
+    profileCache[slug] = { ...(profileCache[slug] || {}) };
 
     try {
       let doc = profileCache[slug].doc;
       if (!doc) {
         const url = BASE + '/jasenet/' + slug + '/';
         let html;
+        // Always try proxy first for cross-origin requests from GitHub Pages
         try {
-          const r = await fetch(url);
-          if (!r.ok) throw new Error(r.status);
-          html = await r.text();
-        } catch {
           const r = await fetch(PROXY + encodeURIComponent(url));
-          if (!r.ok) throw new Error(r.status);
+          if (!r.ok) throw new Error('proxy ' + r.status);
+          html = await r.text();
+        } catch(proxyErr) {
+          console.warn('proxy failed, trying direct:', proxyErr);
+          const r = await fetch(url);
+          if (!r.ok) throw new Error('direct ' + r.status);
           html = await r.text();
         }
         doc = new DOMParser().parseFromString(html, 'text/html');
@@ -838,31 +901,70 @@ footer { background:var(--green-dark); border-top:1px solid var(--border); paddi
 
       const main = doc.querySelector('main, .content main, article') || doc.body;
 
+      // Extract nickname from h1 title e.g. "Ahola Jarno (Jackson)"
+      const h1Text = doc.querySelector('h1')?.textContent || '';
+      const nickMatch = h1Text.match(/\(([^)]+)\)/);
+      const nickname = nickMatch ? nickMatch[1] : null;
+
       // Fields
-      const joined   = extractField(doc, 'liittynyt');
-      const sports   = parseSports(extractField(doc, 'biljardilajit'));
-      const achievRaw = extractField(doc, 'parhaat saavutukset') || extractField(doc, 'saavutukset');
-      const achievements = isBlank(achievRaw) ? [] : achievRaw.split(/[\n,;]+/).map(s => s.replace(/^[-–•\s]+/,'').trim()).filter(s => s && !isBlank(s));
+      const joined    = extractField(doc, 'liittynyt');
+      const sports    = parseSports(extractField(doc, 'biljardilajit'));
+      const started   = extractField(doc, 'aloittanut biljardin');
+      const motto     = extractField(doc, 'motto');
 
-      // Italic bio paragraph
-      const bioEl = main.querySelector('em, i');
-      const bio   = bioEl?.textContent?.trim();
-      const bioClean = (bio && bio.length > 20) ? bio : null;
+      // Achievements — parse bullet list items after "Parhaat saavutukset"
+      const allText = main.innerHTML;
+      const achievSection = allText.match(/parhaat saavutukset[^]*?(?=ennätykset|tavoitteet|<\/|$)/i);
+      let achievements = [];
+      if (achievSection) {
+        const tmp = new DOMParser().parseFromString('<div>' + achievSection[0] + '</div>', 'text/html');
+        achievements = Array.from(tmp.querySelectorAll('li')).map(li => li.textContent.trim()).filter(s => s && !isBlank(s));
+        if (!achievements.length) {
+          // fallback: split by newline/dash
+          const raw = tmp.body.textContent.replace(/parhaat saavutukset/i,'').trim();
+          achievements = raw.split(/\n|\r/).map(s => s.replace(/^[-–•\s]+/,'').trim()).filter(s => s.length > 4 && !isBlank(s));
+        }
+      }
 
-      // Joined year — extract first 4-digit year
+      // Records
+      const recSection = allText.match(/ennätykset[^]*?(?=tavoitteet|<\/section|<footer|$)/i);
+      let records = [];
+      if (recSection) {
+        const tmp = new DOMParser().parseFromString('<div>' + recSection[0] + '</div>', 'text/html');
+        records = Array.from(tmp.querySelectorAll('li')).map(li => li.textContent.trim()).filter(s => s && !isBlank(s));
+        if (!records.length) {
+          const raw = tmp.body.textContent.replace(/ennätykset/i,'').trim();
+          records = raw.split(/\n|\r/).map(s => s.replace(/^[-–•\s]+/,'').trim()).filter(s => s.length > 3 && !isBlank(s));
+        }
+      }
+
+      // Bio paragraphs — italic text blocks
+      const bioEls = Array.from(main.querySelectorAll('em, i')).filter(el => el.textContent.trim().length > 30);
+      const bio = bioEls.map(el => el.textContent.trim()).join(' ').slice(0, 600) || null;
+
+      // Joined year
       const joinedYear = joined ? (joined.match(/\d{4}/) || [])[0] || joined : null;
+      const startedYear = started ? (started.match(/\d{4}/) || [])[0] || started : null;
 
       profileCache[slug] = {
         loaded: true,
         photo: photoCache[slug] || null,
         sports,
         joined: joinedYear,
+        started: startedYear,
+        nickname,
         achievements,
-        bio: bioClean,
+        records,
+        motto: motto && !isBlank(motto) ? motto.replace(/^["']|["']$/g,'').trim() : null,
+        bio: bio && bio.length > 20 ? bio : null,
         doc,
       };
-    } catch {
-      profileCache[slug] = { loaded: true, photo: null, sports: [], joined: null, achievements: [], bio: null };
+    } catch(err) {
+      console.warn('fetchProfile failed for', slug, err);
+      profileCache[slug] = {
+        loaded: true, photo: null, sports: [], joined: null, started: null,
+        nickname: null, achievements: [], records: [], motto: null, bio: null
+      };
     }
 
     return profileCache[slug];
@@ -901,6 +1003,19 @@ footer { background:var(--green-dark); border-top:1px solid var(--border); paddi
     const profile = await fetchProfile(slug);
     if (activePanelSlug !== slug) return; // panel was closed/changed
 
+    // Debug — visible in browser devtools console
+    console.log('Profile loaded:', slug, profile);
+
+    // Safety normalize — ensure all fields exist even if fetch was partial
+    profile.sports       = profile.sports       || [];
+    profile.achievements = profile.achievements || [];
+    profile.records      = profile.records      || [];
+    profile.nickname     = profile.nickname     || null;
+    profile.joined       = profile.joined       || null;
+    profile.started      = profile.started      || null;
+    profile.motto        = profile.motto        || null;
+    profile.bio          = profile.bio          || null;
+
     const color = TYPE_COLOR[member.type];
     const nickM = member.name.match(/\(([^)]+)\)/);
     const nick = nickM ? nickM[1] : null;
@@ -914,20 +1029,46 @@ footer { background:var(--green-dark); border-top:1px solid var(--border); paddi
       ? profile.sports.map(s => `<span class="sport-badge ${({Kaisa:'sb-kaisa',Pool:'sb-pool',Snooker:'sb-snooker',Kara:'sb-kara',Pyramidi:'sb-pyramidi'}[s]||'')}">${s}</span>`).join('')
       : '';
 
+    // Medal icon helper
+    function medalIcon(text) {
+      const t = text.toLowerCase();
+      if (t.includes('kulta') || t.includes('voitto') || t.includes('mestaru')) return '🥇';
+      if (t.includes('hopea')) return '🥈';
+      if (t.includes('pronssi')) return '🥉';
+      return '▸';
+    }
+
+    // Use fetched nickname if available, fallback to hardcoded
+    const displayNick = profile.nickname || nick;
+    const displayName = cleanMemberName;
+
     const achievHTML = profile.achievements.length
-      ? `<div class="panel-achievements">
-           <div class="panel-achievements-label">Parhaat saavutukset</div>
-           ${profile.achievements.map(a => `<div class="achievement-item">${a}</div>`).join('')}
-         </div>`
-      : '';
+      ? `<div class="panel-section">
+           <div class="panel-section-label">Parhaat saavutukset</div>
+           <div class="panel-achieve-list">
+             ${profile.achievements.map(a => `<div class="panel-achieve-item"><span class="panel-achieve-medal">${medalIcon(a)}</span><span>${a}</span></div>`).join('')}
+           </div>
+         </div>` : '';
+
+    const recordsHTML = profile.records?.length
+      ? `<div class="panel-section">
+           <div class="panel-section-label">Ennätykset</div>
+           <div class="panel-achieve-list">
+             ${profile.records.map(r => `<div class="panel-achieve-item"><span class="panel-achieve-medal" style="opacity:0.4;">◎</span><span>${r}</span></div>`).join('')}
+           </div>
+         </div>` : '';
+
+    const mottoHTML = profile.motto
+      ? `<div class="panel-motto">"${profile.motto}"</div>` : '';
 
     const bioHTML = profile.bio
-      ? `<div class="panel-bio">${profile.bio}</div>`
-      : '';
+      ? `<div class="panel-bio">${profile.bio}</div>` : '';
 
-    const joinedHTML = profile.joined
-      ? `<div class="panel-field"><div class="panel-field-label">Liittynyt</div><div class="panel-field-value"><strong>${profile.joined}</strong></div></div>`
-      : '';
+    const statsHTML = (profile.joined || profile.started)
+      ? `<div class="panel-stats">
+          ${profile.joined ? `<div class="panel-stat"><div class="panel-stat-num">${profile.joined}</div><div class="panel-stat-label">Liittynyt</div></div>` : ''}
+          ${profile.started ? `<div class="panel-stat"><div class="panel-stat-num">${profile.started}</div><div class="panel-stat-label">Aloitti biljardin</div></div>` : ''}
+        </div>` : '';
 
     content.innerHTML = `
       <div class="panel-photo">
@@ -937,14 +1078,17 @@ footer { background:var(--green-dark); border-top:1px solid var(--border); paddi
             <div style="width:6px;height:6px;border-radius:50%;background:${color};"></div>
             ${TYPE_LABEL[member.type]}
           </div>
-          <div class="panel-name">${cleanMemberName}${nick ? '<span style="font-size:0.65em;font-style:italic;opacity:0.7;margin-left:8px;">(' + nick + ')</span>' : ''}</div>
+          <div class="panel-name">${displayName}</div>
+          ${displayNick ? `<div class="panel-nickname">"${displayNick}"</div>` : ''}
         </div>
       </div>
       <div class="panel-body">
-        ${sportsHTML ? `<div class="panel-sports">${sportsHTML}</div>` : ''}
-        ${joinedHTML}
-        ${bioHTML}
+        ${sportsHTML ? `<div class="panel-sports" style="margin-bottom:14px;">${sportsHTML}</div>` : ''}
+        ${statsHTML}
+        ${mottoHTML}
         ${achievHTML}
+        ${recordsHTML}
+        ${bioHTML}
       </div>`;
   };
 
