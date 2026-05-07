@@ -284,11 +284,21 @@ nav {
 .panel-close:hover { color:var(--text-primary); border-color:var(--border-strong); }
 
 .panel-photo {
-  width:100%; aspect-ratio:4/3; overflow:hidden;
+  width:100%; aspect-ratio:3/2; overflow:hidden;
   background:var(--green-felt); flex-shrink:0; position:relative;
 }
 .panel-photo img { width:100%; height:100%; object-fit:cover; display:block; filter:brightness(0.82) saturate(0.65); }
-.panel-photo::after { content:''; position:absolute; inset:0; background:linear-gradient(to bottom, transparent 50%, rgba(13,31,15,0.9) 100%); }
+.panel-photo-overlay {
+  position:absolute; inset:0; z-index:1; pointer-events:none;
+  background:linear-gradient(
+    to bottom,
+    rgba(13,31,15,0.15) 0%,
+    transparent 30%,
+    transparent 45%,
+    rgba(13,31,15,0.7) 72%,
+    rgba(13,31,15,0.95) 100%
+  );
+}
 
 .panel-monogram {
   width:100%; height:100%;
@@ -1028,57 +1038,77 @@ footer { background:var(--green-dark); border-top:1px solid var(--border); paddi
     const cleanMemberName = member.name.replace(/\s*\([^)]+\)/, '').trim();
     const mono  = initials(cleanMemberName);
 
-    const photoHTML = '';
-    const monoHTML = `<div class="panel-monogram" id="panel-mono-${slug}"><div class="panel-monogram-text" style="font-size:52px;opacity:0.45;">${nick || mono}</div></div>`;
-
-    const sportsHTML = profile.sports.length
-      ? profile.sports.map(s => `<span class="sport-badge ${({Kaisa:'sb-kaisa',Pool:'sb-pool',Snooker:'sb-snooker',Kara:'sb-kara',Pyramidi:'sb-pyramidi'}[s]||'')}">${s}</span>`).join('')
-      : '';
-
     // Medal icon helper
     function medalIcon(text) {
       const t = text.toLowerCase();
-      if (t.includes('kulta') || t.includes('voitto') || t.includes('mestaru')) return '🥇';
+      if (t.includes('kulta')) return '🥇';
       if (t.includes('hopea')) return '🥈';
       if (t.includes('pronssi')) return '🥉';
+      if (t.includes('mestaru') || t.includes('voitto')) return '🏆';
       return '▸';
     }
 
-    // Use fetched nickname if available, fallback to hardcoded
     const displayNick = profile.nickname || nick;
     const displayName = cleanMemberName;
 
-    const achievHTML = profile.achievements.length
-      ? `<div class="panel-section">
-           <div class="panel-section-label">Parhaat saavutukset</div>
-           <div class="panel-achieve-list">
-             ${profile.achievements.map(a => `<div class="panel-achieve-item"><span class="panel-achieve-medal">${medalIcon(a)}</span><span>${a}</span></div>`).join('')}
-           </div>
-         </div>` : '';
+    // Photo or monogram
+    const hasPhoto = !!profile.photo;
+    const photoImg = hasPhoto
+      ? `<img src="${profile.photo}" alt="${displayName}"
+           style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top;filter:brightness(0.82) saturate(0.65);"
+           onerror="this.style.display='none'">`
+      : '';
+    const monoDiv = `<div class="panel-monogram" id="panel-mono-${slug}" style="${hasPhoto ? 'display:none;' : ''}">
+      <div class="panel-monogram-text" style="font-size:56px;opacity:0.45;">${displayNick || mono}</div>
+    </div>`;
 
-    const recordsHTML = profile.records?.length
-      ? `<div class="panel-section">
-           <div class="panel-section-label">Ennätykset</div>
-           <div class="panel-achieve-list">
-             ${profile.records.map(r => `<div class="panel-achieve-item"><span class="panel-achieve-medal" style="opacity:0.4;">◎</span><span>${r}</span></div>`).join('')}
-           </div>
-         </div>` : '';
+    // Sports badges
+    const sportMap = {Kaisa:'sb-kaisa',Pool:'sb-pool',Snooker:'sb-snooker',Kara:'sb-kara',Pyramidi:'sb-pyramidi'};
+    const sportsRow = profile.sports.length
+      ? profile.sports.map(s => `<span class="sport-badge ${sportMap[s]||''}">${s}</span>`).join('')
+      : '';
 
-    const mottoHTML = profile.motto
+    // Stats
+    const statsRow = (profile.joined || profile.started) ? `
+      <div class="panel-stats">
+        ${profile.joined  ? `<div class="panel-stat"><div class="panel-stat-num">${profile.joined}</div><div class="panel-stat-label">Liittynyt</div></div>` : ''}
+        ${profile.started ? `<div class="panel-stat"><div class="panel-stat-num">${profile.started}</div><div class="panel-stat-label">Aloitti biljardin</div></div>` : ''}
+      </div>` : '';
+
+    // Motto
+    const mottoBlock = profile.motto
       ? `<div class="panel-motto">"${profile.motto}"</div>` : '';
 
-    const bioHTML = profile.bio
-      ? `<div class="panel-bio">${profile.bio}</div>` : '';
+    // Achievements with medal icons
+    const achievBlock = profile.achievements.length ? `
+      <div class="panel-section">
+        <div class="panel-section-label">Parhaat saavutukset</div>
+        <div class="panel-achieve-list">
+          ${profile.achievements.map(a =>
+            `<div class="panel-achieve-item"><span class="panel-achieve-medal">${medalIcon(a)}</span><span>${a}</span></div>`
+          ).join('')}
+        </div>
+      </div>` : '';
 
-    const statsHTML = (profile.joined || profile.started)
-      ? `<div class="panel-stats">
-          ${profile.joined ? `<div class="panel-stat"><div class="panel-stat-num">${profile.joined}</div><div class="panel-stat-label">Liittynyt</div></div>` : ''}
-          ${profile.started ? `<div class="panel-stat"><div class="panel-stat-num">${profile.started}</div><div class="panel-stat-label">Aloitti biljardin</div></div>` : ''}
-        </div>` : '';
+    // Records
+    const recordsBlock = profile.records?.length ? `
+      <div class="panel-section">
+        <div class="panel-section-label">Ennätykset</div>
+        <div class="panel-achieve-list">
+          ${profile.records.map(r =>
+            `<div class="panel-achieve-item"><span class="panel-achieve-medal" style="opacity:0.5;">◎</span><span>${r}</span></div>`
+          ).join('')}
+        </div>
+      </div>` : '';
+
+    // Bio
+    const bioBlock = profile.bio
+      ? `<div class="panel-bio">${profile.bio}</div>` : '';
 
     content.innerHTML = `
       <div class="panel-photo">
-        ${monoHTML}${photoHTML}
+        ${monoDiv}${photoImg}
+        <div class="panel-photo-overlay"></div>
         <div class="panel-name-overlay">
           <div class="panel-type-badge" style="background:${color}22;border:1px solid ${color}44;color:${color};">
             <div style="width:6px;height:6px;border-radius:50%;background:${color};"></div>
@@ -1089,13 +1119,25 @@ footer { background:var(--green-dark); border-top:1px solid var(--border); paddi
         </div>
       </div>
       <div class="panel-body">
-        ${sportsHTML ? `<div class="panel-sports" style="margin-bottom:14px;">${sportsHTML}</div>` : ''}
-        ${statsHTML}
-        ${mottoHTML}
-        ${achievHTML}
-        ${recordsHTML}
-        ${bioHTML}
+        ${sportsRow ? `<div class="panel-sports">${sportsRow}</div>` : ''}
+        ${statsRow}
+        ${mottoBlock}
+        ${achievBlock}
+        ${recordsBlock}
+        ${bioBlock}
       </div>`;
+
+    // If photo fails to load, show monogram
+    if (hasPhoto) {
+      const img = content.querySelector('img');
+      if (img) {
+        img.addEventListener('error', () => {
+          img.style.display = 'none';
+          const mono = content.querySelector('.panel-monogram');
+          if (mono) mono.style.display = 'flex';
+        });
+      }
+    }
   };
 
   window.closePanel = function() {
