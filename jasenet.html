@@ -435,11 +435,10 @@ footer { background:var(--green-dark); border-top:1px solid var(--border); paddi
     <li><a href="index.html">Etusivu</a></li>
     <li><a href="esittely.html">Esittely</a></li>
     <li><a href="uutiset.html">Uutiset</a></li>
-    <li><a href="tulospalvelu.html">Tulospalvelu</a></li>
     <li><a href="tapahtumat.html">Tapahtumat</a></li>
     <li><a href="jasenet.html" class="active">Jäsenet</a></li>
     <li><a href="yhteystiedot.html">Yhteystiedot</a></li>
-    <li><a href="https://www.espoonbiljardikerho.com/esittely/jaseneksi/" class="nav-cta" target="_blank">Liity jäseneksi</a></li>
+    <li><a href="#" onclick="openJoinModal();return false;" class="nav-cta" target="_blank">Liity jäseneksi</a></li>
   </ul>
   <div class="lang-switcher">
     <a href="#" class="lang-btn active">🇫🇮 FI</a>
@@ -455,11 +454,10 @@ footer { background:var(--green-dark); border-top:1px solid var(--border); paddi
   <a href="index.html">Etusivu</a>
   <a href="esittely.html">Esittely</a>
   <a href="uutiset.html">Uutiset</a>
-  <a href="tulospalvelu.html">Tulospalvelu</a>
   <a href="tapahtumat.html">Tapahtumat</a>
   <a href="jasenet.html" class="active">Jäsenet</a>
   <a href="yhteystiedot.html">Yhteystiedot</a>
-  <a href="https://www.espoonbiljardikerho.com/esittely/jaseneksi/" class="m-cta" target="_blank">Liity jäseneksi</a>
+  <a href="#" onclick="openJoinModal();return false;" class="m-cta" target="_blank">Liity jäseneksi</a>
   <div style="display:flex;gap:6px;margin-top:10px;padding-top:10px;border-top:1px solid var(--border);">
     <a href="#" style="flex:1;text-align:center;padding:8px;border-radius:6px;background:rgba(200,168,75,0.1);border:1px solid var(--border-strong);font-size:12px;color:var(--gold);text-decoration:none;">🇫🇮 Suomi</a>
     <a href="#" style="flex:1;text-align:center;padding:8px;border-radius:6px;border:1px solid var(--border);font-size:12px;color:var(--text-muted);text-decoration:none;">🇸🇪 Svenska</a>
@@ -585,8 +583,7 @@ footer { background:var(--green-dark); border-top:1px solid var(--border); paddi
       <li><a href="index.html">Etusivu</a></li>
       <li><a href="esittely.html">Esittely</a></li>
       <li><a href="uutiset.html">Uutiset</a></li>
-      <li><a href="tulospalvelu.html">Tulospalvelu</a></li>
-      <li><a href="tapahtumat.html">Tapahtumat</a></li>
+        <li><a href="tapahtumat.html">Tapahtumat</a></li>
       <li><a href="jasenet.html">Jäsenet</a></li>
     </ul></div>
     <div class="footer-col"><h4>Lajit</h4><ul>
@@ -1039,6 +1036,367 @@ footer { background:var(--green-dark); border-top:1px solid var(--border); paddi
   renderGrids();
   observeCards();
 
+})();
+</script>
+
+
+<!-- ── JÄSENHAKEMUS MODAL ── -->
+<div id="join-modal-overlay" class="jm-overlay" onclick="closeJoinModal(event)">
+  <div class="jm-modal" role="dialog" aria-modal="true" aria-labelledby="jm-title">
+    <button class="jm-close" onclick="closeJoinModal()" aria-label="Sulje">✕</button>
+
+    <!-- Step 1: Choose type -->
+    <div id="jm-step1" class="jm-step">
+      <div class="jm-header">
+        <span class="jm-label">Jäsenyys</span>
+        <div class="jm-divider"></div>
+        <h2 class="jm-title" id="jm-title">Liity <em>Espoon Biljardikerhooon</em></h2>
+        <p class="jm-desc">Yksityisklubi biljardista intohimoisille. Valitse sinulle sopiva jäsenyystyyppi.</p>
+      </div>
+
+      <div class="jm-fee-banner">
+        <span class="jm-fee-label">Jäsenmaksu</span>
+        <span class="jm-fee-amount">75 €<span class="jm-fee-period">/vuosi</span></span>
+        <span class="jm-fee-note">Sisältää 24/7 pelioikeuden klubilla</span>
+      </div>
+
+      <div class="jm-types">
+        <button class="jm-type-card" data-type="taysvaltainen" onclick="selectType(this)">
+          <div class="jm-type-icon">🏆</div>
+          <div class="jm-type-name">Täysvaltainen jäsen</div>
+          <div class="jm-type-desc">Sekä EBK:n että Espoon klubin jäsen. Pelioikeus klubilla ja edustusoikeus kaikissa kilpailuissa.</div>
+          <div class="jm-type-check">✓</div>
+        </button>
+        <button class="jm-type-card" data-type="klubi" onclick="selectType(this)">
+          <div class="jm-type-icon">🎱</div>
+          <div class="jm-type-name">Espoon klubijäsen</div>
+          <div class="jm-type-desc">Pelioikeus Espoon klubilla ja pääsy kaikkiin viikkokilpailuihin ja tapahtumiin.</div>
+          <div class="jm-type-check">✓</div>
+        </button>
+        <button class="jm-type-card" data-type="pelaaja" onclick="selectType(this)">
+          <div class="jm-type-icon">⚡</div>
+          <div class="jm-type-name">Pelaajajäsen</div>
+          <div class="jm-type-desc">Edustusoikeus EBK:n nimissä SBIL:n kilpailuissa. Sopii jos pelaat muualla.</div>
+          <div class="jm-type-check">✓</div>
+        </button>
+      </div>
+
+      <button class="jm-next" id="jm-next-btn" onclick="goToStep2()" disabled>
+        Jatka hakemukseen →
+      </button>
+    </div>
+
+    <!-- Step 2: Application form -->
+    <div id="jm-step2" class="jm-step" style="display:none;">
+      <button class="jm-back" onclick="goToStep1()">← Takaisin</button>
+      <div class="jm-header">
+        <span class="jm-label">Hakemus</span>
+        <div class="jm-divider"></div>
+        <h2 class="jm-title">Täytä hakemus</h2>
+        <p class="jm-desc">Käsittelemme hakemuksesi ja otamme sinuun yhteyttä mahdollisimman pian.</p>
+      </div>
+
+      <div class="jm-selected-type" id="jm-selected-display"></div>
+
+      <form id="jm-form" class="jm-form">
+        <input type="hidden" name="_subject" value="Uusi jäsenhakemus — Espoon Biljardikerho">
+        <input type="hidden" name="jasenyystyyppi" id="jm-hidden-type">
+
+        <div class="jm-field-row">
+          <div class="jm-field">
+            <label class="jm-field-label" for="jm-fname">Etunimi *</label>
+            <input class="jm-input" type="text" id="jm-fname" name="etunimi" required placeholder="Etunimi">
+          </div>
+          <div class="jm-field">
+            <label class="jm-field-label" for="jm-lname">Sukunimi *</label>
+            <input class="jm-input" type="text" id="jm-lname" name="sukunimi" required placeholder="Sukunimi">
+          </div>
+        </div>
+        <div class="jm-field">
+          <label class="jm-field-label" for="jm-email">Sähköposti *</label>
+          <input class="jm-input" type="email" id="jm-email" name="email" required placeholder="sinä@example.com">
+        </div>
+        <div class="jm-field">
+          <label class="jm-field-label" for="jm-phone">Puhelinnumero *</label>
+          <input class="jm-input" type="tel" id="jm-phone" name="puhelin" required placeholder="+358 40 123 4567">
+        </div>
+        <div class="jm-field">
+          <label class="jm-field-label" for="jm-msg">Lisätiedot <span style="opacity:0.5;font-weight:300;">(vapaaehtoinen)</span></label>
+          <textarea class="jm-input jm-textarea" id="jm-msg" name="lisatiedot" placeholder="Esim. aiempi biljardikokemus, mistä kuulit kerhosta…"></textarea>
+        </div>
+
+        <div class="jm-error" id="jm-error" style="display:none;">Lähetys epäonnistui. Yritä uudelleen tai lähetä sähköpostia suoraan.</div>
+
+        <button type="submit" class="jm-submit" id="jm-submit">
+          Lähetä hakemus →
+        </button>
+        <p class="jm-privacy">Tietojasi käytetään vain jäsenhakemuksen käsittelyyn.</p>
+      </form>
+
+      <!-- Success state -->
+      <div id="jm-success" class="jm-success" style="display:none;">
+        <div class="jm-success-icon">🎱</div>
+        <h3>Hakemus lähetetty!</h3>
+        <p>Kiitos hakemuksestasi. Otamme sinuun yhteyttä sähköpostitse mahdollisimman pian.</p>
+        <button class="jm-next" onclick="closeJoinModal()" style="margin-top:20px;">Sulje</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+/* ── JOIN MODAL ── */
+.jm-overlay {
+  display:none; position:fixed; inset:0; z-index:500;
+  background:rgba(7,18,8,0.82); backdrop-filter:blur(6px);
+  align-items:center; justify-content:center;
+  padding:clamp(12px,3vw,24px);
+}
+.jm-overlay.open { display:flex; }
+
+.jm-modal {
+  background:var(--surface-card);
+  border:1px solid var(--border-strong);
+  border-radius:14px;
+  width:100%; max-width:560px;
+  max-height:90svh;
+  overflow-y:auto;
+  position:relative;
+  scrollbar-width:thin;
+  scrollbar-color:var(--border) transparent;
+  animation:jmIn 0.28s cubic-bezier(0.34,1.56,0.64,1) both;
+}
+@keyframes jmIn {
+  from { opacity:0; transform:translateY(24px) scale(0.97); }
+  to   { opacity:1; transform:translateY(0)    scale(1); }
+}
+
+.jm-close {
+  position:sticky; top:0; float:right;
+  margin:14px 14px 0 0;
+  background:rgba(13,31,15,0.7); border:1px solid var(--border);
+  border-radius:6px; width:30px; height:30px;
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer; color:var(--text-muted); font-size:13px;
+  transition:color 0.2s, border-color 0.2s; z-index:1;
+}
+.jm-close:hover { color:var(--text-primary); border-color:var(--border-strong); }
+
+.jm-step { padding:clamp(16px,3vw,32px); padding-top:6px; }
+
+.jm-back {
+  background:none; border:none; color:var(--gold);
+  font-family:'DM Sans',sans-serif; font-size:12px;
+  cursor:pointer; padding:0; margin-bottom:14px;
+  display:inline-flex; align-items:center; gap:4px;
+  transition:opacity 0.2s;
+}
+.jm-back:hover { opacity:0.7; }
+
+.jm-label { font-size:10px; font-weight:500; color:var(--gold); letter-spacing:0.13em; text-transform:uppercase; display:block; margin-bottom:6px; }
+.jm-divider { width:24px; height:2px; background:var(--gold); margin:6px 0 10px; }
+.jm-title { font-family:'Playfair Display',serif; font-size:clamp(20px,2.5vw,28px); font-weight:700; color:var(--text-primary); line-height:1.15; margin-bottom:8px; }
+.jm-title em { font-style:italic; color:var(--gold); }
+.jm-desc { font-size:13px; color:var(--text-secondary); font-weight:300; line-height:1.6; margin-bottom:20px; }
+
+/* Fee banner */
+.jm-fee-banner {
+  display:flex; align-items:center; gap:14px; flex-wrap:wrap;
+  background:rgba(200,168,75,0.07); border:1px solid var(--border-strong);
+  border-radius:8px; padding:12px 16px; margin-bottom:20px;
+}
+.jm-fee-label { font-size:10px; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.08em; }
+.jm-fee-amount { font-family:'Playfair Display',serif; font-size:24px; font-weight:700; color:var(--gold); line-height:1; }
+.jm-fee-period { font-size:13px; font-weight:300; color:var(--text-muted); margin-left:2px; }
+.jm-fee-note { font-size:12px; color:var(--text-secondary); font-weight:300; margin-left:auto; }
+
+/* Type cards */
+.jm-types { display:flex; flex-direction:column; gap:8px; margin-bottom:20px; }
+
+.jm-type-card {
+  display:grid; grid-template-columns:36px 1fr 20px;
+  align-items:center; gap:12px;
+  padding:14px 16px;
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:9px; cursor:pointer; text-align:left;
+  transition:border-color 0.18s, background 0.18s;
+  width:100%;
+}
+.jm-type-card:hover { border-color:var(--border-strong); background:rgba(200,168,75,0.04); }
+.jm-type-card.selected { border-color:var(--gold); background:rgba(200,168,75,0.08); }
+
+.jm-type-icon { font-size:18px; text-align:center; }
+.jm-type-name { font-size:13.5px; font-weight:500; color:var(--text-primary); margin-bottom:2px; }
+.jm-type-desc { font-size:11.5px; color:var(--text-muted); font-weight:300; line-height:1.4; }
+.jm-type-check {
+  width:20px; height:20px; border-radius:50%;
+  border:1.5px solid var(--border); display:flex;
+  align-items:center; justify-content:center;
+  font-size:10px; color:transparent; flex-shrink:0;
+  transition:all 0.18s;
+}
+.jm-type-card.selected .jm-type-check {
+  background:var(--gold); border-color:var(--gold); color:var(--green-dark);
+}
+
+/* Next / submit buttons */
+.jm-next {
+  width:100%; padding:13px 20px;
+  background:var(--gold); color:var(--green-dark);
+  font-family:'DM Sans',sans-serif; font-size:14px; font-weight:500;
+  border:none; border-radius:7px; cursor:pointer;
+  transition:background 0.2s, transform 0.15s, opacity 0.2s;
+  display:flex; align-items:center; justify-content:center;
+}
+.jm-next:hover:not(:disabled) { background:var(--gold-light); transform:translateY(-1px); }
+.jm-next:disabled { opacity:0.35; cursor:not-allowed; }
+
+/* Selected type display in step 2 */
+.jm-selected-type {
+  display:flex; align-items:center; gap:10px;
+  padding:10px 14px; margin-bottom:18px;
+  background:rgba(200,168,75,0.08); border:1px solid var(--border-strong);
+  border-radius:7px; font-size:13px; color:var(--gold); font-weight:500;
+}
+
+/* Form */
+.jm-form { display:flex; flex-direction:column; gap:14px; }
+.jm-field-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.jm-field { display:flex; flex-direction:column; gap:5px; }
+.jm-field-label { font-size:10.5px; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.07em; }
+.jm-input {
+  padding:10px 13px;
+  background:rgba(200,168,75,0.04); border:1px solid var(--border);
+  border-radius:6px; color:var(--text-primary);
+  font-family:'DM Sans',sans-serif; font-size:13.5px; font-weight:300;
+  transition:border-color 0.2s; outline:none; width:100%;
+}
+.jm-input::placeholder { color:var(--text-muted); }
+.jm-input:focus { border-color:var(--border-strong); }
+.jm-textarea { min-height:90px; resize:none; }
+.jm-submit {
+  width:100%; padding:13px 20px;
+  background:var(--gold); color:var(--green-dark);
+  font-family:'DM Sans',sans-serif; font-size:14px; font-weight:500;
+  border:none; border-radius:7px; cursor:pointer;
+  transition:background 0.2s, transform 0.15s, opacity 0.2s;
+  margin-top:4px;
+}
+.jm-submit:hover { background:var(--gold-light); transform:translateY(-1px); }
+.jm-submit:disabled { opacity:0.5; cursor:not-allowed; transform:none; }
+.jm-privacy { font-size:11px; color:var(--text-muted); text-align:center; margin-top:2px; }
+.jm-error { font-size:12px; color:#E8956A; padding:8px 12px; background:rgba(210,90,50,0.08); border-radius:5px; }
+
+/* Success */
+.jm-success { text-align:center; padding:24px 0 8px; }
+.jm-success-icon { font-size:48px; margin-bottom:14px; }
+.jm-success h3 { font-family:'Playfair Display',serif; font-size:22px; color:var(--text-primary); margin-bottom:8px; }
+.jm-success p { font-size:13.5px; color:var(--text-secondary); font-weight:300; line-height:1.6; max-width:340px; margin:0 auto; }
+
+@media (max-width:480px) {
+  .jm-field-row { grid-template-columns:1fr; }
+  .jm-fee-note { margin-left:0; }
+}
+</style>
+
+<script>
+(function() {
+  const FORMSPREE = 'https://formspree.io/f/YOUR_FORM_ID';
+
+  const TYPE_LABELS = {
+    taysvaltainen: '🏆 Täysvaltainen jäsen',
+    klubi:         '🎱 Espoon klubijäsen',
+    pelaaja:       '⚡ Pelaajajäsen'
+  };
+
+  let selectedType = null;
+
+  // Intercept all "Liity jäseneksi" links
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('a[href*="jaseneksi"]').forEach(a => {
+      a.addEventListener('click', e => {
+        e.preventDefault();
+        openJoinModal();
+      });
+    });
+  });
+
+  window.openJoinModal = function() {
+    selectedType = null;
+    document.querySelectorAll('.jm-type-card').forEach(c => c.classList.remove('selected'));
+    document.getElementById('jm-next-btn').disabled = true;
+    document.getElementById('jm-step1').style.display = '';
+    document.getElementById('jm-step2').style.display = 'none';
+    document.getElementById('jm-success').style.display = 'none';
+    document.getElementById('jm-form').style.display = '';
+    document.getElementById('jm-modal-overlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  };
+
+  window.closeJoinModal = function(e) {
+    if (e && e.target !== document.getElementById('join-modal-overlay')) return;
+    document.getElementById('join-modal-overlay').classList.remove('open');
+    document.body.style.overflow = '';
+  };
+
+  // Also close on Escape
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      document.getElementById('join-modal-overlay').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+  });
+
+  window.selectType = function(card) {
+    document.querySelectorAll('.jm-type-card').forEach(c => c.classList.remove('selected'));
+    card.classList.add('selected');
+    selectedType = card.dataset.type;
+    document.getElementById('jm-next-btn').disabled = false;
+  };
+
+  window.goToStep2 = function() {
+    if (!selectedType) return;
+    document.getElementById('jm-hidden-type').value = TYPE_LABELS[selectedType];
+    document.getElementById('jm-selected-display').innerHTML =
+      TYPE_LABELS[selectedType] + ' &nbsp;·&nbsp; 75 €/vuosi';
+    document.getElementById('jm-step1').style.display = 'none';
+    document.getElementById('jm-step2').style.display = '';
+    document.querySelector('.jm-modal').scrollTop = 0;
+  };
+
+  window.goToStep1 = function() {
+    document.getElementById('jm-step1').style.display = '';
+    document.getElementById('jm-step2').style.display = 'none';
+    document.querySelector('.jm-modal').scrollTop = 0;
+  };
+
+  // Form submit
+  document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('jm-form').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const btn = document.getElementById('jm-submit');
+      const errEl = document.getElementById('jm-error');
+      btn.disabled = true;
+      btn.textContent = 'Lähetetään…';
+      errEl.style.display = 'none';
+
+      try {
+        const res = await fetch(FORMSPREE, {
+          method: 'POST',
+          body: new FormData(this),
+          headers: { 'Accept': 'application/json' }
+        });
+        if (!res.ok) throw new Error('fail');
+        this.style.display = 'none';
+        document.getElementById('jm-success').style.display = 'block';
+        document.querySelector('.jm-modal').scrollTop = 0;
+      } catch {
+        errEl.style.display = 'block';
+        btn.disabled = false;
+        btn.textContent = 'Lähetä hakemus →';
+      }
+    });
+  });
 })();
 </script>
 
