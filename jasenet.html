@@ -325,7 +325,7 @@ nav {
   font-weight:600; color:var(--gold); opacity:0.4; user-select:none;
 }
 .panel-name-overlay {
-  display:flex; flex-direction:column; gap:4px;
+  display:flex; flex-direction:column; gap:3px;
 }
 .panel-photo-overlay { display:none; }
 .panel-type-badge {
@@ -434,7 +434,7 @@ nav {
   .profile-panel.open { transform:translateY(0); }
   .panel-handle { width:36px; height:4px; background:var(--border-strong); border-radius:2px; margin:12px auto 4px; flex-shrink:0; }
   .panel-close { position:absolute; top:14px; right:14px; }
-  .panel-photo { aspect-ratio:16/6; flex-shrink:0; }
+  .panel-photo { height:180px; }
   .panel-body { flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; }
   .panel-monogram-text { font-size:48px; }
 }
@@ -1101,7 +1101,6 @@ footer { background:var(--green-dark); border-top:1px solid var(--border); paddi
     const hasPhoto = !!profile.photo;
     const photoImg = hasPhoto
       ? `<img src="${profile.photo}" alt="${displayName}"
-           style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 20%;filter:brightness(0.88) saturate(0.65);"
            onerror="this.style.display='none'">`
       : '';
     const monoDiv = `<div class="panel-monogram" id="panel-mono-${slug}" style="${hasPhoto ? 'display:none;' : ''}">
@@ -1155,15 +1154,18 @@ footer { background:var(--green-dark); border-top:1px solid var(--border); paddi
 
     content.innerHTML = `
       <div class="panel-photo">
-        ${monoDiv}${photoImg}
-        <div class="panel-photo-overlay"></div>
-        <div class="panel-name-overlay">
-          <div class="panel-type-badge" style="background:${color}22;border:1px solid ${color}44;color:${color};">
-            <div style="width:6px;height:6px;border-radius:50%;background:${color};"></div>
-            ${TYPE_LABEL[member.type]}
+        <div class="panel-photo-left">
+          <div class="panel-name-overlay">
+            <div class="panel-type-badge" style="background:${color}22;border:1px solid ${color}44;color:${color};">
+              <div style="width:6px;height:6px;border-radius:50%;background:${color};"></div>
+              ${TYPE_LABEL[member.type]}
+            </div>
+            <div class="panel-name">${displayName}</div>
+            ${displayNick ? `<div class="panel-nickname">"${displayNick}"</div>` : ''}
           </div>
-          <div class="panel-name">${displayName}</div>
-          ${displayNick ? `<div class="panel-nickname">"${displayNick}"</div>` : ''}
+        </div>
+        <div class="panel-photo-right">
+          ${hasPhoto ? photoImg : monoDiv}
         </div>
       </div>
       <div class="panel-body">
