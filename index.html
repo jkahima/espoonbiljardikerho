@@ -123,12 +123,24 @@ nav {
 .hero-bg {
   position:absolute; inset:0;
   background:
-    radial-gradient(ellipse 90% 70% at 65% 50%, rgba(26,58,28,0.55) 0%, transparent 70%),
-    radial-gradient(ellipse 40% 40% at 10% 80%, rgba(200,168,75,0.05) 0%, transparent 60%),
-    linear-gradient(160deg, #0D1F0F 0%, #111E12 60%, #0A1A0B 100%);
+    /* Dark green tint overlay to blend with site palette */
+    linear-gradient(160deg,
+      rgba(7,18,8,0.82) 0%,
+      rgba(10,22,10,0.70) 40%,
+      rgba(13,26,12,0.60) 100%
+    );
+  z-index:1;
+}
+.hero-photo {
+  position:absolute; inset:0;
+  background-image: url('hero_pic.jpg');
+  background-size: cover;
+  background-position: center 40%;
+  filter: saturate(0.55) brightness(0.6);
+  z-index:0;
 }
 .hero-felt {
-  position:absolute; inset:0; opacity:0.35;
+  position:absolute; inset:0; opacity:0.12; z-index:2;
   background-image:
     repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(26,58,28,0.18) 3px, rgba(26,58,28,0.18) 4px),
     repeating-linear-gradient(90deg, transparent, transparent 3px, rgba(26,58,28,0.18) 3px, rgba(26,58,28,0.18) 4px);
@@ -468,10 +480,11 @@ footer { background:var(--green-dark); border-top:1px solid var(--border); paddi
 
 <!-- HERO -->
 <section class="hero">
+  <div class="hero-photo"></div>
   <div class="hero-bg"></div>
   <div class="hero-felt"></div>
 
-  <div class="hero-left">
+  <div class="hero-left" style="position:relative;z-index:3;">
     <div class="hero-badge">Yksityisklubi · Tillinmäki, Espoo</div>
     <h1>Biljardi on<br><em>intohimo</em>,<br>ei vain peli.</h1>
     <p class="hero-desc">
@@ -488,7 +501,7 @@ footer { background:var(--green-dark); border-top:1px solid var(--border); paddi
     </div>
   </div>
 
-  <div class="hero-right">
+  <div class="hero-right" style="position:relative;z-index:3;">
     <div class="hero-events-hdr">
       <span class="hero-events-hdr-title">Tulevat tapahtumat</span>
       <a href="tapahtumat.html" class="hero-events-hdr-link">Kaikki →</a>
