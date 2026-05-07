@@ -957,31 +957,23 @@ footer { background:var(--green-dark); border-top:1px solid var(--border); paddi
         const strongs = Array.from(main.querySelectorAll('strong, b'));
         for (const s of strongs) {
           if (s.textContent.toLowerCase().includes(label.toLowerCase())) {
-            // Find the next <ul> or <ol> after this element
+            console.log('listAfter: found label', label, 'in element', s.parentElement?.tagName, s.parentElement?.textContent?.slice(0,50));
+            // Walk siblings of the parent element looking for UL/OL
             let el = s.parentElement;
-            while (el) {
+            let steps = 0;
+            while (el && steps < 10) {
               el = el.nextElementSibling;
+              steps++;
               if (!el) break;
+              console.log('listAfter: sibling', steps, el.tagName, el.textContent?.slice(0,40));
               if (el.tagName === 'UL' || el.tagName === 'OL') {
-                return Array.from(el.querySelectorAll('li'))
-                  .map(li => li.textContent.trim())
-                  .filter(t => t.length > 2);
+                const items = Array.from(el.querySelectorAll('li')).map(li => li.textContent.trim()).filter(t => t.length > 2);
+                console.log('listAfter: found', items.length, 'items for', label);
+                return items;
               }
-              // Stop if we hit another strong heading
-              if (el.querySelector('strong, b') && el.textContent.length < 100) break;
+              if (el.querySelector('strong, b') && el.textContent.length < 120) break;
             }
-            // Fallback: collect <li> items that are next siblings
-            const items = [];
-            let sib = s.closest('p, div')?.nextElementSibling;
-            while (sib) {
-              if (sib.tagName === 'LI') items.push(sib.textContent.trim());
-              else if (sib.tagName === 'UL' || sib.tagName === 'OL') {
-                sib.querySelectorAll('li').forEach(li => items.push(li.textContent.trim()));
-                break;
-              } else if (sib.querySelector?.('strong')) break;
-              sib = sib.nextElementSibling;
-            }
-            return items.filter(t => t.length > 2);
+            console.log('listAfter: no UL found for', label);
           }
         }
         return [];
