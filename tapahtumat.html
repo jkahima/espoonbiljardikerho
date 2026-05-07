@@ -502,40 +502,24 @@ footer { background:var(--green-dark); border-top:1px solid var(--border); paddi
 (function () {
   const BASE  = 'https://espoonbiljardikerho.yhdistysavain.fi';
 
-  // Multiple proxy fallback with timeout
-  const PROXIES = [
-    'https://api.allorigins.win/raw?url=',
-    'https://api.codetabs.com/v1/proxy?quest=',
-    'https://corsproxy.io/?url=',
-  ];
-
-  async function fetchWithTimeout(url, ms = 8000) {
-    const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), ms);
-    try {
-      const r = await fetch(url, { signal: controller.signal });
-      clearTimeout(timer);
-      if (!r.ok) throw new Error(r.status);
-      return r.text();
-    } catch(e) {
-      clearTimeout(timer);
-      throw e;
-    }
-  }
+  const WORKER = 'https://ebk-proxy.jkahima.workers.dev';
 
   async function fetchWithFallback(url) {
-    // Try direct first (works if on same origin or CORS allowed)
-    try { return await fetchWithTimeout(url, 5000); } catch {}
-    // Try each proxy in sequence
-    for (const proxy of PROXIES) {
-      try {
-        return await fetchWithTimeout(proxy + encodeURIComponent(url), 10000);
-      } catch(e) {
-        console.warn('Proxy failed:', proxy, e.message);
-      }
+    // Extract just the path from the full URL and proxy through our worker
+    let path;
+    try {
+      const u = new URL(url);
+      path = u.pathname + u.search;
+    } catch {
+      path = url;
     }
-    throw new Error('All proxies failed for: ' + url);
+    const proxyUrl = WORKER + path;
+    const r = await fetch(proxyUrl);
+    if (!r.ok) throw new Error('Worker returned ' + r.status);
+    return r.text();
   }
+  }
+
 
 
   const REG_URL = BASE + '/ilmoittautuminen/';
