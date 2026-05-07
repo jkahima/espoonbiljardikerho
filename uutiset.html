@@ -477,7 +477,43 @@ footer { background:var(--green-dark); border-top:1px solid var(--border); paddi
 <script>
 (function() {
   const BASE     = 'https://espoonbiljardikerho.yhdistysavain.fi';
-  const PROXY    = 'https://api.allorigins.win/raw?url=';
+
+  // Multiple proxy fallback with timeout
+  const PROXIES = [
+    'https://api.allorigins.win/raw?url=',
+    'https://api.codetabs.com/v1/proxy?quest=',
+    'https://corsproxy.io/?url=',
+  ];
+
+  async function fetchWithTimeout(url, ms = 8000) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), ms);
+    try {
+      const r = await fetch(url, { signal: controller.signal });
+      clearTimeout(timer);
+      if (!r.ok) throw new Error(r.status);
+      return r.text();
+    } catch(e) {
+      clearTimeout(timer);
+      throw e;
+    }
+  }
+
+  async function fetchWithFallback(url) {
+    // Try direct first (works if on same origin or CORS allowed)
+    try { return await fetchWithTimeout(url, 5000); } catch {}
+    // Try each proxy in sequence
+    for (const proxy of PROXIES) {
+      try {
+        return await fetchWithTimeout(proxy + encodeURIComponent(url), 10000);
+      } catch(e) {
+        console.warn('Proxy failed:', proxy, e.message);
+      }
+    }
+    throw new Error('All proxies failed for: ' + url);
+  }
+
+
   const FALLBACK = 'https://images.unsplash.com/photo-1615213612138-4d1195b1c0e8?w=700&auto=format&fit=crop&q=60';
   const PER_PAGE = 9;
   const TOTAL_PAGES = 42; // Yhdistysavain has 42 pages
@@ -609,7 +645,7 @@ footer { background:var(--green-dark); border-top:1px solid var(--border); paddi
     try {
       let html;
       try { html = await fetchHTML(url); }
-      catch { html = await fetchHTML(PROXY + encodeURIComponent(url)); }
+      catch { html = await fetchHTML(PROXIES[0] + encodeURIComponent(url)); }
 
       allArticles = parseArticles(html);
       if (!allArticles.length) throw new Error('No articles');

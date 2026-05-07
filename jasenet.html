@@ -639,7 +639,43 @@ footer { background:var(--green-dark); border-top:1px solid var(--border); paddi
 <script>
 (function () {
   const BASE  = 'https://espoonbiljardikerho.yhdistysavain.fi';
-  const PROXY = 'https://api.allorigins.win/raw?url=';
+
+  // Multiple proxy fallback with timeout
+  const PROXIES = [
+    'https://api.allorigins.win/raw?url=',
+    'https://api.codetabs.com/v1/proxy?quest=',
+    'https://corsproxy.io/?url=',
+  ];
+
+  async function fetchWithTimeout(url, ms = 8000) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), ms);
+    try {
+      const r = await fetch(url, { signal: controller.signal });
+      clearTimeout(timer);
+      if (!r.ok) throw new Error(r.status);
+      return r.text();
+    } catch(e) {
+      clearTimeout(timer);
+      throw e;
+    }
+  }
+
+  async function fetchWithFallback(url) {
+    // Try direct first (works if on same origin or CORS allowed)
+    try { return await fetchWithTimeout(url, 5000); } catch {}
+    // Try each proxy in sequence
+    for (const proxy of PROXIES) {
+      try {
+        return await fetchWithTimeout(proxy + encodeURIComponent(url), 10000);
+      } catch(e) {
+        console.warn('Proxy failed:', proxy, e.message);
+      }
+    }
+    throw new Error('All proxies failed for: ' + url);
+  }
+
+
 
   // ── Member data scraped from /jasenet/ table ──────────────────────────────
   // Parsed from the three-column table on the live site.
@@ -831,7 +867,7 @@ footer { background:var(--green-dark); border-top:1px solid var(--border); paddi
         if (!r.ok) throw new Error(r.status);
         html = await r.text();
       } catch {
-        const r = await fetch(PROXY + encodeURIComponent(url));
+        const r = await fetch(PROXIES[0] + encodeURIComponent(url));
         if (!r.ok) throw new Error(r.status);
         html = await r.text();
       }
@@ -886,7 +922,7 @@ footer { background:var(--green-dark); border-top:1px solid var(--border); paddi
         let html;
         // Always try proxy first for cross-origin requests from GitHub Pages
         try {
-          const r = await fetch(PROXY + encodeURIComponent(url));
+          const r = await fetch(PROXIES[0] + encodeURIComponent(url));
           if (!r.ok) throw new Error('proxy ' + r.status);
           html = await r.text();
         } catch(proxyErr) {
