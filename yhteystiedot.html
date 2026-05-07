@@ -207,7 +207,7 @@ footer { background:var(--green-dark); border-top:1px solid var(--border); paddi
     <li><a href="tapahtumat.html">Tapahtumat</a></li>
     <li><a href="jasenet.html">Jäsenet</a></li>
     <li><a href="yhteystiedot.html" class="active">Yhteystiedot</a></li>
-    <li><a href="#" onclick="openJoinModal();return false;" class="nav-cta">Liity jäseneksi</a></li>
+    <li><a href="javascript:void(0)" onclick="openJoinModal()" class="nav-cta">Liity jäseneksi</a></li>
   </ul>
   <div class="lang-switcher">
     <a href="#" class="lang-btn active">🇫🇮 FI</a>
@@ -226,7 +226,7 @@ footer { background:var(--green-dark); border-top:1px solid var(--border); paddi
   <a href="tapahtumat.html">Tapahtumat</a>
   <a href="jasenet.html">Jäsenet</a>
   <a href="yhteystiedot.html" class="active">Yhteystiedot</a>
-  <a href="#" onclick="openJoinModal();return false;" class="m-cta">Liity jäseneksi</a>
+  <a href="javascript:void(0)" onclick="openJoinModal()" class="m-cta">Liity jäseneksi</a>
   <div style="display:flex;gap:6px;margin-top:10px;padding-top:10px;border-top:1px solid var(--border);">
     <a href="#" style="flex:1;text-align:center;padding:8px;border-radius:6px;background:rgba(200,168,75,0.1);border:1px solid var(--border-strong);font-size:12px;color:var(--gold);text-decoration:none;">🇫🇮 Suomi</a>
     <a href="#" style="flex:1;text-align:center;padding:8px;border-radius:6px;border:1px solid var(--border);font-size:12px;color:var(--text-muted);text-decoration:none;">🇸🇪 Svenska</a>
@@ -421,7 +421,7 @@ footer { background:var(--green-dark); border-top:1px solid var(--border); paddi
           <span class="form-intro-link-icon">✉️</span>
           <div><div style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:2px;">Sähköposti</div>espoonbiljardikerho@gmail.com</div>
         </a>
-        <a href="#" onclick="openJoinModal();return false;" rel="noopener" class="form-intro-link">
+        <a href="javascript:void(0)" onclick="openJoinModal()" rel="noopener" class="form-intro-link">
           <span class="form-intro-link-icon">🏆</span>
           <div><div style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:2px;">Jäsenyys</div>Liity jäseneksi →</div>
         </a>
@@ -526,101 +526,148 @@ document.getElementById('contact-form').addEventListener('submit', async functio
   <div class="jm-modal" role="dialog" aria-modal="true" aria-labelledby="jm-title">
     <button class="jm-close" onclick="closeJoinModal()" aria-label="Sulje">✕</button>
 
-    <!-- Step 1: Choose type -->
-    <div id="jm-step1" class="jm-step">
+    <div class="jm-inner">
+
+      <!-- HEADER -->
       <div class="jm-header">
         <span class="jm-label">Jäsenyys</span>
         <div class="jm-divider"></div>
         <h2 class="jm-title" id="jm-title">Liity <em>Espoon Biljardikerhooon</em></h2>
-        <p class="jm-desc">Yksityisklubi biljardista intohimoisille. Valitse sinulle sopiva jäsenyystyyppi.</p>
+        <p class="jm-desc">Voit hakea jäsenyyttä Espoon Biljardikerhon yksityisklubille, seuratoimintaan tai molempiin.</p>
       </div>
 
-      <div class="jm-fee-banner">
-        <span class="jm-fee-label">Jäsenmaksu</span>
-        <span class="jm-fee-amount">75 €<span class="jm-fee-period">/vuosi</span></span>
-        <span class="jm-fee-note">Sisältää 24/7 pelioikeuden klubilla</span>
-      </div>
+      <!-- MEMBERSHIP INFO CARDS -->
+      <div class="jm-info-cards">
 
-      <div class="jm-types">
-        <button class="jm-type-card" data-type="taysvaltainen" onclick="selectType(this)">
-          <div class="jm-type-icon">🏆</div>
-          <div class="jm-type-name">Täysvaltainen jäsen</div>
-          <div class="jm-type-desc">Sekä EBK:n että Espoon klubin jäsen. Pelioikeus klubilla ja edustusoikeus kaikissa kilpailuissa.</div>
-          <div class="jm-type-check">✓</div>
-        </button>
-        <button class="jm-type-card" data-type="klubi" onclick="selectType(this)">
-          <div class="jm-type-icon">🎱</div>
-          <div class="jm-type-name">Espoon klubijäsen</div>
-          <div class="jm-type-desc">Pelioikeus Espoon klubilla ja pääsy kaikkiin viikkokilpailuihin ja tapahtumiin.</div>
-          <div class="jm-type-check">✓</div>
-        </button>
-        <button class="jm-type-card" data-type="pelaaja" onclick="selectType(this)">
-          <div class="jm-type-icon">⚡</div>
-          <div class="jm-type-name">Pelaajajäsen</div>
-          <div class="jm-type-desc">Edustusoikeus EBK:n nimissä SBIL:n kilpailuissa. Sopii jos pelaat muualla.</div>
-          <div class="jm-type-check">✓</div>
-        </button>
-      </div>
-
-      <button class="jm-next" id="jm-next-btn" onclick="goToStep2()" disabled>
-        Jatka hakemukseen →
-      </button>
-    </div>
-
-    <!-- Step 2: Application form -->
-    <div id="jm-step2" class="jm-step" style="display:none;">
-      <button class="jm-back" onclick="goToStep1()">← Takaisin</button>
-      <div class="jm-header">
-        <span class="jm-label">Hakemus</span>
-        <div class="jm-divider"></div>
-        <h2 class="jm-title">Täytä hakemus</h2>
-        <p class="jm-desc">Käsittelemme hakemuksesi ja otamme sinuun yhteyttä mahdollisimman pian.</p>
-      </div>
-
-      <div class="jm-selected-type" id="jm-selected-display"></div>
-
-      <form id="jm-form" class="jm-form">
-        <input type="hidden" name="_subject" value="Uusi jäsenhakemus — Espoon Biljardikerho">
-        <input type="hidden" name="jasenyystyyppi" id="jm-hidden-type">
-
-        <div class="jm-field-row">
-          <div class="jm-field">
-            <label class="jm-field-label" for="jm-fname">Etunimi *</label>
-            <input class="jm-input" type="text" id="jm-fname" name="etunimi" required placeholder="Etunimi">
+        <div class="jm-info-card">
+          <div class="jm-info-card-header">
+            <span class="jm-info-icon">🏛️</span>
+            <div>
+              <div class="jm-info-name">Seurajäsenyys</div>
+              <div class="jm-info-price">50 € liittyminen · 50 €<span class="jm-info-period">/vuosi</span></div>
+            </div>
           </div>
-          <div class="jm-field">
-            <label class="jm-field-label" for="jm-lname">Sukunimi *</label>
-            <input class="jm-input" type="text" id="jm-lname" name="sukunimi" required placeholder="Sukunimi">
+          <p class="jm-info-text">Seurajäsenenä saat mahdollisuuden edustaa EBK:ta liiton alaisissa kilpailuissa sekä osallistumisoikeuden seuran omiin mestaruuskilpailuihin.</p>
+        </div>
+
+        <div class="jm-info-card">
+          <div class="jm-info-card-header">
+            <span class="jm-info-icon">🎱</span>
+            <div>
+              <div class="jm-info-name">Klubijäsenyys</div>
+              <div class="jm-info-price">75 €<span class="jm-info-period">/kk</span> · 24/7 kulkuavain</div>
+            </div>
+          </div>
+          <p class="jm-info-text">Käytössäsi on 10 huipputason biljardipöytää ympäri vuorokauden, hyvin varusteltu keittiö, oleskelutila sekä varasto jossa voi säilyttää keppilaukut ja huoltaa varusteita.</p>
+          <div class="jm-info-tables">
+            <span class="jm-info-badge b-pool">4× Pool</span>
+            <span class="jm-info-badge b-kaisa">3× Kaisa</span>
+            <span class="jm-info-badge b-kara">1× Kara</span>
+            <span class="jm-info-badge b-pyramidi">1× Pyramidi</span>
+            <span class="jm-info-badge b-snooker">1× Snooker</span>
           </div>
         </div>
-        <div class="jm-field">
-          <label class="jm-field-label" for="jm-email">Sähköposti *</label>
-          <input class="jm-input" type="email" id="jm-email" name="email" required placeholder="sinä@example.com">
-        </div>
-        <div class="jm-field">
-          <label class="jm-field-label" for="jm-phone">Puhelinnumero *</label>
-          <input class="jm-input" type="tel" id="jm-phone" name="puhelin" required placeholder="+358 40 123 4567">
-        </div>
-        <div class="jm-field">
-          <label class="jm-field-label" for="jm-msg">Lisätiedot <span style="opacity:0.5;font-weight:300;">(vapaaehtoinen)</span></label>
-          <textarea class="jm-input jm-textarea" id="jm-msg" name="lisatiedot" placeholder="Esim. aiempi biljardikokemus, mistä kuulit kerhosta…"></textarea>
-        </div>
 
-        <div class="jm-error" id="jm-error" style="display:none;">Lähetys epäonnistui. Yritä uudelleen tai lähetä sähköpostia suoraan.</div>
-
-        <button type="submit" class="jm-submit" id="jm-submit">
-          Lähetä hakemus →
-        </button>
-        <p class="jm-privacy">Tietojasi käytetään vain jäsenhakemuksen käsittelyyn.</p>
-      </form>
-
-      <!-- Success state -->
-      <div id="jm-success" class="jm-success" style="display:none;">
-        <div class="jm-success-icon">🎱</div>
-        <h3>Hakemus lähetetty!</h3>
-        <p>Kiitos hakemuksestasi. Otamme sinuun yhteyttä sähköpostitse mahdollisimman pian.</p>
-        <button class="jm-next" onclick="closeJoinModal()" style="margin-top:20px;">Sulje</button>
       </div>
+
+      <!-- FORM -->
+      <div class="jm-form-section">
+        <div class="jm-form-title">Täytä hakemus</div>
+
+        <form id="jm-form" class="jm-form">
+          <input type="hidden" name="_subject" value="Uusi jäsenhakemus — Espoon Biljardikerho">
+
+          <!-- Membership type checkboxes -->
+          <div class="jm-field">
+            <label class="jm-field-label">Haen jäseneksi *</label>
+            <div class="jm-check-group">
+              <label class="jm-check-label">
+                <input type="checkbox" name="jasenyys" value="Seura (EBK)" class="jm-check-input">
+                <span class="jm-check-box"></span>
+                <span class="jm-check-text">Seurajäsenyys <span class="jm-check-sub">50 € + 50 €/vuosi</span></span>
+              </label>
+              <label class="jm-check-label">
+                <input type="checkbox" name="jasenyys" value="Yksityisklubi (75€/kk)" class="jm-check-input">
+                <span class="jm-check-box"></span>
+                <span class="jm-check-text">Klubijäsenyys <span class="jm-check-sub">75 €/kk · 24/7</span></span>
+              </label>
+              <label class="jm-check-label">
+                <input type="checkbox" name="jasenyys" value="Molemmat" class="jm-check-input">
+                <span class="jm-check-box"></span>
+                <span class="jm-check-text">Molemmat</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Name row -->
+          <div class="jm-field-row">
+            <div class="jm-field">
+              <label class="jm-field-label" for="jm-fname">Etunimi *</label>
+              <input class="jm-input" type="text" id="jm-fname" name="etunimi" required placeholder="Etunimi">
+            </div>
+            <div class="jm-field">
+              <label class="jm-field-label" for="jm-lname">Sukunimi *</label>
+              <input class="jm-input" type="text" id="jm-lname" name="sukunimi" required placeholder="Sukunimi">
+            </div>
+          </div>
+
+          <!-- Nickname -->
+          <div class="jm-field">
+            <label class="jm-field-label" for="jm-nick">Lempinimi <span class="jm-opt">(vapaaehtoinen)</span></label>
+            <input class="jm-input" type="text" id="jm-nick" name="lempinimi" placeholder="Kutsumanimi tai pelinimi">
+          </div>
+
+          <!-- DOB + Phone row -->
+          <div class="jm-field-row">
+            <div class="jm-field">
+              <label class="jm-field-label" for="jm-dob">Syntymäaika *</label>
+              <input class="jm-input" type="text" id="jm-dob" name="syntymaaika" required placeholder="pp.kk.vvvv">
+            </div>
+            <div class="jm-field">
+              <label class="jm-field-label" for="jm-phone">Puhelinnumero *</label>
+              <input class="jm-input" type="tel" id="jm-phone" name="puhelin" required placeholder="+358 40 123 4567">
+            </div>
+          </div>
+
+          <!-- Email -->
+          <div class="jm-field">
+            <label class="jm-field-label" for="jm-email">Sähköposti *</label>
+            <input class="jm-input" type="email" id="jm-email" name="email" required placeholder="sinä@example.com">
+          </div>
+
+          <!-- Disciplines -->
+          <div class="jm-field">
+            <label class="jm-field-label">Pelattavat lajit <span class="jm-opt">(vapaaehtoinen)</span></label>
+            <div class="jm-disc-group">
+              <label class="jm-disc-label"><input type="checkbox" name="lajit" value="Pool"><span>Pool</span></label>
+              <label class="jm-disc-label"><input type="checkbox" name="lajit" value="Kaisa"><span>Kaisa</span></label>
+              <label class="jm-disc-label"><input type="checkbox" name="lajit" value="Pyramidi"><span>Pyramidi</span></label>
+              <label class="jm-disc-label"><input type="checkbox" name="lajit" value="Snooker"><span>Snooker</span></label>
+              <label class="jm-disc-label"><input type="checkbox" name="lajit" value="Kara"><span>Kara</span></label>
+            </div>
+          </div>
+
+          <!-- Free text -->
+          <div class="jm-field">
+            <label class="jm-field-label" for="jm-msg">Lisätiedot <span class="jm-opt">(vapaaehtoinen)</span></label>
+            <textarea class="jm-input jm-textarea" id="jm-msg" name="lisatiedot" placeholder="Kerro lyhyesti itsestäsi, aiemmasta pelikokemuksesta tai mistä kuulit kerhostamme…"></textarea>
+          </div>
+
+          <div class="jm-error" id="jm-error" style="display:none;">Lähetys epäonnistui. Yritä uudelleen tai ota yhteyttä sähköpostitse.</div>
+
+          <button type="submit" class="jm-submit" id="jm-submit">Lähetä hakemus →</button>
+          <p class="jm-privacy">Tietojasi käytetään vain jäsenhakemuksen käsittelyyn. Otamme sinuun yhteyttä mahdollisimman pian.</p>
+        </form>
+
+        <!-- Success state -->
+        <div id="jm-success" class="jm-success" style="display:none;">
+          <div class="jm-success-icon">🎱</div>
+          <h3>Hakemus lähetetty!</h3>
+          <p>Kiitos hakemuksestasi. Otamme sinuun yhteyttä sähköpostitse mahdollisimman pian.</p>
+          <button class="jm-submit" onclick="closeJoinModal()" style="margin-top:20px;">Sulje</button>
+        </div>
+      </div>
+
     </div>
   </div>
 </div>
@@ -629,7 +676,7 @@ document.getElementById('contact-form').addEventListener('submit', async functio
 /* ── JOIN MODAL ── */
 .jm-overlay {
   display:none; position:fixed; inset:0; z-index:500;
-  background:rgba(7,18,8,0.82); backdrop-filter:blur(6px);
+  background:rgba(7,18,8,0.85); backdrop-filter:blur(6px);
   align-items:center; justify-content:center;
   padding:clamp(12px,3vw,24px);
 }
@@ -639,8 +686,8 @@ document.getElementById('contact-form').addEventListener('submit', async functio
   background:var(--surface-card);
   border:1px solid var(--border-strong);
   border-radius:14px;
-  width:100%; max-width:560px;
-  max-height:90svh;
+  width:100%; max-width:640px;
+  max-height:92svh;
   overflow-y:auto;
   position:relative;
   scrollbar-width:thin;
@@ -648,103 +695,58 @@ document.getElementById('contact-form').addEventListener('submit', async functio
   animation:jmIn 0.28s cubic-bezier(0.34,1.56,0.64,1) both;
 }
 @keyframes jmIn {
-  from { opacity:0; transform:translateY(24px) scale(0.97); }
-  to   { opacity:1; transform:translateY(0)    scale(1); }
+  from { opacity:0; transform:translateY(20px) scale(0.97); }
+  to   { opacity:1; transform:translateY(0) scale(1); }
 }
 
 .jm-close {
-  position:sticky; top:0; float:right;
+  position:sticky; top:0; float:right; z-index:2;
   margin:14px 14px 0 0;
-  background:rgba(13,31,15,0.7); border:1px solid var(--border);
+  background:rgba(13,31,15,0.8); border:1px solid var(--border);
   border-radius:6px; width:30px; height:30px;
   display:flex; align-items:center; justify-content:center;
   cursor:pointer; color:var(--text-muted); font-size:13px;
-  transition:color 0.2s, border-color 0.2s; z-index:1;
+  transition:color 0.2s, border-color 0.2s;
 }
 .jm-close:hover { color:var(--text-primary); border-color:var(--border-strong); }
 
-.jm-step { padding:clamp(16px,3vw,32px); padding-top:6px; }
+.jm-inner { padding:clamp(16px,3vw,28px); padding-top:4px; }
 
-.jm-back {
-  background:none; border:none; color:var(--gold);
-  font-family:'DM Sans',sans-serif; font-size:12px;
-  cursor:pointer; padding:0; margin-bottom:14px;
-  display:inline-flex; align-items:center; gap:4px;
-  transition:opacity 0.2s;
-}
-.jm-back:hover { opacity:0.7; }
-
+/* Header */
 .jm-label { font-size:10px; font-weight:500; color:var(--gold); letter-spacing:0.13em; text-transform:uppercase; display:block; margin-bottom:6px; }
 .jm-divider { width:24px; height:2px; background:var(--gold); margin:6px 0 10px; }
-.jm-title { font-family:'Playfair Display',serif; font-size:clamp(20px,2.5vw,28px); font-weight:700; color:var(--text-primary); line-height:1.15; margin-bottom:8px; }
+.jm-title { font-family:'Playfair Display',serif; font-size:clamp(20px,2.5vw,26px); font-weight:700; color:var(--text-primary); line-height:1.15; margin-bottom:6px; }
 .jm-title em { font-style:italic; color:var(--gold); }
 .jm-desc { font-size:13px; color:var(--text-secondary); font-weight:300; line-height:1.6; margin-bottom:20px; }
 
-/* Fee banner */
-.jm-fee-banner {
-  display:flex; align-items:center; gap:14px; flex-wrap:wrap;
-  background:rgba(200,168,75,0.07); border:1px solid var(--border-strong);
-  border-radius:8px; padding:12px 16px; margin-bottom:20px;
-}
-.jm-fee-label { font-size:10px; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.08em; }
-.jm-fee-amount { font-family:'Playfair Display',serif; font-size:24px; font-weight:700; color:var(--gold); line-height:1; }
-.jm-fee-period { font-size:13px; font-weight:300; color:var(--text-muted); margin-left:2px; }
-.jm-fee-note { font-size:12px; color:var(--text-secondary); font-weight:300; margin-left:auto; }
-
-/* Type cards */
-.jm-types { display:flex; flex-direction:column; gap:8px; margin-bottom:20px; }
-
-.jm-type-card {
-  display:grid; grid-template-columns:36px 1fr 20px;
-  align-items:center; gap:12px;
-  padding:14px 16px;
+/* Info cards */
+.jm-info-cards { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:24px; }
+.jm-info-card {
   background:var(--surface); border:1px solid var(--border);
-  border-radius:9px; cursor:pointer; text-align:left;
-  transition:border-color 0.18s, background 0.18s;
-  width:100%;
+  border-radius:9px; padding:14px;
 }
-.jm-type-card:hover { border-color:var(--border-strong); background:rgba(200,168,75,0.04); }
-.jm-type-card.selected { border-color:var(--gold); background:rgba(200,168,75,0.08); }
+.jm-info-card-header { display:flex; align-items:flex-start; gap:10px; margin-bottom:10px; }
+.jm-info-icon { font-size:20px; flex-shrink:0; margin-top:1px; }
+.jm-info-name { font-size:13px; font-weight:500; color:var(--text-primary); margin-bottom:2px; }
+.jm-info-price { font-size:11px; color:var(--gold); font-weight:500; }
+.jm-info-period { color:var(--text-muted); font-weight:300; }
+.jm-info-text { font-size:13px; color:var(--text-muted); font-weight:300; line-height:1.6; }
+.jm-info-tables { display:flex; flex-wrap:wrap; gap:4px; margin-top:10px; }
+.jm-info-badge { font-size:9px; font-weight:500; padding:2px 7px; border-radius:3px; letter-spacing:0.04em; text-transform:uppercase; }
+.jm-info-badge.b-pool    { background:rgba(29,158,117,0.12); color:#4ECBA0; border:1px solid rgba(29,158,117,0.25); }
+.jm-info-badge.b-kaisa   { background:rgba(200,168,75,0.12); color:var(--gold); border:1px solid rgba(200,168,75,0.25); }
+.jm-info-badge.b-kara    { background:rgba(210,90,50,0.12); color:#E8956A; border:1px solid rgba(210,90,50,0.25); }
+.jm-info-badge.b-pyramidi{ background:rgba(80,160,200,0.12); color:#7DC8E8; border:1px solid rgba(80,160,200,0.25); }
+.jm-info-badge.b-snooker { background:rgba(106,90,205,0.12); color:#9D8FE8; border:1px solid rgba(106,90,205,0.25); }
 
-.jm-type-icon { font-size:18px; text-align:center; }
-.jm-type-name { font-size:13.5px; font-weight:500; color:var(--text-primary); margin-bottom:2px; }
-.jm-type-desc { font-size:11.5px; color:var(--text-muted); font-weight:300; line-height:1.4; }
-.jm-type-check {
-  width:20px; height:20px; border-radius:50%;
-  border:1.5px solid var(--border); display:flex;
-  align-items:center; justify-content:center;
-  font-size:10px; color:transparent; flex-shrink:0;
-  transition:all 0.18s;
-}
-.jm-type-card.selected .jm-type-check {
-  background:var(--gold); border-color:var(--gold); color:var(--green-dark);
-}
-
-/* Next / submit buttons */
-.jm-next {
-  width:100%; padding:13px 20px;
-  background:var(--gold); color:var(--green-dark);
-  font-family:'DM Sans',sans-serif; font-size:14px; font-weight:500;
-  border:none; border-radius:7px; cursor:pointer;
-  transition:background 0.2s, transform 0.15s, opacity 0.2s;
-  display:flex; align-items:center; justify-content:center;
-}
-.jm-next:hover:not(:disabled) { background:var(--gold-light); transform:translateY(-1px); }
-.jm-next:disabled { opacity:0.35; cursor:not-allowed; }
-
-/* Selected type display in step 2 */
-.jm-selected-type {
-  display:flex; align-items:center; gap:10px;
-  padding:10px 14px; margin-bottom:18px;
-  background:rgba(200,168,75,0.08); border:1px solid var(--border-strong);
-  border-radius:7px; font-size:13px; color:var(--gold); font-weight:500;
-}
-
-/* Form */
+/* Form section */
+.jm-form-section { border-top:1px solid var(--border); padding-top:20px; }
+.jm-form-title { font-family:'Playfair Display',serif; font-size:16px; font-weight:600; color:var(--text-primary); margin-bottom:16px; }
 .jm-form { display:flex; flex-direction:column; gap:14px; }
 .jm-field-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
 .jm-field { display:flex; flex-direction:column; gap:5px; }
 .jm-field-label { font-size:10.5px; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.07em; }
+.jm-opt { opacity:0.55; font-weight:300; text-transform:none; letter-spacing:0; font-size:10px; }
 .jm-input {
   padding:10px 13px;
   background:rgba(200,168,75,0.04); border:1px solid var(--border);
@@ -754,29 +756,76 @@ document.getElementById('contact-form').addEventListener('submit', async functio
 }
 .jm-input::placeholder { color:var(--text-muted); }
 .jm-input:focus { border-color:var(--border-strong); }
-.jm-textarea { min-height:90px; resize:none; }
+.jm-textarea { min-height:80px; resize:none; }
+
+/* Membership checkboxes */
+.jm-check-group { display:flex; flex-direction:column; gap:7px; }
+.jm-check-label {
+  display:flex; align-items:center; gap:10px;
+  padding:10px 13px; cursor:pointer;
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:7px; transition:border-color 0.18s, background 0.18s;
+  user-select:none;
+}
+.jm-check-label:hover { border-color:var(--border-strong); }
+.jm-check-label:has(.jm-check-input:checked) { border-color:var(--gold); background:rgba(200,168,75,0.07); }
+.jm-check-input { display:none; }
+.jm-check-box {
+  width:18px; height:18px; border-radius:4px; flex-shrink:0;
+  border:1.5px solid var(--border); background:transparent;
+  display:flex; align-items:center; justify-content:center;
+  transition:all 0.18s; position:relative;
+}
+.jm-check-label:has(.jm-check-input:checked) .jm-check-box {
+  background:var(--gold); border-color:var(--gold);
+}
+.jm-check-label:has(.jm-check-input:checked) .jm-check-box::after {
+  content:'✓'; font-size:11px; color:var(--green-dark); font-weight:700;
+}
+.jm-check-text { font-size:13px; color:var(--text-primary); font-weight:400; }
+.jm-check-sub { font-size:11px; color:var(--gold); font-weight:300; margin-left:6px; }
+
+/* Disciplines */
+.jm-disc-group { display:flex; gap:7px; flex-wrap:wrap; }
+.jm-disc-label {
+  display:flex; align-items:center; gap:6px;
+  padding:6px 12px; cursor:pointer;
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:20px; font-size:12px; color:var(--text-muted);
+  transition:all 0.18s; user-select:none;
+}
+.jm-disc-label input { display:none; }
+.jm-disc-label:hover { border-color:var(--border-strong); color:var(--text-primary); }
+.jm-disc-label:has(input:checked) { background:rgba(200,168,75,0.1); border-color:var(--border-strong); color:var(--gold); }
+.jm-disc-label:has(input[value="Pool"]:checked)    { background:rgba(29,158,117,0.12); border-color:rgba(29,158,117,0.35); color:#4ECBA0; }
+.jm-disc-label:has(input[value="Kaisa"]:checked)   { background:rgba(200,168,75,0.12); border-color:rgba(200,168,75,0.35); color:var(--gold); }
+.jm-disc-label:has(input[value="Pyramidi"]:checked){ background:rgba(80,160,200,0.12); border-color:rgba(80,160,200,0.35); color:#7DC8E8; }
+.jm-disc-label:has(input[value="Snooker"]:checked) { background:rgba(106,90,205,0.12); border-color:rgba(106,90,205,0.35); color:#9D8FE8; }
+.jm-disc-label:has(input[value="Kara"]:checked)    { background:rgba(210,90,50,0.12);  border-color:rgba(210,90,50,0.35);  color:#E8956A; }
+
+/* Submit */
 .jm-submit {
   width:100%; padding:13px 20px;
   background:var(--gold); color:var(--green-dark);
   font-family:'DM Sans',sans-serif; font-size:14px; font-weight:500;
   border:none; border-radius:7px; cursor:pointer;
   transition:background 0.2s, transform 0.15s, opacity 0.2s;
-  margin-top:4px;
+  margin-top:2px;
 }
 .jm-submit:hover { background:var(--gold-light); transform:translateY(-1px); }
 .jm-submit:disabled { opacity:0.5; cursor:not-allowed; transform:none; }
-.jm-privacy { font-size:11px; color:var(--text-muted); text-align:center; margin-top:2px; }
+.jm-privacy { font-size:11px; color:var(--text-muted); text-align:center; margin-top:6px; line-height:1.5; }
 .jm-error { font-size:12px; color:#E8956A; padding:8px 12px; background:rgba(210,90,50,0.08); border-radius:5px; }
 
 /* Success */
-.jm-success { text-align:center; padding:24px 0 8px; }
+.jm-success { text-align:center; padding:28px 0 8px; }
 .jm-success-icon { font-size:48px; margin-bottom:14px; }
 .jm-success h3 { font-family:'Playfair Display',serif; font-size:22px; color:var(--text-primary); margin-bottom:8px; }
 .jm-success p { font-size:13.5px; color:var(--text-secondary); font-weight:300; line-height:1.6; max-width:340px; margin:0 auto; }
 
-@media (max-width:480px) {
+@media (max-width:540px) {
+  .jm-info-cards { grid-template-columns:1fr; }
   .jm-field-row { grid-template-columns:1fr; }
-  .jm-fee-note { margin-left:0; }
 }
 </style>
 
@@ -784,33 +833,14 @@ document.getElementById('contact-form').addEventListener('submit', async functio
 (function() {
   const FORMSPREE = 'https://formspree.io/f/YOUR_FORM_ID';
 
-  const TYPE_LABELS = {
-    taysvaltainen: '🏆 Täysvaltainen jäsen',
-    klubi:         '🎱 Espoon klubijäsen',
-    pelaaja:       '⚡ Pelaajajäsen'
-  };
-
-  let selectedType = null;
-
-  // Intercept all "Liity jäseneksi" links
-  document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('a[href*="jaseneksi"]').forEach(a => {
-      a.addEventListener('click', e => {
-        e.preventDefault();
-        openJoinModal();
-      });
-    });
-  });
-
   window.openJoinModal = function() {
-    selectedType = null;
-    document.querySelectorAll('.jm-type-card').forEach(c => c.classList.remove('selected'));
-    document.getElementById('jm-next-btn').disabled = true;
-    document.getElementById('jm-step1').style.display = '';
-    document.getElementById('jm-step2').style.display = 'none';
-    document.getElementById('jm-success').style.display = 'none';
+    document.getElementById('jm-form').reset();
     document.getElementById('jm-form').style.display = '';
-    document.getElementById('jm-modal-overlay').classList.add('open');
+    document.getElementById('jm-success').style.display = 'none';
+    document.getElementById('jm-error').style.display = 'none';
+    document.getElementById('jm-submit').disabled = false;
+    document.getElementById('jm-submit').textContent = 'Lähetä hakemus →';
+    document.getElementById('join-modal-overlay').classList.add('open');
     document.body.style.overflow = 'hidden';
   };
 
@@ -820,41 +850,25 @@ document.getElementById('contact-form').addEventListener('submit', async functio
     document.body.style.overflow = '';
   };
 
-  // Also close on Escape
-  document.addEventListener('keydown', e => {
+  document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') {
       document.getElementById('join-modal-overlay').classList.remove('open');
       document.body.style.overflow = '';
     }
   });
 
-  window.selectType = function(card) {
-    document.querySelectorAll('.jm-type-card').forEach(c => c.classList.remove('selected'));
-    card.classList.add('selected');
-    selectedType = card.dataset.type;
-    document.getElementById('jm-next-btn').disabled = false;
-  };
-
-  window.goToStep2 = function() {
-    if (!selectedType) return;
-    document.getElementById('jm-hidden-type').value = TYPE_LABELS[selectedType];
-    document.getElementById('jm-selected-display').innerHTML =
-      TYPE_LABELS[selectedType] + ' &nbsp;·&nbsp; 75 €/vuosi';
-    document.getElementById('jm-step1').style.display = 'none';
-    document.getElementById('jm-step2').style.display = '';
-    document.querySelector('.jm-modal').scrollTop = 0;
-  };
-
-  window.goToStep1 = function() {
-    document.getElementById('jm-step1').style.display = '';
-    document.getElementById('jm-step2').style.display = 'none';
-    document.querySelector('.jm-modal').scrollTop = 0;
-  };
-
-  // Form submit
-  document.addEventListener('DOMContentLoaded', () => {
+  document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('jm-form').addEventListener('submit', async function(e) {
       e.preventDefault();
+
+      // Validate at least one membership type selected
+      const checked = document.querySelectorAll('input[name="jasenyys"]:checked');
+      if (!checked.length) {
+        document.getElementById('jm-error').textContent = 'Valitse vähintään yksi jäsenyystyyppi.';
+        document.getElementById('jm-error').style.display = 'block';
+        return;
+      }
+
       const btn = document.getElementById('jm-submit');
       const errEl = document.getElementById('jm-error');
       btn.disabled = true;
@@ -872,6 +886,7 @@ document.getElementById('contact-form').addEventListener('submit', async functio
         document.getElementById('jm-success').style.display = 'block';
         document.querySelector('.jm-modal').scrollTop = 0;
       } catch {
+        errEl.textContent = 'Lähetys epäonnistui. Yritä uudelleen tai ota yhteyttä sähköpostitse.';
         errEl.style.display = 'block';
         btn.disabled = false;
         btn.textContent = 'Lähetä hakemus →';
