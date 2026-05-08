@@ -74,21 +74,6 @@ nav {
 .nav-links a.active { color:var(--gold); }
 .nav-cta { padding:6px 16px !important; background:var(--gold) !important; color:var(--green-dark) !important; font-weight:500 !important; border-radius:5px !important; }
 .nav-cta:hover { background:var(--gold-light) !important; }
-.lang-switcher {
-  display:flex; align-items:center; gap:2px;
-  margin-left:10px; padding-left:10px;
-  border-left:1px solid var(--border);
-}
-.lang-btn {
-  display:flex; align-items:center; gap:4px;
-  padding:4px 7px; border-radius:4px; border:none; cursor:pointer;
-  background:transparent; color:var(--text-muted);
-  font-family:'DM Sans',sans-serif; font-size:11px;
-  transition:color 0.2s, background 0.2s;
-  text-decoration:none;
-}
-.lang-btn:hover  { color:var(--text-primary); background:rgba(200,168,75,0.08); }
-.lang-btn.active { color:var(--gold); }
 .hamburger { display:none; flex-direction:column; gap:5px; cursor:pointer; padding:6px; background:none; border:none; }
 .hamburger span { display:block; width:22px; height:2px; background:var(--text-secondary); border-radius:2px; }
 .mobile-menu {
@@ -267,9 +252,16 @@ section { padding: var(--spy) var(--px); }
   background:var(--surface-card);
 }
 /* Collapse empty paragraphs that Yhdistysavain inserts around images */
-.article-content p:empty { display:none; margin:0; }
+.article-content p:empty { display:none; margin:0; padding:0; }
 .article-content p:has(> img:only-child) { margin:0.3em 0; }
 .article-content br + br { display:none; }
+/* Collapse paragraphs that only contain &nbsp; or spaces — handled in JS, but also via CSS */
+.article-content p:blank { display:none; }
+/* Reduce top margin after images */
+.article-content img + p, .article-content img + br { margin-top:0; }
+/* No large margin on divs Yhdistysavain uses to wrap images */
+.article-content div:has(> img:only-child) { margin:0.4em 0; }
+.article-content div:has(> img:only-child) p { margin:0; }
 .article-content a { color:var(--gold); text-decoration:underline; text-underline-offset:2px; }
 .article-content a:hover { color:var(--gold-light); }
 .article-content ul, .article-content ol {
@@ -410,8 +402,7 @@ footer { background:var(--green-dark); border-top:1px solid var(--border); paddi
 /* ── MOBILE ── */
 @media (max-width:900px) {
   .nav-links { display:none; }
-  .lang-switcher { display:none; }
-  .hamburger { display:flex; }
+    .hamburger { display:flex; }
   .article-layout { grid-template-columns:1fr; }
   .article-sidebar { display:none; } /* sidebar becomes less useful on mobile */
   .news-grid { grid-template-columns:1fr 1fr; }
@@ -444,11 +435,6 @@ footer { background:var(--green-dark); border-top:1px solid var(--border); paddi
     <li><a href="yhteystiedot.html">Yhteystiedot</a></li>
     <li><a href="javascript:void(0)" onclick="openJoinModal()" class="nav-cta">Liity jäseneksi</a></li>
   </ul>
-  <div class="lang-switcher">
-    <a href="#" class="lang-btn active" title="Suomi">🇫🇮 FI</a>
-    <a href="#" class="lang-btn" title="Svenska">🇸🇪 SV</a>
-    <a href="#" class="lang-btn" title="Українська">🇺🇦 UA</a>
-  </div>
   <button class="hamburger" onclick="document.querySelector('.mobile-menu').classList.toggle('open')" aria-label="Menu">
     <span></span><span></span><span></span>
   </button>
@@ -463,9 +449,6 @@ footer { background:var(--green-dark); border-top:1px solid var(--border); paddi
   <a href="yhteystiedot.html">Yhteystiedot</a>
   <a href="javascript:void(0)" onclick="openJoinModal()" class="m-cta">Liity jäseneksi</a>
   <div style="display:flex;gap:6px;margin-top:10px;padding-top:10px;border-top:1px solid var(--border);">
-    <a href="#" style="flex:1;text-align:center;padding:8px;border-radius:6px;background:rgba(200,168,75,0.1);border:1px solid var(--border-strong);font-size:12px;color:var(--gold);text-decoration:none;">🇫🇮 Suomi</a>
-    <a href="#" style="flex:1;text-align:center;padding:8px;border-radius:6px;border:1px solid var(--border);font-size:12px;color:var(--text-muted);text-decoration:none;">🇸🇪 Svenska</a>
-    <a href="#" style="flex:1;text-align:center;padding:8px;border-radius:6px;border:1px solid var(--border);font-size:12px;color:var(--text-muted);text-decoration:none;">🇺🇦 UA</a>
   </div>
 </div>
 
@@ -684,6 +667,24 @@ footer { background:var(--green-dark); border-top:1px solid var(--border); paddi
         a.setAttribute('href', BASE + href);
         a.setAttribute('target', '_blank');
         a.setAttribute('rel', 'noopener');
+      }
+    });
+    // ── Strip blank paragraphs and excess whitespace that Yhdistysavain injects ──
+    // Remove paragraphs that are empty or contain only &nbsp; / whitespace
+    el.querySelectorAll('p').forEach(p => {
+      if (!p.textContent.trim().replace(/\u00a0/g, '').trim() && !p.querySelector('img')) {
+        p.remove();
+      }
+    });
+    // Collapse runs of more than 2 consecutive <br> tags into one
+    const brs = el.querySelectorAll('br');
+    brs.forEach(br => {
+      let next = br.nextSibling;
+      while (next && ((next.nodeType === 3 && !next.textContent.trim()) ||
+                      (next.nodeType === 1 && next.tagName === 'BR'))) {
+        const toRemove = next;
+        next = next.nextSibling;
+        toRemove.remove();
       }
     });
     return el.innerHTML;

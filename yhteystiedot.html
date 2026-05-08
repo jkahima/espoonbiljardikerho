@@ -42,10 +42,6 @@ nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-i
 .nav-links a.active { color:var(--gold); }
 .nav-cta { padding:6px 16px !important; background:var(--gold) !important; color:var(--green-dark) !important; font-weight:500 !important; border-radius:5px !important; }
 .nav-cta:hover { background:var(--gold-light) !important; }
-.lang-switcher { display:flex; align-items:center; gap:2px; margin-left:10px; padding-left:10px; border-left:1px solid var(--border); }
-.lang-btn { display:flex; align-items:center; gap:4px; padding:4px 7px; border-radius:4px; border:none; cursor:pointer; background:transparent; color:var(--text-muted); font-family:'DM Sans',sans-serif; font-size:11px; transition:color 0.2s, background 0.2s; text-decoration:none; }
-.lang-btn:hover { color:var(--text-primary); background:rgba(200,168,75,0.08); }
-.lang-btn.active { color:var(--gold); }
 .hamburger { display:none; flex-direction:column; gap:5px; cursor:pointer; padding:6px; background:none; border:none; }
 .hamburger span { display:block; width:22px; height:2px; background:var(--text-secondary); border-radius:2px; }
 .mobile-menu { display:none; position:fixed; top:clamp(52px,7vw,64px); left:0; right:0; background:rgba(13,31,15,0.98); border-bottom:1px solid var(--border); z-index:99; padding:14px var(--px) 20px; flex-direction:column; gap:3px; }
@@ -180,8 +176,7 @@ footer { background:var(--green-dark); border-top:1px solid var(--border); paddi
 @keyframes fadeUp { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
 
 @media (max-width:900px) {
-  .nav-links { display:none; } .lang-switcher { display:none; } .hamburger { display:flex; }
-  .contact-grid { grid-template-columns:1fr; }
+  .nav-links { display:none; }   .contact-grid { grid-template-columns:1fr; }
   .people-grid { grid-template-columns:1fr; }
   .form-layout { grid-template-columns:1fr; }
   .footer-grid { grid-template-columns:1fr 1fr; }
@@ -209,11 +204,6 @@ footer { background:var(--green-dark); border-top:1px solid var(--border); paddi
     <li><a href="yhteystiedot.html" class="active">Yhteystiedot</a></li>
     <li><a href="javascript:void(0)" onclick="openJoinModal()" class="nav-cta">Liity jäseneksi</a></li>
   </ul>
-  <div class="lang-switcher">
-    <a href="#" class="lang-btn active">🇫🇮 FI</a>
-    <a href="#" class="lang-btn">🇸🇪 SV</a>
-    <a href="#" class="lang-btn">🇺🇦 UA</a>
-  </div>
   <button class="hamburger" onclick="document.querySelector('.mobile-menu').classList.toggle('open')" aria-label="Menu">
     <span></span><span></span><span></span>
   </button>
@@ -228,9 +218,6 @@ footer { background:var(--green-dark); border-top:1px solid var(--border); paddi
   <a href="yhteystiedot.html" class="active">Yhteystiedot</a>
   <a href="javascript:void(0)" onclick="openJoinModal()" class="m-cta">Liity jäseneksi</a>
   <div style="display:flex;gap:6px;margin-top:10px;padding-top:10px;border-top:1px solid var(--border);">
-    <a href="#" style="flex:1;text-align:center;padding:8px;border-radius:6px;background:rgba(200,168,75,0.1);border:1px solid var(--border-strong);font-size:12px;color:var(--gold);text-decoration:none;">🇫🇮 Suomi</a>
-    <a href="#" style="flex:1;text-align:center;padding:8px;border-radius:6px;border:1px solid var(--border);font-size:12px;color:var(--text-muted);text-decoration:none;">🇸🇪 Svenska</a>
-    <a href="#" style="flex:1;text-align:center;padding:8px;border-radius:6px;border:1px solid var(--border);font-size:12px;color:var(--text-muted);text-decoration:none;">🇺🇦 UA</a>
   </div>
 </div>
 
