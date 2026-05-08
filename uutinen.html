@@ -262,6 +262,14 @@ section { padding: var(--spy) var(--px); }
 /* No large margin on divs Yhdistysavain uses to wrap images */
 .article-content div:has(> img:only-child) { margin:0.4em 0; }
 .article-content div:has(> img:only-child) p { margin:0; }
+/* Override any inline height on widget containers */
+.article-content div, .article-content span, .article-content figure {
+  min-height:unset !important;
+  max-height:unset !important;
+}
+/* Yhdistysavain widget wrappers */
+.article-content [class*="d4-"] { margin:0 !important; padding:0 !important; }
+.article-content [class*="widget"] { margin:0 !important; padding:0 !important; }
 .article-content a { color:var(--gold); text-decoration:underline; text-underline-offset:2px; }
 .article-content a:hover { color:var(--gold-light); }
 .article-content ul, .article-content ol {
@@ -674,6 +682,24 @@ footer { background:var(--green-dark); border-top:1px solid var(--border); paddi
     el.querySelectorAll('p').forEach(p => {
       if (!p.textContent.trim().replace(/\u00a0/g, '').trim() && !p.querySelector('img')) {
         p.remove();
+      }
+    });
+    // Remove empty divs (spacers Yhdistysavain injects)
+    el.querySelectorAll('div').forEach(div => {
+      if (!div.textContent.trim().replace(/\u00a0/g, '').trim() && !div.querySelector('img, table, video, iframe')) {
+        div.remove();
+      }
+    });
+    // Strip inline height/min-height from all elements (widget containers)
+    el.querySelectorAll('*').forEach(node => {
+      if (node.style) {
+        node.style.removeProperty('height');
+        node.style.removeProperty('min-height');
+        node.style.removeProperty('max-height');
+        node.style.removeProperty('padding-top');
+        node.style.removeProperty('padding-bottom');
+        node.style.removeProperty('margin-top');
+        node.style.removeProperty('margin-bottom');
       }
     });
     // Collapse runs of more than 2 consecutive <br> tags into one
